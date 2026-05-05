@@ -158,22 +158,38 @@ export default function Home() {
 
           <div className="controls" aria-label="display controls">
             <button
-              aria-label="toggle color theme"
-              className="control-pill"
+              aria-label={`switch to ${isLight ? "dark" : "light"} mode`}
+              className="control-pill icon-control"
               onClick={() => setIsLight((value) => !value)}
               type="button"
+              title={`Switch to ${isLight ? "dark" : "light"} mode`}
             >
-              <span className="control-dot" />
-              <span>{isLight ? "☾" : "☼"}</span>
+              <span
+                aria-hidden="true"
+                className={`theme-icon ${isLight ? "theme-icon-sun" : "theme-icon-moon"}`}
+              />
+              <span className="sr-only">
+                {isLight ? "light mode" : "dark mode"}
+              </span>
             </button>
             <button
-              aria-label="toggle larger text"
-              className="control-pill text-control"
+              aria-label={`switch to ${largeText ? "regular" : "larger"} text`}
+              className="control-pill icon-control text-control"
               onClick={() => setLargeText((value) => !value)}
               type="button"
+              title={`Switch to ${largeText ? "regular" : "larger"} text`}
             >
-              <span>A</span>
-              <span>A</span>
+              <span
+                aria-hidden="true"
+                className={`font-size-icon ${
+                  largeText ? "font-size-icon-large" : "font-size-icon-regular"
+                }`}
+              >
+                A
+              </span>
+              <span className="sr-only">
+                {largeText ? "regular text" : "larger text"}
+              </span>
             </button>
           </div>
         </header>
