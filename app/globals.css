@@ -540,7 +540,7 @@ a {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  margin-top: 16px;
+  margin-top: 24px;
 }
 
 .folder-link {
@@ -618,6 +618,108 @@ a {
   color: var(--faint);
   font-size: 11px;
   font-weight: 800;
+}
+
+.daily-delve-preview {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 72%),
+    #111113;
+  color: var(--text);
+  outline: 0;
+  overflow: hidden;
+  padding: 14px;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.theme-light .daily-delve-preview {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 72%),
+    #19191b;
+  border-color: #303033;
+}
+
+.daily-delve-preview:hover {
+  border-color: color-mix(in srgb, var(--warning) 58%, var(--line));
+}
+
+.daily-delve-preview:hover {
+  transform: translateY(-1px);
+}
+
+.game-preview-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.game-preview-head > div {
+  min-width: 0;
+}
+
+.game-preview-head span {
+  display: block;
+  margin-bottom: 5px;
+  color: #8c8c91;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.game-preview-head h3 {
+  margin: 0;
+  color: #f4f4f4;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.game-preview-head strong {
+  flex: 0 0 auto;
+  color: var(--warning);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.delve-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 2px solid #242428;
+  background: #09090b;
+  overflow: hidden;
+}
+
+.delve-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #09090b;
+}
+
+.daily-delve-preview p {
+  margin: 12px 0 0;
+  color: #9d9da3;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.game-source-link {
+  display: inline-flex;
+  margin-top: 11px;
+  color: var(--warning);
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .contact-copy {

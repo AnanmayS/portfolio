@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const profile = {
   name: "Ananmay Som Singh",
@@ -22,6 +22,14 @@ const navItems = [
 ];
 
 const projects = [
+  {
+    name: "daily delve",
+    fullName: "Daily Delve",
+    description:
+      "Browser roguelike shooter with a deterministic daily dungeon, seeded treasure choices, weapon drops, boss phases, and local run history.",
+    tech: ["TypeScript", "Vite", "Phaser 3", "LocalStorage"],
+    github: "https://github.com/AnanmayS/Daily-Devele",
+  },
   {
     name: "paper trading",
     fullName: "Polymarket Paper Trading Agent",
@@ -88,6 +96,55 @@ function Section({
       <h2>{title}:</h2>
       {children}
     </section>
+  );
+}
+
+function DailyDelveShowcase() {
+  const todaySeed = useMemo(
+    () => new Intl.DateTimeFormat("en-CA").format(new Date()),
+    [],
+  );
+
+  return (
+    <article
+      aria-label="Daily Delve animated gameplay preview"
+      className="daily-delve-preview"
+    >
+      <div className="game-preview-head">
+        <div>
+          <span>animated project preview</span>
+          <h3>Daily Delve</h3>
+        </div>
+        <strong>Phaser</strong>
+      </div>
+
+      <div
+        aria-label="Looping gameplay recording of Daily Delve"
+        className="delve-stage"
+      >
+        <video
+          aria-label={`Daily Delve gameplay preview recorded from the ${todaySeed} build`}
+          autoPlay
+          className="delve-video"
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          src="/daily-delve-preview/gameplay-preview.mov"
+        />
+      </div>
+
+      <p>Daily seeded top-down roguelike shooter with quick room fights, weapon drops, and boss runs.</p>
+
+      <a
+        className="game-source-link"
+        href="https://github.com/AnanmayS/Daily-Devele"
+        rel="noreferrer"
+        target="_blank"
+      >
+        view project source
+      </a>
+    </article>
   );
 }
 
@@ -255,6 +312,8 @@ export default function Home() {
         </Section>
 
         <Section id="projects" title="work">
+          <DailyDelveShowcase />
+
           <div className="folder-grid">
             {projects.map((project) => (
               <a className="folder-link" href={project.github} key={project.name}>
