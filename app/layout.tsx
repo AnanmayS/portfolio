@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Ananmay Som Singh | Portfolio",
   description:
     "Computer Engineering student building software projects across machine learning, backend systems, DevOps, and data analytics.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

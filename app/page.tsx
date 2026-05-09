@@ -74,6 +74,30 @@ const skills = [
   ["devops/cloud", "Docker, GitHub Actions, AWS S3, Lambda, API Gateway"],
 ];
 
+type DrakeTrack = {
+  artistName: string;
+  artworkUrl100: string;
+  collectionName: string;
+  trackId: number;
+  trackName: string;
+  trackViewUrl: string;
+};
+
+const fallbackTrack: DrakeTrack = {
+  artistName: "Drake",
+  artworkUrl100:
+    "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b6/5d/2f/b65d2f34-511c-c2f9-087e-5fd46afab93d/24UMGIM85348.rgb.jpg/300x300bb.jpg",
+  collectionName: "100 GIGS",
+  trackId: 1762404568,
+  trackName: "It's Up",
+  trackViewUrl:
+    "https://music.apple.com/us/album/its-up-feat-young-thug-21-savage/1762404567?i=1762404568",
+};
+
+function getLargeArtworkUrl(url: string) {
+  return url.replace(/\/\d+x\d+bb\.(jpg|png|webp)$/i, "/300x300bb.$1");
+}
+
 function FolderIcon() {
   return (
     <span aria-hidden="true" className="folder-icon">
@@ -152,12 +176,89 @@ export default function Home() {
   const [isLight, setIsLight] = useState(false);
   const [largeText, setLargeText] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [drakeTrack, setDrakeTrack] = useState<DrakeTrack>(fallbackTrack);
   const [timeData, setTimeData] = useState({
     collegeParkTime: "--:--",
     collegeParkDate: "--- · -- ---",
     userTime: "--:--",
     userDate: "--- · -- ---",
   });
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadRandomDrakeSong = async () => {
+      try {
+        const response = await fetch(
+          "https://itunes.apple.com/search?term=drake&country=US&media=music&entity=song&attribute=artistTerm&limit=200",
+          { signal: controller.signal },
+        );
+
+        if (!response.ok) {
+          throw new Error("Unable to load Drake tracks");
+        }
+
+        const data = (await response.json()) as { results?: DrakeTrack[] };
+        const tracks = (data.results ?? []).filter(
+          (track) =>
+            track.artistName === "Drake" &&
+            track.artworkUrl100 &&
+            track.trackName &&
+            track.trackViewUrl,
+        );
+
+        if (tracks.length > 0) {
+          const nextTrack = tracks[Math.floor(Math.random() * tracks.length)];
+          setDrakeTrack({
+            ...nextTrack,
+            artworkUrl100: getLargeArtworkUrl(nextTrack.artworkUrl100),
+          });
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setDrakeTrack(fallbackTrack);
+        }
+      }
+    };
+
+    loadRandomDrakeSong();
+
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const revealTargets = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      revealTargets.forEach((target) => target.classList.add("is-visible"));
+    } else {
+      document.documentElement.classList.add("motion-ready");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+      );
+
+      revealTargets.forEach((target) => observer.observe(target));
+
+      return () => {
+        observer.disconnect();
+        document.documentElement.classList.remove("motion-ready");
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const formatTime = (date: Date, timeZone?: string) =>
@@ -208,7 +309,7 @@ export default function Home() {
       }`}
     >
       <div className="mini-shell">
-        <header className="topbar" id="top">
+        <header className="topbar" data-reveal="entry" id="top">
           <a className="wordmark" href="#top">
             {profile.name}
           </a>
@@ -251,7 +352,11 @@ export default function Home() {
           </div>
         </header>
 
-        <nav className="mini-nav" aria-label="primary navigation">
+        <nav
+          aria-label="primary navigation"
+          className="mini-nav"
+          data-reveal="entry"
+        >
           {navItems.map((item) => (
             <a href={item.href} key={item.href}>
               {item.label}
@@ -259,14 +364,18 @@ export default function Home() {
           ))}
         </nav>
 
-        <section className="intro">
+        <section className="intro" data-reveal="entry">
           <p className="kicker">i build things with data + systems</p>
           <h1>{profile.title}</h1>
           <p>{profile.intro}</p>
         </section>
 
-        <section className="widget-grid" aria-label="quick facts">
-          <div className="mini-card weather-widget">
+        <section
+          aria-label="quick facts"
+          className="widget-grid"
+          data-reveal="entry"
+        >
+          <div className="mini-card weather-widget widget-card-one">
             <div className="widget-heading">
               <span>COLLEGE PARK</span>
               <span>MAINLY CLEAR</span>
@@ -277,7 +386,7 @@ export default function Home() {
               <span>84° / 52°</span>
             </div>
           </div>
-          <div className="mini-card time-widget">
+          <div className="mini-card time-widget widget-card-two">
             <div className="time-zone">
               <span>COLLEGE PARK</span>
               <strong className="pixel-number">
@@ -291,98 +400,124 @@ export default function Home() {
               <em>{timeData.userDate}</em>
             </div>
           </div>
-          <a className="mini-card now-playing" href="#projects">
-            <div className="views-art" aria-hidden="true" />
+          <a
+            aria-label={`Now playing ${drakeTrack.trackName} by ${drakeTrack.artistName}, from ${drakeTrack.collectionName}`}
+            className="mini-card now-playing widget-card-three"
+            href={drakeTrack.trackViewUrl}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              alt={`${drakeTrack.collectionName} album artwork`}
+              className="album-art"
+              height="80"
+              src={drakeTrack.artworkUrl100}
+              width="80"
+            />
             <span>
-              <small>last played</small>
-              <strong>Views</strong>
-              <em>Drake</em>
+              <small>listening to</small>
+              <strong>{drakeTrack.trackName}</strong>
+              <em>{drakeTrack.collectionName}</em>
             </span>
           </a>
         </section>
 
-        <Section id="about" title="about me">
-          <ul className="dash-list">
-            <li>raised in the bay area</li>
-            <li>building ml products, games, and backend tools</li>
-            <li>interested in ai agents and devops workflows</li>
-            <li>like turning messy workflows into fast tools</li>
-            <li>always trying to make projects feel useful</li>
-          </ul>
-        </Section>
+        <div data-reveal="section">
+          <Section id="about" title="about me">
+            <ul className="dash-list">
+              <li>raised in the bay area</li>
+              <li>building ml products, games, and backend tools</li>
+              <li>interested in ai agents and devops workflows</li>
+              <li>like turning messy workflows into fast tools</li>
+              <li>always trying to make projects feel useful</li>
+            </ul>
+          </Section>
+        </div>
 
-        <Section id="projects" title="work">
-          <DailyDelveShowcase />
+        <div data-reveal="section">
+          <Section id="projects" title="work">
+            <DailyDelveShowcase />
 
-          <div className="folder-grid">
-            {projects.map((project) => (
-              <a className="folder-link" href={project.github} key={project.name}>
-                <FolderIcon />
-                <span>{project.name}</span>
-              </a>
-            ))}
-          </div>
-
-          <div className="project-list">
-            {projects.map((project) => (
-              <article className="project-note" key={project.fullName}>
-                <a href={project.github} rel="noreferrer" target="_blank">
-                  {project.fullName}
+            <div className="folder-grid">
+              {projects.map((project) => (
+                <a
+                  className="folder-link"
+                  href={project.github}
+                  key={project.name}
+                >
+                  <FolderIcon />
+                  <span>{project.name}</span>
                 </a>
-                <p>{project.description}</p>
-                <small>{project.tech.join(" / ")}</small>
-              </article>
-            ))}
-          </div>
-        </Section>
+              ))}
+            </div>
 
-        <Section id="interests" title="interests">
-          <ul className="dash-list">
-            <li>love nutella and ruffles</li>
-            <li>usually down to play catan</li>
-            <li>play badminton</li>
-            <li>love music</li>
-            <li>building games for fun</li>
-            <li>automating my life with ai agents</li>
-          </ul>
-        </Section>
+            <div className="project-list">
+              {projects.map((project) => (
+                <article className="project-note" key={project.fullName}>
+                  <a href={project.github} rel="noreferrer" target="_blank">
+                    {project.fullName}
+                  </a>
+                  <p>{project.description}</p>
+                  <small>{project.tech.join(" / ")}</small>
+                </article>
+              ))}
+            </div>
+          </Section>
+        </div>
 
-        <Section id="skills" title="skills">
-          <ul className="dash-list">
-            {skills.map(([group, value]) => (
-              <li key={group}>
-                <strong>{group}</strong> — {value}
-              </li>
-            ))}
-          </ul>
-        </Section>
+        <div data-reveal="section">
+          <Section id="interests" title="interests">
+            <ul className="dash-list">
+              <li>love nutella and ruffles</li>
+              <li>usually down to play catan</li>
+              <li>play badminton</li>
+              <li>love music</li>
+              <li>building games for fun</li>
+              <li>automating my life with ai agents</li>
+            </ul>
+          </Section>
+        </div>
 
-        <Section id="contact" title="contact">
-          <p className="contact-copy">
-            Feel free to reach out if you want to connect, collaborate, or talk
-            about software engineering opportunities.
-          </p>
+        <div data-reveal="section">
+          <Section id="skills" title="skills">
+            <ul className="dash-list">
+              {skills.map(([group, value]) => (
+                <li key={group}>
+                  <strong>{group}</strong>: {value}
+                </li>
+              ))}
+            </ul>
+          </Section>
+        </div>
 
-          <div className="availability">
-            <span className="pulse-dot" />
-            <span>available for internships / software work</span>
-          </div>
+        <div data-reveal="section">
+          <Section id="contact" title="contact">
+            <p className="contact-copy">
+              Feel free to reach out if you want to connect, collaborate, or
+              talk about software engineering opportunities.
+            </p>
 
-          <button className="mail-link" onClick={copyEmail} type="button">
-            <span className="mail-icon" aria-hidden="true" />
-            <span>{copied ? "copied email" : "copy email"}</span>
-          </button>
+            <div className="availability">
+              <span className="pulse-dot" />
+              <span>available for internships / software work</span>
+            </div>
 
-          <div className="socials">
-            <a href={profile.github} rel="noreferrer" target="_blank">
-              github
-            </a>
-            <a href={profile.linkedin} rel="noreferrer" target="_blank">
-              linkedin
-            </a>
-            <a href={`mailto:${profile.email}`}>email</a>
-          </div>
-        </Section>
+            <button className="mail-link" onClick={copyEmail} type="button">
+              <span className="mail-icon" aria-hidden="true" />
+              <span>{copied ? "copied email" : "copy email"}</span>
+            </button>
+
+            <div className="socials">
+              <a href={profile.github} rel="noreferrer" target="_blank">
+                github
+              </a>
+              <a href={profile.linkedin} rel="noreferrer" target="_blank">
+                linkedin
+              </a>
+              <a href={`mailto:${profile.email}`}>email</a>
+            </div>
+          </Section>
+        </div>
       </div>
     </main>
   );
