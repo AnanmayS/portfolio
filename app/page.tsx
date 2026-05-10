@@ -2,6 +2,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+type Project = {
+  slug: string;
+  name: string;
+  fullName: string;
+  description: string;
+  detail: string;
+  role: string;
+  status: string;
+  signal: string;
+  tech: string[];
+  github: string;
+};
+
 const profile = {
   name: "Ananmay Som Singh",
   title: "computer engineering / software engineering / ml + devops",
@@ -15,51 +28,81 @@ const profile = {
 };
 
 const navItems = [
-  { label: "about", href: "#about" },
   { label: "work", href: "#projects" },
+  { label: "about", href: "#about" },
   { label: "skills", href: "#skills" },
   { label: "contact", href: "#contact" },
 ];
 
-const projects = [
+const projects: Project[] = [
   {
+    slug: "daily-delve",
     name: "daily delve",
     fullName: "Daily Delve",
     description:
       "Browser roguelike shooter with a deterministic daily dungeon, seeded treasure choices, weapon drops, boss phases, and local run history.",
+    detail:
+      "The fun part was making a run feel fresh each day without needing a backend: seeded rooms, pickups, and boss phases all resolve locally.",
+    role: "game systems + frontend",
+    status: "playable build",
+    signal: "daily seed",
     tech: ["TypeScript", "Vite", "Phaser 3", "LocalStorage"],
     github: "https://github.com/AnanmayS/Daily-Devele",
   },
   {
+    slug: "paper-trading",
     name: "paper trading",
     fullName: "Polymarket Paper Trading Agent",
     description:
       "Paper trading agent for prediction markets that tracks simulated trades, strategy performance, and market signals.",
+    detail:
+      "Built around a loop of collecting market data, simulating trades, and making performance easy to inspect without risking real capital.",
+    role: "agent workflow + api",
+    status: "strategy sandbox",
+    signal: "market signals",
     tech: ["Python", "APIs", "React", "FastAPI"],
     github: "https://github.com/AnanmayS/polymarket-papertrade-agent",
   },
   {
+    slug: "ai-equity",
     name: "ai equity",
     fullName: "AI Equity Research Platform",
     description:
       "AI-powered stock research platform that summarizes financial data, filings, and market signals for faster investment research.",
+    detail:
+      "A research surface for reducing the time between raw filings, financial data, and a useful first-pass investment read.",
+    role: "llm product + backend",
+    status: "research tool",
+    signal: "filing summary",
     tech: ["Python", "LLMs", "FastAPI", "React"],
     github: "https://github.com/AnanmayS/AI-Equity-Research-Platform",
   },
   {
+    slug: "f1-telemetry",
     name: "f1 telemetry",
     fullName: "Formula 1 Telemetry Analytics Platform",
     description:
       "Analyzes historical F1 telemetry data, predicts race position changes, and visualizes real-time lap data.",
+    detail:
+      "A data-heavy build focused on turning lap telemetry into something explorable: position shifts, race context, and model-backed predictions.",
+    role: "data app + ml",
+    status: "analytics platform",
+    signal: "race position",
     tech: ["Python", "FastAPI", "React", "Docker", "XGBoost"],
     github:
       "https://github.com/AnanmayS/Formula-1-Telemetry-Analytics-Platform",
   },
   {
+    slug: "earnings-ml",
     name: "earnings ml",
     fullName: "Earnings Surprise Prediction Platform",
     description:
       "Machine learning system that predicts earnings beat or miss outcomes using financial statement and market-based features.",
+    detail:
+      "A prediction pipeline that connects finance features, model training, cloud deployment, and a small frontend for reading outputs.",
+    role: "ml pipeline + cloud",
+    status: "prediction system",
+    signal: "beat or miss",
     tech: ["Python", "XGBoost", "AWS", "React", "FastAPI"],
     github:
       "https://github.com/AnanmayS/Earnings-Surprise-Prediction-Platform",
@@ -136,7 +179,7 @@ function DailyDelveShowcase() {
     >
       <div className="game-preview-head">
         <div>
-          <span>animated project preview</span>
+          <span>featured file</span>
           <h3>Daily Delve</h3>
         </div>
         <strong>Phaser</strong>
@@ -158,7 +201,10 @@ function DailyDelveShowcase() {
         />
       </div>
 
-      <p>Daily seeded top-down roguelike shooter with quick room fights, weapon drops, and boss runs.</p>
+      <p>
+        The project I would open first: a daily seeded top-down roguelike
+        shooter with quick room fights, weapon drops, and boss runs.
+      </p>
 
       <a
         className="game-source-link"
@@ -169,6 +215,68 @@ function DailyDelveShowcase() {
         view project source
       </a>
     </article>
+  );
+}
+
+function ProjectDesk() {
+  return (
+    <div className="project-desk">
+      <p className="project-desk-note">
+        project folders:
+      </p>
+
+      <div aria-label="project folders" className="folder-grid">
+        {projects.map((project) => (
+          <a
+            aria-label={`jump to ${project.fullName}`}
+            className="folder-link"
+            href={`#project-${project.slug}`}
+            key={project.name}
+          >
+            <FolderIcon />
+            <span>{project.name}</span>
+          </a>
+        ))}
+      </div>
+
+      <div className="project-log">
+        <p className="project-log-label">project notes</p>
+
+        {projects.map((project) => (
+          <article
+            className="project-inspector"
+            id={`project-${project.slug}`}
+            key={project.slug}
+          >
+            <div className="project-inspector-head">
+              <span>{project.status}</span>
+              <strong>{project.signal}</strong>
+            </div>
+            <h3>{project.fullName}</h3>
+            <p>{project.description}</p>
+            <p>{project.detail}</p>
+            <dl className="project-meta">
+              <div>
+                <dt>role</dt>
+                <dd>{project.role}</dd>
+              </div>
+              <div>
+                <dt>stack</dt>
+                <dd>{project.tech.join(" / ")}</dd>
+              </div>
+            </dl>
+            <a
+              className="project-source-link"
+              href={project.github}
+              rel="noreferrer"
+              target="_blank"
+            >
+              open source folder
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -423,6 +531,14 @@ export default function Home() {
         </section>
 
         <div data-reveal="section">
+          <Section id="projects" title="work">
+            <DailyDelveShowcase />
+
+            <ProjectDesk />
+          </Section>
+        </div>
+
+        <div data-reveal="section">
           <Section id="about" title="about me">
             <ul className="dash-list">
               <li>raised in the bay area</li>
@@ -431,37 +547,6 @@ export default function Home() {
               <li>like turning messy workflows into fast tools</li>
               <li>always trying to make projects feel useful</li>
             </ul>
-          </Section>
-        </div>
-
-        <div data-reveal="section">
-          <Section id="projects" title="work">
-            <DailyDelveShowcase />
-
-            <div className="folder-grid">
-              {projects.map((project) => (
-                <a
-                  className="folder-link"
-                  href={project.github}
-                  key={project.name}
-                >
-                  <FolderIcon />
-                  <span>{project.name}</span>
-                </a>
-              ))}
-            </div>
-
-            <div className="project-list">
-              {projects.map((project) => (
-                <article className="project-note" key={project.fullName}>
-                  <a href={project.github} rel="noreferrer" target="_blank">
-                    {project.fullName}
-                  </a>
-                  <p>{project.description}</p>
-                  <small>{project.tech.join(" / ")}</small>
-                </article>
-              ))}
-            </div>
           </Section>
         </div>
 
@@ -493,14 +578,9 @@ export default function Home() {
         <div data-reveal="section">
           <Section id="contact" title="contact">
             <p className="contact-copy">
-              Feel free to reach out if you want to connect, collaborate, or
-              talk about software engineering opportunities.
+              Email is the fastest way to reach me. GitHub has the build logs;
+              LinkedIn has the more normal version of all this.
             </p>
-
-            <div className="availability">
-              <span className="pulse-dot" />
-              <span>available for internships / software work</span>
-            </div>
 
             <button className="mail-link" onClick={copyEmail} type="button">
               <span className="mail-icon" aria-hidden="true" />

@@ -554,18 +554,20 @@ a {
 .folder-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 24px;
+  gap: 22px 24px;
+  margin-top: 26px;
 }
 
 .folder-link {
   display: grid;
   justify-items: start;
   gap: 8px;
+  background: transparent;
   color: var(--faint);
   font-size: 11px;
   font-weight: 800;
   line-height: 1.1;
+  text-align: left;
   text-decoration: none;
   transition:
     color 160ms var(--ease-out-quart),
@@ -615,45 +617,140 @@ a {
   background: var(--warning);
 }
 
-.project-list {
-  display: grid;
-  gap: 14px;
-  margin-top: 28px;
+.project-desk {
+  margin-top: 6px;
 }
 
-.project-note {
+.project-desk-note,
+.project-log-label {
+  margin: 0;
+  color: var(--faint);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
+.project-desk-note {
+  margin-top: 18px;
+}
+
+.project-log {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.project-log-label {
+  color: color-mix(in oklch, var(--muted) 80%, var(--text));
+}
+
+.project-inspector {
+  scroll-margin-top: 20px;
   border: 1px solid color-mix(in oklch, var(--line) 78%, transparent);
   background: color-mix(in oklch, var(--text) 2%, transparent);
-  padding: 12px 13px;
+  padding: 13px 14px 14px;
   transition:
     background 180ms var(--ease-out-quart),
     border-color 180ms var(--ease-out-quart),
     transform 180ms var(--ease-out-quart);
 }
 
-.project-note:hover {
+.project-inspector:hover {
   border-color: color-mix(in oklch, var(--warning) 48%, var(--line));
   background: color-mix(in oklch, var(--text) 4%, transparent);
   transform: translateY(-1px);
 }
 
-.project-note a {
+.project-inspector:target {
+  border-color: color-mix(in oklch, var(--warning) 62%, var(--line));
+  background: color-mix(in oklch, var(--warning) 5%, transparent);
+}
+
+.project-inspector-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.project-inspector-head span,
+.project-inspector-head strong {
+  color: var(--faint);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.project-inspector-head strong {
+  color: var(--warning);
+  letter-spacing: 0;
+  text-align: right;
+  text-transform: none;
+}
+
+.project-inspector h3 {
+  margin: 0;
   color: color-mix(in srgb, var(--text) 80%, var(--muted));
   font-size: 14px;
   font-weight: 900;
+  line-height: 1.25;
 }
 
-.project-note p {
+.project-inspector p {
   margin: 6px 0;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.55;
 }
 
-.project-note small {
+.project-meta {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.project-meta div {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.project-meta dt {
   color: var(--faint);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.project-meta dd {
+  margin: 0;
+  color: color-mix(in oklch, var(--muted) 88%, var(--text));
   font-size: 11px;
   font-weight: 800;
+  line-height: 1.45;
+}
+
+.project-source-link {
+  display: inline-flex;
+  margin-top: 13px;
+  color: var(--warning);
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration-thickness: 1px;
+  transition:
+    color 160ms var(--ease-out-quart),
+    transform 160ms var(--ease-out-quart);
+}
+
+.project-source-link:hover {
+  color: color-mix(in oklch, var(--warning) 78%, var(--text));
+  transform: translateY(-1px);
 }
 
 .daily-delve-preview {
@@ -765,24 +862,6 @@ a {
   color: var(--muted);
   font-size: 14px;
   line-height: 1.55;
-}
-
-.availability {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.pulse-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
-  animation: pulse 1.8s ease-in-out infinite;
 }
 
 .mail-link {
@@ -919,17 +998,6 @@ html.motion-ready [data-reveal]:not(.is-visible) {
 .large-text .dash-list,
 .large-text .contact-copy {
   font-size: 16px;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.72);
-  }
 }
 
 @keyframes sun-drift {
