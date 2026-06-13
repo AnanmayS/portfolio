@@ -21,12 +21,12 @@ type Mention = {
 
 const latest: WorkItem[] = [
   {
-    name: "SEDS",
+    name: "SEDS @ UMD",
     logo: "SD",
     rows: [
       {
         title: "Software Engineer",
-        note: "GitHub Actions, Claude API, Docker",
+        note: "CI/CD, Docker, LLM automation",
         start: "2024",
         end: "26",
       },
