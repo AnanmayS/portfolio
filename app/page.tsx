@@ -98,15 +98,14 @@ const earlier: WorkItem[] = [
     ],
   },
   {
-    name: "F1 Analytics",
-    logo: "F1",
-    logoImg: "/project-icons/f1-analytics.png",
-    href: "https://github.com/AnanmayS/Formula-1-Telemetry-Analytics-Platform",
+    name: "ShowdownRL",
+    logo: "SR",
+    href: "https://github.com/AnanmayS/ShowdownRL",
     rows: [
       {
-        title: "Race telemetry & prediction",
-        note: "React, TypeScript, XGBoost, Docker",
-        start: "2025",
+        title: "PPO-trained Pokemon battle agent",
+        note: "Python, PPO, Playwright, Gymnasium",
+        start: "2026",
       },
     ],
   },
@@ -122,7 +121,7 @@ const skills = [
 const misc: Mention[] = [
   {
     year: "Coursework",
-    title: "Data Structures, Algorithms, Object-Oriented Programming, Computer Systems, Computer Architecture",
+    title: "Computer Systems (C), Algorithms (Java), Programming Languages (OCaml, Rust), Computer Architecture, Digital Logic Design (Verilog), FPGA Lab",
     note: "",
     href: "https://umd.edu/",
   },
