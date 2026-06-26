@@ -100,6 +100,7 @@ const earlier: WorkItem[] = [
   {
     name: "ShowdownRL",
     logo: "SR",
+    logoImg: "/project-icons/showdownrl.png",
     href: "https://github.com/AnanmayS/ShowdownRL",
     rows: [
       {
