@@ -85,19 +85,6 @@ const earlier: WorkItem[] = [
     ],
   },
   {
-    name: "Daily Delve",
-    logo: "DD",
-    logoImg: "/project-icons/daily-delve.png",
-    href: "https://github.com/AnanmayS/Daily-Devele",
-    rows: [
-      {
-        title: "Procedural dungeon crawler",
-        note: "TypeScript, Phaser",
-        start: "2025",
-      },
-    ],
-  },
-  {
     name: "ShowdownRL",
     logo: "SR",
     logoImg: "/project-icons/showdownrl.png",
@@ -107,6 +94,19 @@ const earlier: WorkItem[] = [
         title: "PPO-trained Pokemon battle agent",
         note: "Python, PPO, Playwright, Gymnasium",
         start: "2026",
+      },
+    ],
+  },
+  {
+    name: "Daily Delve",
+    logo: "DD",
+    logoImg: "/project-icons/daily-delve.png",
+    href: "https://github.com/AnanmayS/Daily-Devele",
+    rows: [
+      {
+        title: "Procedural dungeon crawler",
+        note: "TypeScript, Phaser",
+        start: "2025",
       },
     ],
   },
