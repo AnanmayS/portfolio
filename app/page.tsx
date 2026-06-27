@@ -327,7 +327,7 @@ export default function Home() {
           </div>
           <a className="resume-link" href="/resume.pdf" target="_blank">
             <ResumeIcon />
-            <span>PDF</span>
+            <span>Resume</span>
           </a>
         </footer>
       </div>
