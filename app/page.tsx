@@ -26,7 +26,7 @@ const latest: WorkItem[] = [
     rows: [
       {
         title: "Software Engineering Intern",
-        note: "FastAPI research platform for 52 companies",
+        note: "AI-powered research platform for catalyst-driven swing trading",
         start: "May 2026",
         end: "Now",
       },
