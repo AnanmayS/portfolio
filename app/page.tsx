@@ -21,12 +21,24 @@ type Mention = {
 
 const latest: WorkItem[] = [
   {
+    name: "GSAlpha Labs LLC",
+    logo: "GS",
+    rows: [
+      {
+        title: "Software Engineering Intern",
+        note: "FastAPI research platform for 52 companies",
+        start: "May 2026",
+        end: "Now",
+      },
+    ],
+  },
+  {
     name: "SEDS @ UMD",
     logo: "SD",
     rows: [
       {
         title: "Software Engineer",
-        note: "CI/CD, Docker, LLM automation",
+        note: "Python FPGA testing, 60% faster simulation",
         start: "2024",
         end: "26",
       },
@@ -38,8 +50,9 @@ const latest: WorkItem[] = [
     rows: [
       {
         title: "Software Engineering Intern",
-        note: "CI/CD, Python, Node.js",
-        start: "2025",
+        note: "Docker CI, 75% faster release validation",
+        start: "Jun 2025",
+        end: "Jul 2025",
       },
     ],
   },
@@ -48,8 +61,8 @@ const latest: WorkItem[] = [
     logo: "XR",
     rows: [
       {
-        title: "Software Engineer",
-        note: "React, PostgreSQL",
+        title: "Software Engineer & Technical Lead",
+        note: "5+ Unity VR apps across 15+ workshops",
         start: "2023",
         end: "24",
       },
@@ -59,27 +72,12 @@ const latest: WorkItem[] = [
 
 const earlier: WorkItem[] = [
   {
-    name: "AI Equity",
-    logo: "AI",
-    logoImg: "/project-icons/ai-equity.png",
-    href: "https://github.com/AnanmayS/AI-Equity-Research-Platform",
+    name: "ClosetAI",
+    logo: "CA",
     rows: [
       {
-        title: "Multi-agent research platform",
-        note: "Next.js, Supabase, Claude API",
-        start: "2026",
-      },
-    ],
-  },
-  {
-    name: "Polymarket",
-    logo: "PM",
-    logoImg: "/project-icons/polymarket.png",
-    href: "https://github.com/AnanmayS/polymarket-papertrade-agent",
-    rows: [
-      {
-        title: "Event-driven trading engine",
-        note: "Python, FastAPI, PostgreSQL",
+        title: "AI wardrobe & outfit recommender",
+        note: "500+ items, recommendations under 2s",
         start: "2026",
       },
     ],
@@ -91,38 +89,38 @@ const earlier: WorkItem[] = [
     href: "https://github.com/AnanmayS/ShowdownRL",
     rows: [
       {
-        title: "PPO-trained Pokemon battle agent",
-        note: "Python, PPO, Playwright, Gymnasium",
+        title: "PPO battle agent with 79% win rate",
+        note: "PyTorch, 2,000+ evaluated matches",
         start: "2026",
       },
     ],
   },
   {
-    name: "Daily Delve",
-    logo: "DD",
-    logoImg: "/project-icons/daily-delve.png",
-    href: "https://github.com/AnanmayS/Daily-Devele",
+    name: "Ghost Line",
+    logo: "GL",
+    logoImg: "/project-icons/f1-analytics.png",
+    href: "https://github.com/AnanmayS/Formula-1-Telemetry-Analytics-Platform",
     rows: [
       {
-        title: "Procedural dungeon crawler",
-        note: "TypeScript, Phaser",
+        title: "Telemetry-derived racing-line optimizer",
+        note: "FastF1, SciPy, 400-point track maps",
         start: "2025",
+        end: "26",
       },
     ],
   },
 ];
 
 const skills = [
-  ["Languages", "Python, TypeScript/JavaScript, Java, C++, C, SQL"],
-  ["Frameworks", "React, Next.js, FastAPI, Node.js"],
-  ["Cloud & Infra", "AWS, Docker, GitHub Actions, Terraform"],
-  ["ML/Data", "PyTorch, XGBoost, scikit-learn, Pandas, PostgreSQL"],
+  ["Languages", "Python, TypeScript/JavaScript, Java, C, SQL, Verilog"],
+  ["Frameworks", "FastAPI, React, Next.js, Node.js, PyTorch, Playwright, SQLAlchemy"],
+  ["Tools", "PostgreSQL, Supabase, NumPy, SciPy, Pandas, Git, Docker, GitHub Actions, Vercel, Linux"],
 ];
 
 const misc: Mention[] = [
   {
     year: "Coursework",
-    title: "Computer Systems (C), Algorithms (Java), Programming Languages (OCaml, Rust), Computer Architecture, Digital Logic Design (Verilog), FPGA Lab",
+    title: "Algorithms, Computer Systems and Organization, Digital Logic Design, Applied Probability and Statistics",
     note: "",
     href: "https://umd.edu/",
   },
