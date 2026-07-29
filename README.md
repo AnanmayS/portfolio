@@ -1,6 +1,8 @@
 # Ananmay Som Singh Portfolio
 
-A clean, responsive personal portfolio built with Next.js, TypeScript, and Tailwind CSS. It is intentionally simple to edit and ready to deploy on Vercel.
+A clean, responsive personal portfolio built with Next.js, TypeScript, and Tailwind CSS.
+
+Live site: [ananmays.github.io/portfolio](https://ananmays.github.io/portfolio/)
 
 ## Run Locally
 
@@ -24,12 +26,6 @@ Create a production build:
 npm run build
 ```
 
-Run the production server locally:
-
-```bash
-npm run start
-```
-
 ## Edit Your Information
 
 Most content lives in `app/page.tsx`.
@@ -42,15 +38,13 @@ Most content lives in `app/page.tsx`.
 
 Global styling is in `app/globals.css`.
 
-## Deploy To Vercel
+## Deploy to GitHub Pages
 
-1. Push this project to a GitHub repository.
-2. Go to [Vercel](https://vercel.com) and choose **Add New Project**.
-3. Import your GitHub repository.
-4. Keep the default framework setting as **Next.js**.
-5. Click **Deploy**.
+The site is exported as static HTML and deployed automatically by
+`.github/workflows/deploy-pages.yml`.
 
-No environment variables are required for this version of the site.
+Every push to `main` runs the typecheck, builds the site with the GitHub Pages
+base path, and publishes the `out` directory.
 
 ## Useful Commands
 

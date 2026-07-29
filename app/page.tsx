@@ -1,5 +1,7 @@
 import { EmailAction } from "./email-action";
 
+const basePath = process.env.PAGES_BASE_PATH ?? "";
+
 type Experience = {
   company: string;
   role: string;
@@ -165,7 +167,7 @@ export default function Home() {
             >
               LinkedIn
             </a>
-            <a href="/resume.pdf" target="_blank">
+            <a href={`${basePath}/resume.pdf`} target="_blank">
               Résumé
             </a>
           </nav>
