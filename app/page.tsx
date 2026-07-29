@@ -1,3 +1,5 @@
+import { EmailAction } from "./email-action";
+
 type Experience = {
   company: string;
   role: string;
@@ -148,7 +150,7 @@ export default function Home() {
           </div>
 
           <nav className="contact-links" aria-label="Contact links">
-            <a href="mailto:ananmays20@gmail.com">Email</a>
+            <EmailAction label="Email" />
             <a
               href="https://github.com/AnanmayS"
               rel="noreferrer"
@@ -192,9 +194,7 @@ export default function Home() {
 
         <footer className="footer">
           <span>College Park, MD</span>
-          <a href="mailto:ananmays20@gmail.com">
-            Get in touch <Arrow />
-          </a>
+          <EmailAction label="Get in touch" showArrow />
         </footer>
       </div>
     </main>
