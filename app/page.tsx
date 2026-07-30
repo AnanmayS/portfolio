@@ -73,7 +73,7 @@ const projects: Project[] = [
 const skills = [
   ["Languages", "Python, TypeScript, JavaScript, Java, C, SQL, Verilog"],
   ["Frameworks", "FastAPI, React, Next.js, Node.js, PyTorch"],
-  ["Tools", "PostgreSQL, Supabase, Docker, GitHub Actions, GitHub Pages"],
+  ["Tools", "AWS, PostgreSQL, Supabase, Docker, GitHub Actions, GitHub Pages"],
 ];
 
 function Arrow() {
