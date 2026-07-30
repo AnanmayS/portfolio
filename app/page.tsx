@@ -48,6 +48,7 @@ const projects: Project[] = [
     name: "ForgeGrid",
     description: "Distributed game builds across workers, cutting build time by 59%.",
     tools: "Node.js, JavaScript, Docker",
+    href: "https://github.com/AnanmayS/forgegrid",
   },
   {
     name: "ClosetAI",
