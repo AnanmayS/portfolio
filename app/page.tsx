@@ -45,6 +45,11 @@ const experience: Experience[] = [
 
 const projects: Project[] = [
   {
+    name: "ForgeGrid",
+    description: "Distributed game builds across workers, cutting build time by 59%.",
+    tools: "Node.js, JavaScript, Docker",
+  },
+  {
     name: "ClosetAI",
     description: "AI wardrobe and outfit recommendations across 500+ items.",
     tools: "FastAPI, React, PostgreSQL",
