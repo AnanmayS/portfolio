@@ -53,6 +53,7 @@ const projects: Project[] = [
     name: "ClosetAI",
     description: "AI wardrobe and outfit recommendations across 500+ items.",
     tools: "FastAPI, React, PostgreSQL",
+    href: "https://github.com/AnanmayS/ClosetAI",
   },
   {
     name: "ShowdownRL",
