@@ -1,4 +1,5 @@
 import { EmailAction } from "./email-action";
+import { ContactForm } from "./contact-form";
 
 const basePath = process.env.PAGES_BASE_PATH ?? "";
 
@@ -201,10 +202,7 @@ export default function Home() {
           </Section>
         </div>
 
-        <footer className="footer">
-          <span>College Park, MD</span>
-          <EmailAction label="Get in touch" showArrow />
-        </footer>
+        <ContactForm />
       </div>
     </main>
   );
