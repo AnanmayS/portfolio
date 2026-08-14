@@ -269,7 +269,8 @@ a:focus-visible {
 }
 
 .contact-form-trigger,
-.contact-form-close,
+.contact-dialog-close,
+.contact-form-cancel,
 .contact-form-submit {
   border: 0;
   font: inherit;
@@ -283,14 +284,16 @@ a:focus-visible {
 }
 
 .contact-form-trigger:hover,
-.contact-form-close:hover {
+.contact-dialog-close:hover,
+.contact-form-cancel:hover {
   color: var(--foreground);
   text-decoration: underline;
   text-underline-offset: 0.2rem;
 }
 
 .contact-form-trigger:focus-visible,
-.contact-form-close:focus-visible,
+.contact-dialog-close:focus-visible,
+.contact-form-cancel:focus-visible,
 .contact-form-submit:focus-visible,
 .contact-form input:focus-visible,
 .contact-form textarea:focus-visible {
@@ -298,43 +301,65 @@ a:focus-visible {
   outline-offset: 0.25rem;
 }
 
-.contact-form {
-  padding: 1.5rem 0;
-  animation: appear 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+.contact-dialog {
+  width: min(calc(100% - 2rem), 34rem);
+  max-width: none;
+  max-height: min(calc(100dvh - 2rem), 42rem);
+  margin: auto;
+  border: 1px solid color-mix(in oklab, var(--foreground) 22%, transparent);
+  padding: 0;
+  overflow: hidden;
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 1.5rem 5rem oklch(0% 0 0 / 0.55);
 }
 
-.contact-form-heading {
+.contact-dialog::backdrop {
+  background: oklch(7% 0 0 / 0.78);
+}
+
+.contact-dialog[open] {
+  animation: dialog-appear 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.contact-dialog-panel {
+  overflow: auto;
+}
+
+.contact-dialog-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+  padding: 1.1rem 1.25rem;
 }
 
-.contact-form-heading h2 {
+.contact-dialog-header h2 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 400;
   letter-spacing: -0.015em;
 }
 
-.contact-form-heading p {
-  margin: 0.25rem 0 0;
-  color: var(--faint);
-  font-size: 0.75rem;
-}
-
-.contact-form-close {
-  padding: 0.125rem 0;
+.contact-dialog-close {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  padding: 0;
   background: transparent;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 200;
+  line-height: 1;
 }
 
-.contact-form-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
 }
 
 .contact-form label {
@@ -345,8 +370,23 @@ a:focus-visible {
   font-size: 0.75rem;
 }
 
-.contact-form-message {
-  grid-column: 1 / -1;
+.contact-recipient {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1rem;
+  color: var(--faint);
+  font-size: 0.75rem;
+}
+
+.contact-recipient strong {
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  text-overflow: ellipsis;
 }
 
 .contact-form input,
@@ -378,16 +418,89 @@ a:focus-visible {
   color: var(--faint);
 }
 
+.contact-honeypot {
+  position: absolute;
+  left: -10000px;
+}
+
+.contact-form-error {
+  margin: -0.25rem 0 0;
+  color: oklch(70% 0.16 25);
+  font-size: 0.75rem;
+}
+
+.contact-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.625rem;
+  margin: 0 -1.25rem -1.25rem;
+  border-top: 1px solid var(--line);
+  padding: 1rem 1.25rem;
+}
+
+.contact-form-cancel,
 .contact-form-submit {
-  margin-top: 1rem;
   padding: 0.7rem 0.9rem;
+  font-size: 0.8125rem;
+}
+
+.contact-form-cancel {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+}
+
+.contact-form-submit {
   background: var(--foreground);
   color: var(--background);
-  font-size: 0.8125rem;
 }
 
 .contact-form-submit:hover {
   background: color-mix(in oklab, var(--foreground) 88%, var(--muted));
+}
+
+.contact-form-submit:disabled,
+.contact-form-cancel:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.contact-form-result {
+  padding: 2.75rem 1.25rem 1.25rem;
+}
+
+.contact-form-result strong {
+  font-size: 1.125rem;
+  font-weight: 400;
+}
+
+.contact-form-result p {
+  margin: 0.35rem 0 2.5rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.contact-form-result button {
+  width: 100%;
+  border: 0;
+  padding: 0.75rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+@keyframes dialog-appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes appear {
@@ -460,12 +573,17 @@ a:focus-visible {
     text-align: left;
   }
 
-  .contact-form-fields {
-    grid-template-columns: 1fr;
+  .contact-dialog-header,
+  .contact-form {
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 
-  .contact-form-message {
-    grid-column: auto;
+  .contact-form-actions {
+    margin-right: -1rem;
+    margin-left: -1rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
