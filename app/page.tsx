@@ -1,5 +1,11 @@
 import { EmailAction } from "./email-action";
 import { ContactForm } from "./contact-form";
+import {
+  ClosetPreview,
+  ForgeGridPreview,
+  GhostLinePreview,
+  ShowdownPreview,
+} from "./project-previews";
 
 const basePath = process.env.PAGES_BASE_PATH ?? "";
 
@@ -13,8 +19,12 @@ type Experience = {
 type Project = {
   name: string;
   description: string;
+  metric: string;
+  metricNote: string;
   tools: string;
+  preview: () => React.ReactElement;
   href?: string;
+  notes?: string;
 };
 
 const experience: Experience[] = [
@@ -47,26 +57,42 @@ const experience: Experience[] = [
 const projects: Project[] = [
   {
     name: "ForgeGrid",
-    description: "Distributed game builds across workers, cutting build time by 59%.",
-    tools: "Node.js, JavaScript, Docker",
+    description:
+      "Splits a game build into 7 independent tasks and schedules them across Node.js workers. Content-based caching skips unchanged tasks on rebuild, and a worker dying mid-build gets its task reassigned instead of failing the run.",
+    metric: "2.5s → 1.0s",
+    metricNote: "59% faster · benchmarked 1–8 workers",
+    tools: "Node.js · Docker · JavaScript",
+    preview: ForgeGridPreview,
     href: "https://github.com/AnanmayS/forgegrid",
   },
   {
-    name: "ClosetAI",
-    description: "AI wardrobe and outfit recommendations across 500+ items.",
-    tools: "FastAPI, React, PostgreSQL",
-    href: "https://github.com/AnanmayS/ClosetAI",
-  },
-  {
     name: "ShowdownRL",
-    description: "A PPO battle agent with a 79% win rate over 2,000+ matches.",
-    tools: "PyTorch, Python",
+    description:
+      "A PPO agent that plays live Pokémon Showdown battles through Playwright, learning from 100+ engineered battle features. The eval harness runs 2,000+ matches per policy version against opponents of known strength, so improvements are measurable rather than anecdotal.",
+    metric: "79% win rate",
+    metricNote: "vs. 50% baseline · 2,000+ matches",
+    tools: "PyTorch · Gymnasium · Playwright · Python",
+    preview: ShowdownPreview,
     href: "https://github.com/AnanmayS/ShowdownRL",
   },
   {
+    name: "ClosetAI",
+    description:
+      "A computer-vision pipeline that cleans clothing photos and tags 10 attributes per item, feeding a recommender that scores 10,000+ outfit combinations against weather, occasion, and past feedback.",
+    metric: "500+ items tagged",
+    metricNote: "10,000+ combinations scored · under 2s",
+    tools: "FastAPI · Next.js · PostgreSQL · TypeScript",
+    preview: ClosetPreview,
+    href: "https://github.com/AnanmayS/ClosetAI",
+  },
+  {
     name: "Ghost Line",
-    description: "Telemetry-derived racing lines built from 400-point track maps.",
-    tools: "FastF1, SciPy, Python",
+    description:
+      "Reconstructs the line a car actually drove from FastF1 telemetry, resampling each lap onto a 400-point track map so two drivers' laps can be compared at the same point on the circuit instead of the same point in time.",
+    metric: "400-point resampling",
+    metricNote: "lap-over-lap delta by track position",
+    tools: "FastF1 · SciPy · NumPy · Python",
+    preview: GhostLinePreview,
     href: "https://github.com/AnanmayS/Formula-1-Telemetry-Analytics-Platform",
   },
 ];
@@ -117,28 +143,39 @@ function ProjectRows() {
   return (
     <div className="project-rows">
       {projects.map((project) => {
-        const content = (
-          <>
-            <div className="project-name">
-              <strong>{project.name}</strong>
-              {project.href ? <Arrow /> : null}
-            </div>
-            <p>{project.description}</p>
-            <span className="project-tools">{project.tools}</span>
-          </>
-        );
+        const Preview = project.preview;
 
-        return project.href ? (
-          <a
-            href={project.href}
-            key={project.name}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {content}
-          </a>
-        ) : (
-          <div key={project.name}>{content}</div>
+        return (
+          <article className="project" key={project.name}>
+            <div className="project-head">
+              <h3>{project.name}</h3>
+              <div className="project-links">
+                {project.notes ? (
+                  <a href={project.notes} rel="noreferrer" target="_blank">
+                    notes <Arrow />
+                  </a>
+                ) : null}
+                {project.href ? (
+                  <a href={project.href} rel="noreferrer" target="_blank">
+                    repo <Arrow />
+                  </a>
+                ) : null}
+              </div>
+            </div>
+
+            <p className="project-description">{project.description}</p>
+
+            <div className="project-preview">
+              <Preview />
+            </div>
+
+            <div className="project-foot">
+              <span className="project-metric">
+                {project.metric} <span>· {project.metricNote}</span>
+              </span>
+              <span className="project-tools">{project.tools}</span>
+            </div>
+          </article>
         );
       })}
     </div>
@@ -186,7 +223,7 @@ export default function Home() {
             <ExperienceRows />
           </Section>
 
-          <Section title="Projects">
+          <Section title="Selected work">
             <ProjectRows />
           </Section>
 
