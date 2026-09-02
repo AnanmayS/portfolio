@@ -1,7 +1,8 @@
-const MARK = "oklch(92% 0 0)";
-const MARK_SOFT = "oklch(58% 0 0)";
-const TRACK = "oklch(34% 0 0)";
-const LABEL = "oklch(66% 0 0)";
+const MARK = "var(--ink)";
+const MARK_SOFT = "#7c857b";
+const TRACK = "#c9d1c3";
+const LABEL = "var(--ink-soft)";
+const FLAG = "var(--flag)";
 
 type PreviewProps = { title: string };
 
@@ -50,12 +51,11 @@ export function TapePreview() {
         <path
           key={x}
           d={`M${x} 11 L${x} 41`}
-          stroke={MARK_SOFT}
-          strokeWidth="1"
-          strokeDasharray="3 3"
+          stroke={FLAG}
+          strokeWidth="1.5"
         />
       ))}
-      <text x="100" y="58" fill={LABEL}>
+      <text x="100" y="58" fill={FLAG}>
         3 gaps flagged · 3,240 messages lost under fault injection
       </text>
 
@@ -71,7 +71,7 @@ export function TapePreview() {
         stroke={MARK_SOFT}
         strokeWidth="1.2"
       />
-      <text x="362" y="96" fill="oklch(80% 0 0)">
+      <text x="362" y="96" fill={MARK}>
         2,580x real time
       </text>
       <text x="100" y="122" fill={LABEL}>
@@ -130,7 +130,7 @@ export function ForgeGridPreview() {
       <text x="280" y="60" fill={LABEL}>
         each task starts as its dependencies finish
       </text>
-      <text x="280" y="106" fill="oklch(80% 0 0)">
+      <text x="280" y="106" fill={MARK}>
         59% faster
       </text>
     </Frame>
@@ -141,7 +141,7 @@ export function ForgeGridPreview() {
 export function ShowdownPreview() {
   return (
     <Frame title="79 percent win rate across 1,000 logged live matches against human opponents, read against an even 50 percent split">
-      <text x="16" y="52" className="pv-hero" fill="oklch(95% 0 0)">
+      <text x="16" y="52" className="pv-hero" fill={MARK}>
         79%
       </text>
       <text x="160" y="52" fill={LABEL}>

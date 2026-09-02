@@ -1,5 +1,6 @@
 import { EmailAction } from "./email-action";
 import { ContactForm } from "./contact-form";
+import { RecordStrip } from "./record-strip";
 import {
   ForgeGridPreview,
   ShowdownPreview,
@@ -12,44 +13,49 @@ type Experience = {
   company: string;
   role: string;
   note: string;
-  date: string;
+  year: string;
+  span: string;
 };
 
 type Project = {
   name: string;
+  lang: string;
   description: string;
   metric: string;
   metricNote: string;
   tools: string;
   preview: () => React.ReactElement;
   href?: string;
-  notes?: string;
 };
 
 const experience: Experience[] = [
   {
     company: "GSAlpha Labs",
     role: "Software Engineering Intern",
-    note: "HomeFlow AI — 52-field contract intake at 96% accuracy",
-    date: "May 2026 · Now",
+    note: "HomeFlow AI — 52-field contract intake at 96% accuracy, every date showing the rule that produced it",
+    year: "2026",
+    span: "may — now",
   },
   {
     company: "SEDS @ UMD",
     role: "Software Engineer",
-    note: "CubeSat GPS test framework, 4h regression down to 95min",
-    date: "2024 · 2026",
+    note: "CubeSat GPS test framework for 26 Verilog modules, 4h regression down to 95min",
+    year: "2024",
+    span: "sep — feb 26",
   },
   {
     company: "theconviction.ai",
     role: "Software Engineering Intern",
-    note: "SEC filings and transcripts for 50+ companies, one record",
-    date: "May 2025 · Aug 2025",
+    note: "SEC filings, transcripts, and news for 50+ companies collapsed into one clean record",
+    year: "2025",
+    span: "may — aug",
   },
 ];
 
 const projects: Project[] = [
   {
     name: "Tape",
+    lang: "go",
     description:
       "Records live exchange feeds to S3 and replays them byte-identical, so a backtest run twice over the same window answers the same way twice. Fault-injection tests severed the feed every 25s; Tape caught all 3 gaps and flags those windows, so nothing silently backtests on missing data.",
     metric: "2,580× replay",
@@ -60,6 +66,7 @@ const projects: Project[] = [
   },
   {
     name: "ForgeGrid",
+    lang: "node",
     description:
       "Spreads a build across worker machines and starts each task the moment its dependencies finish. A content-addressed cache skips any task whose inputs have not changed, and a worker dying mid-build gets its tasks reassigned instead of failing the run.",
     metric: "59% faster",
@@ -70,6 +77,7 @@ const projects: Project[] = [
   },
   {
     name: "ShowdownRL",
+    lang: "python",
     description:
       "A PPO agent that plays live Pokémon Showdown battles through Playwright, reading a 106-feature view of the board and masked out of illegal moves so it never wastes a turn. Every battle log is saved, so a reported win rate traces back to the games behind it.",
     metric: "79% win rate",
@@ -81,16 +89,16 @@ const projects: Project[] = [
 ];
 
 const skills = [
-  ["Languages", "Go, Python, Java, C++, C, TypeScript, JavaScript, SQL, Verilog"],
+  ["languages", "Go, Python, Java, C++, C, TypeScript, JavaScript, SQL, Verilog"],
   [
-    "Backend & data",
-    "FastAPI, Node.js, PostgreSQL, Drizzle, SQLAlchemy, Supabase, Zod, WebSockets",
+    "backend",
+    "FastAPI, Node.js, PostgreSQL, Drizzle, SQLAlchemy, Supabase, Zod, WebSockets, concurrency",
   ],
   [
-    "Infrastructure",
-    "AWS (S3, ECS, CloudWatch), Terraform, Docker, Linux, GitHub Actions, Vercel",
+    "infra",
+    "AWS (S3, ECS, CloudWatch), Terraform, Docker, Linux, GitHub Actions, Vercel, pytest, Vitest",
   ],
-  ["Frameworks & ML", "React, Next.js, PyTorch, LLM extraction and evaluation"],
+  ["frameworks", "React, Next.js, PyTorch, LLM extraction and evaluation"],
 ];
 
 function Arrow() {
@@ -116,13 +124,16 @@ function ExperienceRows() {
   return (
     <div className="rows">
       {experience.map((item) => (
-        <div className="experience-row" key={item.company}>
-          <div className="row-company">{item.company}</div>
-          <div className="row-detail">
-            <span>{item.role}</span>
-            <small>{item.note}</small>
+        <div className="entry" key={item.company}>
+          <div className="entry-rail">
+            <b>{item.year}</b>
+            {item.span}
           </div>
-          <time>{item.date}</time>
+          <div>
+            <h3 className="entry-title">{item.company}</h3>
+            <p className="entry-role">{item.role}</p>
+            <p className="entry-note">{item.note}</p>
+          </div>
         </div>
       ))}
     </div>
@@ -136,34 +147,35 @@ function ProjectRows() {
         const Preview = project.preview;
 
         return (
-          <article className="project" key={project.name}>
-            <div className="project-head">
-              <h3>{project.name}</h3>
-              <div className="project-links">
-                {project.notes ? (
-                  <a href={project.notes} rel="noreferrer" target="_blank">
-                    notes <Arrow />
-                  </a>
-                ) : null}
-                {project.href ? (
-                  <a href={project.href} rel="noreferrer" target="_blank">
-                    repo <Arrow />
-                  </a>
-                ) : null}
+          <article className="entry" key={project.name}>
+            <div className="entry-rail">
+              <b>{project.lang}</b>
+            </div>
+
+            <div>
+              <div className="project-head">
+                <h3 className="entry-title">{project.name}</h3>
+                <div className="project-links">
+                  {project.href ? (
+                    <a href={project.href} rel="noreferrer" target="_blank">
+                      repo <Arrow />
+                    </a>
+                  ) : null}
+                </div>
               </div>
-            </div>
 
-            <p className="project-description">{project.description}</p>
+              <p className="project-description">{project.description}</p>
 
-            <div className="project-preview">
-              <Preview />
-            </div>
+              <div className="project-preview">
+                <Preview />
+              </div>
 
-            <div className="project-foot">
-              <span className="project-metric">
-                {project.metric} <span>· {project.metricNote}</span>
-              </span>
-              <span className="project-tools">{project.tools}</span>
+              <div className="project-foot">
+                <span className="project-metric">
+                  {project.metric} <span>· {project.metricNote}</span>
+                </span>
+                <span className="project-tools">{project.tools}</span>
+              </div>
             </div>
           </article>
         );
@@ -177,37 +189,39 @@ export default function Home() {
     <main className="site-main">
       <div className="page-shell">
         <header className="hero">
-          <div>
-            <h1>Ananmay Som Singh</h1>
-            <p>Computer Engineering @ UMD</p>
-            <p className="hero-note">
-              I build backend and infrastructure software — market data
-              capture, distributed build systems, and LLM pipelines that get
-              measured before they ship.
-            </p>
-          </div>
+          <h1>Ananmay Som Singh</h1>
+          <p className="hero-role">
+            computer engineering @ umd · class of 2028
+          </p>
+          <p className="hero-note">
+            I build systems that keep a record of themselves: feeds you can
+            replay byte-for-byte, builds that prove what they skipped, and
+            agents whose win rate traces back to the logs.
+          </p>
 
           <nav className="contact-links" aria-label="Contact links">
-            <EmailAction label="Email" />
+            <EmailAction label="email" />
             <a
               href="https://github.com/AnanmayS"
               rel="noreferrer"
               target="_blank"
             >
-              GitHub
+              github
             </a>
             <a
               href="https://www.linkedin.com/in/ananmaysingh"
               rel="noreferrer"
               target="_blank"
             >
-              LinkedIn
+              linkedin
             </a>
             <a href={`${basePath}/resume.pdf`} target="_blank">
-              Résumé
+              résumé
             </a>
           </nav>
         </header>
+
+        <RecordStrip />
 
         <div className="content">
           <Section title="Experience">
