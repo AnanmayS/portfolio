@@ -4,7 +4,7 @@ import "./globals.css";
 const basePath = process.env.PAGES_BASE_PATH ?? "";
 const siteUrl = "https://ananmays.github.io/portfolio/";
 const siteDescription =
-  "Computer Engineering student, software engineer, and AI automation builder.";
+  "Computer engineering student at UMD building backend, distributed systems, and applied ML software.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -1,10 +1,9 @@
 import { EmailAction } from "./email-action";
 import { ContactForm } from "./contact-form";
 import {
-  ClosetPreview,
   ForgeGridPreview,
-  GhostLinePreview,
   ShowdownPreview,
+  TapePreview,
 } from "./project-previews";
 
 const basePath = process.env.PAGES_BASE_PATH ?? "";
@@ -31,76 +30,67 @@ const experience: Experience[] = [
   {
     company: "GSAlpha Labs",
     role: "Software Engineering Intern",
-    note: "AI research platform for catalyst-driven swing trading",
+    note: "HomeFlow AI — 52-field contract intake at 96% accuracy",
     date: "May 2026 · Now",
   },
   {
     company: "SEDS @ UMD",
     role: "Software Engineer",
-    note: "Python FPGA testing, 60% faster simulation",
+    note: "CubeSat GPS test framework, 4h regression down to 95min",
     date: "2024 · 2026",
   },
   {
-    company: "Marine Mammal Center",
+    company: "theconviction.ai",
     role: "Software Engineering Intern",
-    note: "Docker CI, 75% faster release validation",
-    date: "Jun 2025 · Jul 2025",
-  },
-  {
-    company: "XR EDU",
-    role: "Software Engineer & Technical Lead",
-    note: "5+ Unity VR apps across 15+ workshops",
-    date: "2023 · 2024",
+    note: "SEC filings and transcripts for 50+ companies, one record",
+    date: "May 2025 · Aug 2025",
   },
 ];
 
 const projects: Project[] = [
   {
+    name: "Tape",
+    description:
+      "Records live exchange feeds to S3 and replays them byte-identical, so a backtest run twice over the same window answers the same way twice. Fault-injection tests severed the feed every 25s; Tape caught all 3 gaps and flags those windows, so nothing silently backtests on missing data.",
+    metric: "2,580× replay",
+    metricNote: "49.8k msg/s sustained · 5.2× smaller on disk",
+    tools: "Go · AWS S3 · ECS · Terraform · Docker",
+    preview: TapePreview,
+    href: "https://github.com/AnanmayS/tape",
+  },
+  {
     name: "ForgeGrid",
     description:
-      "Splits a game build into 7 independent tasks and schedules them across Node.js workers. Content-based caching skips unchanged tasks on rebuild, and a worker dying mid-build gets its task reassigned instead of failing the run.",
-    metric: "2.5s → 1.0s",
-    metricNote: "59% faster · benchmarked 1–8 workers",
-    tools: "Node.js · Docker · JavaScript",
+      "Spreads a build across worker machines and starts each task the moment its dependencies finish. A content-addressed cache skips any task whose inputs have not changed, and a worker dying mid-build gets its tasks reassigned instead of failing the run.",
+    metric: "59% faster",
+    metricNote: "benchmarked 1–8 workers · plateaus past 3",
+    tools: "Node.js · Docker · Linux · JavaScript",
     preview: ForgeGridPreview,
     href: "https://github.com/AnanmayS/forgegrid",
   },
   {
     name: "ShowdownRL",
     description:
-      "A PPO agent that plays live Pokémon Showdown battles through Playwright, learning from 100+ engineered battle features. The eval harness runs 2,000+ matches per policy version against opponents of known strength, so improvements are measurable rather than anecdotal.",
+      "A PPO agent that plays live Pokémon Showdown battles through Playwright, reading a 106-feature view of the board and masked out of illegal moves so it never wastes a turn. Every battle log is saved, so a reported win rate traces back to the games behind it.",
     metric: "79% win rate",
-    metricNote: "vs. 50% baseline · 2,000+ matches",
+    metricNote: "1,000 live matches · human opponents",
     tools: "PyTorch · Gymnasium · Playwright · Python",
     preview: ShowdownPreview,
     href: "https://github.com/AnanmayS/ShowdownRL",
   },
-  {
-    name: "ClosetAI",
-    description:
-      "A computer-vision pipeline that cleans clothing photos and tags 10 attributes per item, feeding a recommender that scores 10,000+ outfit combinations against weather, occasion, and past feedback.",
-    metric: "500+ items tagged",
-    metricNote: "10,000+ combinations scored · under 2s",
-    tools: "FastAPI · Next.js · PostgreSQL · TypeScript",
-    preview: ClosetPreview,
-    href: "https://github.com/AnanmayS/ClosetAI",
-  },
-  {
-    name: "Ghost Line",
-    description:
-      "Reconstructs the line a car actually drove from FastF1 telemetry, resampling each lap onto a 400-point track map so two drivers' laps can be compared at the same point on the circuit instead of the same point in time.",
-    metric: "400-point resampling",
-    metricNote: "lap-over-lap delta by track position",
-    tools: "FastF1 · SciPy · NumPy · Python",
-    preview: GhostLinePreview,
-    href: "https://github.com/AnanmayS/Formula-1-Telemetry-Analytics-Platform",
-  },
 ];
 
 const skills = [
-  ["Languages", "Python, TypeScript, JavaScript, Java, C, SQL, Verilog"],
-  ["Frameworks", "FastAPI, React, Next.js, Node.js, PyTorch"],
-  ["Tools", "AWS, PostgreSQL, Supabase, Docker, GitHub Actions, GitHub Pages"],
+  ["Languages", "Go, Python, Java, C++, C, TypeScript, JavaScript, SQL, Verilog"],
+  [
+    "Backend & data",
+    "FastAPI, Node.js, PostgreSQL, Drizzle, SQLAlchemy, Supabase, Zod, WebSockets",
+  ],
+  [
+    "Infrastructure",
+    "AWS (S3, ECS, CloudWatch), Terraform, Docker, Linux, GitHub Actions, Vercel",
+  ],
+  ["Frameworks & ML", "React, Next.js, PyTorch, LLM extraction and evaluation"],
 ];
 
 function Arrow() {
@@ -191,8 +181,9 @@ export default function Home() {
             <h1>Ananmay Som Singh</h1>
             <p>Computer Engineering @ UMD</p>
             <p className="hero-note">
-              I build useful software across machine learning, backend systems,
-              data, and games.
+              I build backend and infrastructure software — market data
+              capture, distributed build systems, and LLM pipelines that get
+              measured before they ship.
             </p>
           </div>
 
