@@ -33,7 +33,7 @@ layout:
 motion:
   degree-fill: 1100ms
   diagram-grow: 640ms
-  clock-tick: 1s (60s under reduced motion)
+  readout: every animation frame (60s under reduced motion)
 ---
 
 ## Overview
@@ -89,17 +89,25 @@ scale across the whole degree — September 2024 to an expected May 2028 — wit
 readout that counts down live beside it.
 
 The bar alone would look static: it advances about 0.07% a day, far below what
-a viewer can see. The ticking clock is what makes it read as live, so the two
-are one device, not a bar with a decoration attached. Both ends are labelled on
-the page because the start date is an assumption drawn from the earliest UMD
-date on the resume, not something the resume states.
+a viewer can see. The readout is what makes it read as live, so the two are one
+device, not a bar with a decoration attached. Both ends are labelled on the
+page because the start date is an assumption drawn from the earliest UMD date
+on the resume, not something the resume states.
+
+The percentage carries nine decimals because progress advances 8.6e-7 percent
+a second: fewer places and the figure sits still. The leading two decimals stay
+at full strength and the fine tail is dimmed, so the number reads as "54.14"
+with live precision behind it rather than as noise. Updates are written
+straight to the DOM, not through state, so a per-frame counter does not
+re-render the tree sixty times a second.
 
 It also answers the question a recruiter has first: when is this person
 available.
 
-The clock is the only thing on the page that changes on its own. Under
-`prefers-reduced-motion` it drops to whole days and updates once a minute
-rather than every second — a number flickering every second is motion too.
+The readout is the only thing on the page that changes on its own. Under
+`prefers-reduced-motion` it drops to two decimals and whole days and updates
+once a minute — a spinning number is motion too. Screen readers are given one
+steady figure rather than a moving one.
 
 Everything else stays quiet so this lands. If a new element competes with it,
 the new element is wrong.
