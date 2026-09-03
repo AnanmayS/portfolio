@@ -1,7 +1,7 @@
 ---
 version: beta
 name: Measured
-description: A minimal recruiter-first personal site. Near-white ground, one saturated accent spent only on measured results, and every strong claim drawn to scale as a delta the reader can see rather than only read.
+description: A minimal recruiter-first personal site. Near-white ground, one saturated accent spent only on measured results, and every strong claim drawn to scale as a mark the reader can see rather than only read.
 colors:
   ground: "#FAFAFB"
   surface: "#F1F2F5"
@@ -31,8 +31,9 @@ layout:
   radius: 4px
   block-gap: 5.5rem
 motion:
-  intake-collapse: 1900ms
+  degree-fill: 1100ms
   diagram-grow: 640ms
+  clock-tick: 1s (60s under reduced motion)
 ---
 
 ## Overview
@@ -81,22 +82,34 @@ A quiet fixed bar appears once the hero scrolls away, keeping the resume and
 email one click from anywhere on the page. It is function, not chrome — nothing
 lives in it that is not an action.
 
-## The intake collapse
+## Degree progress
 
-The signature, and the only place a large gesture is spent. A full-width bar
-representing about 35 minutes of typing collapses to the 1.4% that is 30
-seconds, inside a ghost outline that preserves the original extent. It is drawn
-to true scale; the drama is the real ratio, not an effect.
+The signature, and the only place a large gesture is spent. A bar drawn to
+scale across the whole degree — September 2024 to an expected May 2028 — with a
+readout that counts down live beside it.
 
-Everything else on the page stays quiet so this lands. If a new element competes
-with it, the new element is wrong.
+The bar alone would look static: it advances about 0.07% a day, far below what
+a viewer can see. The ticking clock is what makes it read as live, so the two
+are one device, not a bar with a decoration attached. Both ends are labelled on
+the page because the start date is an assumption drawn from the earliest UMD
+date on the resume, not something the resume states.
+
+It also answers the question a recruiter has first: when is this person
+available.
+
+The clock is the only thing on the page that changes on its own. Under
+`prefers-reduced-motion` it drops to whole days and updates once a minute
+rather than every second — a number flickering every second is motion too.
+
+Everything else stays quiet so this lands. If a new element competes with it,
+the new element is wrong.
 
 ## Motion
 
 Four moments, all purposeful:
 
 1. The hero rises on load, staggered.
-2. The intake bar collapses once, after a beat holding at full width.
+2. The degree bar fills once on load, then only its readout changes.
 3. Project diagrams draw in when scrolled into view.
 4. The fixed bar slides in past the hero.
 
@@ -120,5 +133,5 @@ invisible. Under `prefers-reduced-motion` everything lands immediately.
 - Do keep the accent scarce enough that one blue mark reads as the answer.
 - Do write experience as short bullets a scanner can skim.
 - Don't add a second accent, a gradient, or a shadow that is not the dialog's.
-- Don't turn the hero into a stats row; the collapse is the hero.
+- Don't turn the hero into a stats row; the degree bar is the hero.
 - Don't let a decorative element animate. Motion is for things that measure.

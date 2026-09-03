@@ -222,48 +222,51 @@ p {
   color: #fff;
 }
 
-/* ---------- signature: the intake collapse ---------- */
+/* ---------- signature: live degree progress ---------- */
 
-.delta {
+.degree {
   margin: 3.25rem 0 0;
   border-top: 1px solid var(--rule);
   padding-top: 1.5rem;
 }
 
-.delta-what {
+.degree-what {
   color: var(--faint);
   font-family: var(--font-code);
   font-size: 0.6875rem;
 }
 
-.delta-svg {
+.degree-svg {
   display: block;
   width: 100%;
   height: auto;
   margin-top: 0.75rem;
 }
 
-.delta-fill {
+.degree-fill {
   transform-box: fill-box;
   transform-origin: left center;
-  animation: delta-collapse 1900ms cubic-bezier(0.22, 1, 0.36, 1) 520ms both;
+  animation: degree-fill 1100ms cubic-bezier(0.22, 1, 0.36, 1) 320ms both;
 }
 
-.delta-read {
+.degree-read {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
   font-family: var(--font-code);
   font-size: 0.75rem;
+  /* the clock reruns every second; fixed-width digits stop it juddering */
+  font-variant-numeric: tabular-nums;
 }
 
-.delta-after {
+.degree-pct {
   color: var(--accent);
   font-weight: 500;
 }
 
-.delta-before {
+.degree-span,
+.degree-left {
   color: var(--faint);
 }
 
@@ -690,14 +693,13 @@ p {
 
 /* ---------- motion ---------- */
 
-@keyframes delta-collapse {
-  0%,
-  26% {
-    transform: scaleX(1);
+@keyframes degree-fill {
+  from {
+    transform: scaleX(0);
   }
 
-  100% {
-    transform: scaleX(0.0142857);
+  to {
+    transform: scaleX(1);
   }
 }
 

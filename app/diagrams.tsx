@@ -4,45 +4,6 @@
   ever the measured result.
 */
 
-/* ---- signature: the one measurement the whole page opens on ---- */
-
-const INTAKE_BEFORE = 35 * 60; /* ~35 minutes of typing */
-const INTAKE_AFTER = 30; /* under 30 seconds */
-
-export function IntakeDelta() {
-  return (
-    <figure className="delta">
-      <figcaption className="delta-what">
-        purchase-agreement intake · HomeFlow AI
-      </figcaption>
-
-      <svg
-        className="delta-svg"
-        viewBox="0 0 720 44"
-        role="img"
-        aria-label="Purchase-agreement intake fell from about 35 minutes of typing to under 30 seconds, drawn to scale."
-        fill="none"
-      >
-        {/* the before extent stays as a ghost, so the collapse stays legible */}
-        <rect x="0.5" y="8.5" width="719" height="27" stroke="var(--rule)" />
-        <rect
-          className="delta-fill"
-          x="0"
-          y="8"
-          width="720"
-          height="28"
-          fill="var(--accent)"
-        />
-      </svg>
-
-      <div className="delta-read">
-        <span className="delta-after">30 seconds</span>
-        <span className="delta-before">was ~35 minutes</span>
-      </div>
-    </figure>
-  );
-}
-
 /* ---- project marks ---- */
 
 type Seg = [number, number];
