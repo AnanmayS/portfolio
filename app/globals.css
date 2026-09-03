@@ -265,6 +265,12 @@ p {
   font-weight: 500;
 }
 
+/* The fine digits move every frame; dimming them keeps the readable figure
+   in front and the precision behind it. */
+.degree-tail {
+  opacity: 0.55;
+}
+
 .degree-span,
 .degree-left {
   color: var(--faint);
