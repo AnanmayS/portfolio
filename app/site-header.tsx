@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { ThemeToggle } from "./theme-toggle";
+
 /*
   A quiet persistent bar that appears once the hero scrolls away, so the
   resume and email stay one click from wherever a reader has got to.
@@ -22,6 +24,7 @@ export function SiteHeader({ resumeHref }: { resumeHref: string }) {
         <span className="topbar-name">Ananmay Som Singh</span>
         <nav className="topbar-links" aria-label="Quick links">
           <a href="mailto:ananmays20@gmail.com">email</a>
+          <ThemeToggle />
           <a className="topbar-cta" href={resumeHref} target="_blank">
             résumé
           </a>

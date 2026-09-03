@@ -7,17 +7,25 @@
   Separation is carried by space first and hairlines only where a row genuinely
   needs an edge.
 */
+/*
+  Dark is the default, so the dark palette lives on bare :root and light is the
+  override. The attribute is `data-appearance`, not `data-theme`, because some
+  hosts stamp `data-theme` on the root themselves and would hijack the toggle.
+*/
 :root {
-  --ground: #fafafb;
-  --surface: #f1f2f5;
-  --ink: #14181d;
-  --muted: #4c545f;
-  --faint: #6a7280;
-  --rule: #e2e5ea;
-  --slow: #bcc3cd; /* the un-improved baseline in a comparison */
-  --accent: #2743e8;
-  --accent-ink: #1c33b8;
-  --accent-soft: #eaedfe;
+  --ground: #0f1216;
+  --surface: #171b21;
+  --ink: #e8ebef;
+  --muted: #aab2bd;
+  --faint: #838c99;
+  --rule: #262c34;
+  --slow: #39424d; /* the un-improved baseline in a comparison */
+  --accent: #7b93ff;
+  --accent-ink: #9aabff;
+  --on-accent: #0f1216;
+  --danger: #ff9a90;
+  --shadow: rgba(0, 0, 0, 0.55);
+  --backdrop: rgba(8, 10, 13, 0.62);
 
   --radius: 4px;
   --gutter: 1.5rem;
@@ -28,12 +36,29 @@
   --font-code: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
+:root[data-appearance="light"] {
+  color-scheme: light;
+  --ground: #fafafb;
+  --surface: #f1f2f5;
+  --ink: #14181d;
+  --muted: #4c545f;
+  --faint: #6a7280;
+  --rule: #e2e5ea;
+  --slow: #bcc3cd;
+  --accent: #2743e8;
+  --accent-ink: #1c33b8;
+  --on-accent: #ffffff;
+  --danger: #c0362c;
+  --shadow: rgba(20, 24, 29, 0.24);
+  --backdrop: rgba(20, 24, 29, 0.4);
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
   background: var(--ground);
   scroll-behavior: smooth;
 }
@@ -47,11 +72,14 @@ body {
   font-size: 0.9375rem;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 }
 
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 a {
@@ -136,12 +164,12 @@ p {
   border-radius: var(--radius);
   background: var(--accent);
   padding: 0.4rem 0.7rem;
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .topbar-cta:hover {
   background: var(--accent-ink);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* ---------- shell ---------- */
@@ -188,7 +216,7 @@ p {
 }
 
 .hero-lead {
-  max-width: 34ch;
+  max-width: 38ch;
   margin-top: 1.5rem;
   font-size: 1.3125rem;
   line-height: 1.45;
@@ -210,6 +238,19 @@ p {
   color: var(--accent);
 }
 
+.theme-toggle {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--accent);
+}
+
 .action-primary {
   border-radius: var(--radius);
   background: var(--ink);
@@ -219,7 +260,7 @@ p {
 
 .action-primary:hover {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* ---------- signature: live degree progress ---------- */
@@ -522,11 +563,11 @@ p {
   overflow: hidden;
   background: var(--ground);
   color: var(--ink);
-  box-shadow: 0 1.5rem 4rem rgba(20, 24, 29, 0.24);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
 }
 
 .contact-dialog::backdrop {
-  background: rgba(20, 24, 29, 0.4);
+  background: var(--backdrop);
 }
 
 .contact-dialog[open] {
@@ -629,7 +670,7 @@ p {
 
 .contact-form-error {
   margin-top: -0.25rem;
-  color: #c0362c;
+  color: var(--danger);
   font-size: 0.8125rem;
 }
 
@@ -657,7 +698,7 @@ p {
 
 .contact-form-submit {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .contact-form-submit:hover {
@@ -691,7 +732,7 @@ p {
   border-radius: var(--radius);
   padding: 0.7rem 1rem;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   font-family: var(--font-code);
   font-size: 0.75rem;
   cursor: pointer;
