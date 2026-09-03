@@ -3,6 +3,7 @@ import { EmailAction } from "./email-action";
 import { DegreeProgress } from "./degree-progress";
 import { Reveal } from "./reveal";
 import { SiteHeader } from "./site-header";
+import { ThemeToggle } from "./theme-toggle";
 import {
   ForgeGridDiagram,
   ShowdownDiagram,
@@ -111,8 +112,9 @@ export default function Home() {
             computer engineering · umd 2028 · college park, md
           </p>
           <p className="hero-lead">
-            I build backend and infrastructure software. Every number in the
-            work below comes from a run I can show you.
+            Hey, I&apos;m Ananmay. I build backend and infrastructure things,
+            and I keep the receipts — every number on this page came from a run
+            I still have the logs for.
           </p>
           <nav className="hero-actions" aria-label="Links">
             <a className="action-primary" href={resumeHref} target="_blank">
@@ -129,6 +131,7 @@ export default function Home() {
             >
               linkedin
             </a>
+            <ThemeToggle />
           </nav>
           <DegreeProgress buildNow={Date.now()} />
         </header>

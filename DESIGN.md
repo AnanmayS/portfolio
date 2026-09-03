@@ -1,17 +1,28 @@
 ---
 version: beta
 name: Measured
-description: A minimal recruiter-first personal site. Near-white ground, one saturated accent spent only on measured results, and every strong claim drawn to scale as a mark the reader can see rather than only read.
+description: A minimal recruiter-first personal site in dark and light. One saturated accent spent only on measured results, and every strong claim drawn to scale as a mark the reader can see rather than only read.
 colors:
-  ground: "#FAFAFB"
-  surface: "#F1F2F5"
-  ink: "#14181D"
-  muted: "#4C545F"
-  faint: "#6A7280"
-  rule: "#E2E5EA"
-  slow: "#BCC3CD"
-  accent: "#2743E8"
-  accent-ink: "#1C33B8"
+  dark:
+    ground: "#0F1216"
+    surface: "#171B21"
+    ink: "#E8EBEF"
+    muted: "#AAB2BD"
+    faint: "#838C99"
+    rule: "#262C34"
+    slow: "#39424D"
+    accent: "#7B93FF"
+    on-accent: "#0F1216"
+  light:
+    ground: "#FAFAFB"
+    surface: "#F1F2F5"
+    ink: "#14181D"
+    muted: "#4C545F"
+    faint: "#6A7280"
+    rule: "#E2E5EA"
+    slow: "#BCC3CD"
+    accent: "#2743E8"
+    on-accent: "#FFFFFF"
 typography:
   display:
     fontFamily: "Familjen Grotesk"
@@ -50,17 +61,32 @@ hairlines only where a row genuinely needs an edge, and a single accent.
 
 ## Colors
 
-Near-monochrome. A cool near-white ground, blue-black ink, and one saturated
-cobalt.
+Near-monochrome in both themes, with one saturated accent.
 
-The accent is reserved for a measured result and nothing else: the collapsed
-intake bar, the flagged gaps in Tape, the 59% mark, the win rate, the resume
-action, focus rings, and link hover. If it starts appearing on decoration it
-stops reading as a signal.
+Dark is the default and lives on bare `:root`; light is the override, keyed on
+`data-appearance="light"` on the root element. The attribute is deliberately
+not `data-theme`: some hosts stamp that themselves, and would override the
+reader's own choice. An explicit choice is stored in `localStorage` and applied
+by a tiny script before first paint, so a reader who picked light never sees a
+flash of dark.
+
+Every colour is declared as a token in the bare `:root` block and only
+redefined in the light block. Nothing is styled with a literal, so both themes
+resolve as a complete set — this is why the diagrams invert correctly without
+having any theme logic of their own.
+
+The accent shifts between themes rather than staying fixed: cobalt on light,
+lifted to a paler blue on dark so it keeps its contrast against a dark ground.
+`--on-accent` carries the text colour that sits on top of the accent, which
+flips from white to near-black; it is never assumed.
+
+The accent is reserved for a measured result and nothing else: the degree bar,
+the flagged gaps in Tape, the 59% mark, the win rate, the resume action, focus
+rings, and link hover.
 
 `--slow` is the deliberate neutral for the un-improved side of a comparison. It
-must stay visibly darker than `--rule`, or the baseline reads as an empty track
-instead of the slow run.
+must stay visibly distinct from `--rule` in both themes, or the baseline reads
+as an empty track instead of the slow run.
 
 ## Typography
 
@@ -142,5 +168,8 @@ invisible. Under `prefers-reduced-motion` everything lands immediately.
 - Do keep the accent scarce enough that one blue mark reads as the answer.
 - Do write experience as short bullets a scanner can skim.
 - Don't add a second accent, a gradient, or a shadow that is not the dialog's.
+- Don't style anything with a colour literal; both themes resolve through
+  tokens, and a literal breaks one of them.
 - Don't turn the hero into a stats row; the degree bar is the hero.
 - Don't let a decorative element animate. Motion is for things that measure.
+- Don't reach for `data-theme`; this page owns `data-appearance`.

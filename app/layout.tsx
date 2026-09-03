@@ -50,6 +50,15 @@ export default function RootLayout({
       lang="en"
       className={`${display.variable} ${body.variable} ${mono.variable}`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('appearance')==='light')" +
+              "document.documentElement.dataset.appearance='light'}catch(e){}",
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
