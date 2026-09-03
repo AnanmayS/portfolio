@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
   straight to the DOM rather than through state, so a 60fps counter does not
   re-render the tree sixty times a second.
 */
-const START = Date.UTC(2024, 8, 1); /* Sep 2024, first UMD term */
+const START = Date.UTC(2024, 7, 28); /* first day of term at UMD */
 const END = Date.UTC(2028, 4, 15); /* expected May 2028 */
 const SPAN = END - START;
 const DAY = 86_400_000;
@@ -75,7 +75,7 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
       svg.current.setAttribute(
         "aria-label",
         `${measure(Date.now(), false).head} percent through a B.S. in Computer ` +
-          `Engineering, September 2024 to an expected May 2028.`,
+          `Engineering, 28 August 2024 to an expected May 2028.`,
       );
     }
 
@@ -102,7 +102,7 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
         ref={svg}
         viewBox="0 0 720 44"
         role="img"
-        aria-label="Progress through a B.S. in Computer Engineering, September 2024 to an expected May 2028."
+        aria-label="Progress through a B.S. in Computer Engineering, 28 August 2024 to an expected May 2028."
         fill="none"
       >
         <rect x="0.5" y="8.5" width="719" height="27" stroke="var(--rule)" />
@@ -126,7 +126,7 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
             </span>
             %
           </span>
-          <span className="degree-span"> of sep 2024 → may 2028</span>
+          <span className="degree-span"> of aug 2024 → may 2028</span>
         </span>
         <span className="degree-left" ref={left}>
           {seed.left}

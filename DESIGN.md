@@ -85,14 +85,15 @@ lives in it that is not an action.
 ## Degree progress
 
 The signature, and the only place a large gesture is spent. A bar drawn to
-scale across the whole degree — September 2024 to an expected May 2028 — with a
+scale across the whole degree — 28 August 2024 to an expected May 2028 — with a
 readout that counts down live beside it.
 
 The bar alone would look static: it advances about 0.07% a day, far below what
 a viewer can see. The readout is what makes it read as live, so the two are one
-device, not a bar with a decoration attached. Both ends are labelled on the
-page because the start date is an assumption drawn from the earliest UMD date
-on the resume, not something the resume states.
+device, not a bar with a decoration attached. The start is the real first day
+of term; the end is the expected May 2028 the resume states, pinned to mid-May
+for the arithmetic. Both ends stay labelled on the page so the span the figure
+is measured against is always visible.
 
 The percentage carries nine decimals because progress advances 8.6e-7 percent
 a second: fewer places and the figure sits still. The leading two decimals stay
