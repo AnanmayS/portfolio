@@ -67,18 +67,15 @@ export function ContactForm() {
   };
 
   return (
-    <div className="contact-form-shell">
-      <footer className="footer">
-        <span>College Park, MD</span>
-        <button
-          aria-haspopup="dialog"
-          className="contact-form-trigger"
-          onClick={openDialog}
-          type="button"
-        >
-          Get in touch <span aria-hidden="true">↗</span>
-        </button>
-      </footer>
+    <>
+      <button
+        aria-haspopup="dialog"
+        className="contact-form-trigger"
+        onClick={openDialog}
+        type="button"
+      >
+        send a message
+      </button>
 
       <dialog
         aria-labelledby="contact-dialog-title"
@@ -166,6 +163,6 @@ export function ContactForm() {
           )}
         </div>
       </dialog>
-    </div>
+    </>
   );
 }
