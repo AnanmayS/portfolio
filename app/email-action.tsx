@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const EMAIL_ADDRESS = "ananmays20@gmail.com";
+const EMAIL_ADDRESS = "ananmaysom@gmail.com";
 
 function copyWithFallback(value: string) {
   const input = document.createElement("textarea");
