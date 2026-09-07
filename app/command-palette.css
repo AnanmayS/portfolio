@@ -1,0 +1,164 @@
+/*
+  Command palette. A native <dialog> so the browser owns the top layer, the
+  backdrop, Escape, and returning focus to whatever opened it. Everything here
+  is a token; there is no theme logic in the component.
+*/
+
+.cp-trigger {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.2rem 0.4rem;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.cp-trigger:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cp-dialog {
+  width: min(calc(100% - 2rem), 34rem);
+  max-width: none;
+  max-height: min(calc(100dvh - 4rem), 30rem);
+  /* Sits high on the screen: it is a keyboard surface, not a page. */
+  margin: 12vh auto auto;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--ground);
+  color: var(--ink);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+}
+
+.cp-dialog::backdrop {
+  background: var(--backdrop);
+}
+
+.cp-dialog[open] {
+  animation: rise 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cp-panel {
+  display: flex;
+  max-height: inherit;
+  flex-direction: column;
+}
+
+.cp-field {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  padding: 0 1rem;
+}
+
+.cp-caret {
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.8125rem;
+}
+
+.cp-input {
+  width: 100%;
+  border: 0;
+  padding: 0.9rem 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-code);
+  font-size: 0.8125rem;
+}
+
+.cp-input::placeholder {
+  color: var(--faint);
+}
+
+.cp-input:focus {
+  outline: none;
+}
+
+.cp-list {
+  margin: 0;
+  padding: 0.35rem 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.cp-row {
+  display: grid;
+  align-items: baseline;
+  /* label · dimmed detail · section, with the detail taking the slack */
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  border-left: 2px solid transparent;
+  padding: 0.45rem 1rem 0.45rem calc(1rem - 2px);
+  cursor: pointer;
+}
+
+.cp-row[aria-selected="true"] {
+  border-left-color: var(--accent);
+  background: var(--surface);
+}
+
+.cp-label {
+  font-family: var(--font-code);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.cp-detail {
+  overflow: hidden;
+  color: var(--faint);
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cp-section {
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+}
+
+.cp-empty {
+  padding: 1.25rem 1rem;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+}
+
+.cp-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--rule);
+  padding: 0.55rem 1rem;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+}
+
+@media (max-width: 44rem) {
+  .cp-dialog {
+    margin-top: 6vh;
+  }
+
+  /* The question would crowd the label at 390px; the label carries it. */
+  .cp-detail {
+    display: none;
+  }
+
+  .cp-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .cp-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

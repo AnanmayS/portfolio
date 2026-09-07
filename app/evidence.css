@@ -1,0 +1,228 @@
+/*
+  Evidence drawer. A claim in a sentence is a button, not a link: it does not
+  navigate, it opens the run behind the number. The dotted accent underline is
+  the only accent spent inside body text, and it is spent on a measured result.
+*/
+
+.ev-claim {
+  border: 0;
+  border-bottom: 1px dotted var(--accent);
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ev-claim:hover .ev-claim-text {
+  color: var(--accent);
+}
+
+.ev-claim:hover .ev-claim-label {
+  color: var(--accent);
+}
+
+.ev-claim-label {
+  margin-left: 0.15em;
+  color: var(--faint);
+  font-family: var(--font-code);
+  /* a footnote marker, so it sits just under the 0.6875rem small-mono size */
+  font-size: 0.625rem;
+  font-style: normal;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* The label reads as a footnote marker; a screen reader gets a sentence. */
+.ev-claim-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- the drawer ---------- */
+
+.ev-dialog {
+  width: min(calc(100% - 2rem), 34rem);
+  max-width: none;
+  max-height: min(calc(100dvh - 2rem), 42rem);
+  margin: auto;
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--ground);
+  color: var(--ink);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+}
+
+.ev-dialog::backdrop {
+  background: var(--backdrop);
+}
+
+.ev-dialog[open] {
+  animation: rise 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ev-dialog-panel {
+  max-height: min(calc(100dvh - 2rem), 42rem);
+  overflow: auto;
+}
+
+.ev-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+  padding: 1.1rem 1.25rem;
+}
+
+.ev-dialog-header h2 {
+  font-size: 1rem;
+  text-wrap: pretty;
+}
+
+.ev-dialog-close {
+  display: grid;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 0;
+  margin: -0.25rem -0.4rem 0 0;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ev-dialog-close:hover {
+  color: var(--accent);
+}
+
+.ev-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.25rem;
+}
+
+.ev-kicker {
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ev-lines {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.85rem 0.9rem;
+  overflow-wrap: anywhere;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  line-height: 1.85;
+  white-space: pre-wrap;
+}
+
+.ev-rows {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.ev-rows > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.9fr) 1fr;
+  gap: 0.75rem 1rem;
+  border-top: 1px solid var(--rule);
+  padding: 0.55rem 0.9rem;
+}
+
+.ev-rows > div:first-child {
+  border-top: 0;
+}
+
+.ev-rows dt,
+.ev-rows dd {
+  margin: 0;
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.ev-rows dt {
+  color: var(--faint);
+}
+
+.ev-rows dd {
+  color: var(--ink);
+}
+
+.ev-single {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.7rem 0.9rem;
+  overflow-wrap: anywhere;
+  background: var(--surface);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+}
+
+.ev-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.9rem;
+}
+
+.ev-source {
+  max-width: 44ch;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  overflow-wrap: break-word;
+}
+
+.ev-open {
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+.ev-open:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 44rem) {
+  .ev-dialog-header,
+  .ev-body {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .ev-rows > div {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+}

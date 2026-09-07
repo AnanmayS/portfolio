@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { CommandPaletteTrigger } from "./command-palette";
 import { ThemeToggle } from "./theme-toggle";
 
 /*
@@ -24,6 +25,7 @@ export function SiteHeader({ resumeHref }: { resumeHref: string }) {
         <span className="topbar-name">Ananmay Som Singh</span>
         <nav className="topbar-links" aria-label="Quick links">
           <a href="mailto:ananmaysom@gmail.com">email</a>
+          <CommandPaletteTrigger />
           <ThemeToggle />
           <a className="topbar-cta" href={resumeHref} target="_blank">
             résumé

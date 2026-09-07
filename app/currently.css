@@ -1,0 +1,98 @@
+/* ---------- currently strip ---------- */
+/*
+  One hairline row under the hero, no fill, three cells that wrap at narrow
+  widths. Every line is clamped to two lines so the strip cannot grow past
+  about five rems on desktop; the full text stays in the title attribute.
+*/
+
+.now {
+  margin-top: 2.5rem;
+}
+
+.now-row {
+  display: grid;
+  /* the push line carries the longest text, so it gets the wider column */
+  grid-template-columns: 1.25fr 1fr 1fr;
+  gap: 0.9rem 1.5rem;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.7rem 0;
+}
+
+.now-cell {
+  min-width: 0;
+}
+
+.now-label {
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+}
+
+.now-line {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 0.15rem;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.now-push {
+  color: inherit;
+}
+
+.now-repo {
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+}
+
+.now-sep,
+.now-line time {
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+}
+
+.now-msg {
+  color: var(--muted);
+}
+
+.now-push:hover .now-repo,
+.now-push:hover .now-msg,
+.now-push:hover time {
+  color: var(--accent);
+}
+
+.now-source {
+  margin-top: 0.55rem;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  text-align: right;
+}
+
+/* Two cells, then one, rather than three squeezed columns. */
+@media (max-width: 46rem) {
+  .now-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 30rem) {
+  .now-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.7rem;
+  }
+
+  .now-line {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+}
