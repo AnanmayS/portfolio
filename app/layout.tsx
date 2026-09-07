@@ -1,25 +1,18 @@
-import type { Metadata } from "next";
-import { Azeret_Mono, Familjen_Grotesk, Schibsted_Grotesk } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const display = Familjen_Grotesk({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const body = Schibsted_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const mono = Azeret_Mono({
+const sans = Geist({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-mono",
+  variable: "--font-geist-sans",
+  display: "swap",
+});
+
+const mono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
@@ -42,20 +35,25 @@ export const metadata: Metadata = {
   icons: { icon: `${basePath}/favicon.svg` },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#131313" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable}`}
-    >
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <head>
+        {/* Apply a stored theme choice before first paint; otherwise follow the system. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(localStorage.getItem('appearance')==='light')" +
-              "document.documentElement.dataset.appearance='light'}catch(e){}",
+              "try{var a=localStorage.getItem('appearance');" +
+              "if(a==='light'||a==='dark')document.documentElement.dataset.appearance=a}catch(e){}",
           }}
         />
       </head>

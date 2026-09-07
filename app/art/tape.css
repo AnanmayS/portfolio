@@ -1,0 +1,248 @@
+/*
+  Tape — one 8s loop, in four beats.
+
+    0.0-3.1s  the capture track fills left to right; twice the feed is severed,
+              the ticks stop, and a dashed span is drawn where nothing arrived
+    3.5-4.4s  a hairline sweeps down off the capture track, narrowing to a
+              quarter as it goes: the window being read back
+    4.5-5.9s  the replay track redraws the same window at that quarter width,
+              fast, gaps included, and "2,790×" lands at its right end
+    6.0-6.9s  "= ee9576…fb7a21" and "byte-identical" fade in
+    6.9-8.0s  rest, then repeat
+
+  The un-animated state is the last frame, so a browser that never adds
+  `is-visible` (and a reader who asked for less motion) still gets the ending.
+*/
+
+.art-tape {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tape-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--faint);
+}
+
+.tape-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--foreground);
+}
+
+.tape-rule {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+/* Message density. Muted, so the severed spans are the darkest thing here. */
+.tape-tick {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.tape-tick-fine {
+  stroke-width: 1;
+}
+
+/* A hole in the data is a dashed stroke, never a colour. */
+.tape-gap {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+/* The same holes, a quarter as wide, so the dashes shorten with them. */
+.tape-gap-fine {
+  stroke-dasharray: 2 2;
+}
+
+.tape-sweep {
+  fill: var(--foreground);
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: 80px 50px;
+}
+
+/* ---- the loop ---- */
+
+@keyframes tape-capture-fill {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  12.5% {
+    clip-path: inset(0 60% 0 0);
+  } /* up to the first severance */
+  16.5% {
+    clip-path: inset(0 60% 0 0);
+  } /* nothing arrives */
+  18.2% {
+    clip-path: inset(0 54.69% 0 0);
+  }
+  25.8% {
+    clip-path: inset(0 30% 0 0);
+  } /* up to the second */
+  29.8% {
+    clip-path: inset(0 30% 0 0);
+  }
+  31.5% {
+    clip-path: inset(0 24.69% 0 0);
+  }
+  39.2%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes tape-gap-1 {
+  0%,
+  13% {
+    opacity: 0;
+  }
+  17%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tape-gap-2 {
+  0%,
+  26.5% {
+    opacity: 0;
+  }
+  30.5%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tape-note {
+  0%,
+  16% {
+    opacity: 0;
+  }
+  21%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tape-sweep {
+  0%,
+  43.75% {
+    opacity: 0;
+    transform: translateY(0) scaleX(1);
+  }
+  46%,
+  53% {
+    opacity: 0.75;
+  }
+  55% {
+    transform: translateY(74px) scaleX(0.25);
+  }
+  57%,
+  100% {
+    opacity: 0;
+    transform: translateY(74px) scaleX(0.25);
+  }
+}
+
+@keyframes tape-replay-fill {
+  0%,
+  56.25% {
+    clip-path: inset(0 100% 0 0);
+  }
+  71.5%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes tape-rate {
+  0%,
+  68% {
+    opacity: 0;
+  }
+  74%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tape-digest {
+  0%,
+  75% {
+    opacity: 0;
+  }
+  82%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tape-verdict {
+  0%,
+  79% {
+    opacity: 0;
+  }
+  86%,
+  100% {
+    opacity: 1;
+  }
+}
+
+.is-visible .tape-capture {
+  animation: tape-capture-fill 8s linear infinite;
+}
+
+.is-visible .tape-gap-1 {
+  animation: tape-gap-1 8s linear infinite;
+}
+
+.is-visible .tape-gap-2 {
+  animation: tape-gap-2 8s linear infinite;
+}
+
+.is-visible .tape-note {
+  animation: tape-note 8s linear infinite;
+}
+
+.is-visible .tape-sweep {
+  animation: tape-sweep 8s linear infinite;
+}
+
+.is-visible .tape-replay {
+  animation: tape-replay-fill 8s linear infinite;
+}
+
+.is-visible .tape-rate {
+  animation: tape-rate 8s linear infinite;
+}
+
+.is-visible .tape-digest {
+  animation: tape-digest 8s linear infinite;
+}
+
+.is-visible .tape-verdict {
+  animation: tape-verdict 8s linear infinite;
+}
+
+/* Narrow screens: the drawing shrinks, so the type grows back into it. */
+@media (max-width: 40rem) {
+  .tape-label,
+  .tape-num {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-tape,
+  .art-tape * {
+    animation: none !important;
+  }
+}

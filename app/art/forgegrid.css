@@ -1,0 +1,702 @@
+/*
+  ForgeGrid — one 8.5s loop, four lanes, one time axis.
+
+    0.0 – 2.5s  run 1. The baseline lane lays down seven tasks nose to tail
+                while the three worker lanes run the same graph in parallel;
+                the fleet lands at 1.0s, the baseline is 40% along.
+    2.5 – 3.7s  hold.
+    3.7 – 4.0s  the worker lanes clear; the baseline and the 1.0s result stay,
+                because they are the yardstick the second run is read against.
+    4.0 – 6.5s  run 2, "worker 2 dies". Its bar goes dashed at 0.40s, its task
+                drops into worker 3's lane and finishes there; 1.4s.
+    6.5 – 7.5s  the rebuild line: 7 of 7 from cache.
+    7.5 – 8.5s  rest, then repeat.
+
+  Every animation shares the 8.5s period, so the whole scene is one clock.
+  Unclassed (no .is-visible) and under reduced motion the figure sits at the
+  last frame: both runs' results and the cache line already on the page.
+*/
+
+.art-fg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+
+  --fg-dur: 8.5s;
+  --fg-fs: 11px;
+  --fg-fs-num: 12px;
+}
+
+.art-fg .fg-narrow {
+  display: none;
+}
+
+/* Small screens shrink the whole viewBox, so the type inside it grows back and
+   the lane labels shorten to make room for it. */
+@media (max-width: 40rem) {
+  .art-fg {
+    --fg-fs: 17px;
+    --fg-fs-num: 18px;
+  }
+
+  .art-fg .fg-wide {
+    display: none;
+  }
+
+  .art-fg .fg-narrow {
+    display: block;
+  }
+}
+
+.art-fg .fg-label {
+  font-family: var(--font-mono);
+  font-size: var(--fg-fs);
+  fill: var(--faint);
+}
+
+.art-fg .fg-num {
+  font-family: var(--font-mono);
+  font-size: var(--fg-fs-num);
+  fill: var(--foreground);
+}
+
+.art-fg .fg-blk,
+.art-fg .fg-dead,
+.art-fg .fg-token {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+/* ---- paint ---- */
+
+/* work that ran on a worker */
+.art-fg .fg-blk {
+  fill: var(--foreground);
+}
+
+/* the one-worker baseline the parallel run is read against */
+.art-fg .fg-base {
+  fill: var(--faint);
+}
+
+/* what worker 2 got through before it died: kept, but no longer solid work */
+.art-fg .fg-dead {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+/* the requeued task in transit between lanes */
+.art-fg .fg-token {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+/* a cache hit did no work, so it is drawn hollow */
+.art-fg .fg-hit {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1;
+}
+
+.art-fg .fg-mark1,
+.art-fg .fg-mark2 {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.art-fg .fg-rule {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+/* ---- resting (finished) state ---- */
+
+.art-fg .fg-p1,
+.art-fg .fg-p2,
+.art-fg .fg-p3,
+.art-fg .fg-p4,
+.art-fg .fg-p5,
+.art-fg .fg-p6,
+.art-fg .fg-p7,
+.art-fg .fg-q6,
+.art-fg .fg-token,
+.art-fg .fg-title1 {
+  opacity: 0;
+}
+
+.art-fg .fg-clock1 {
+  transform: translateY(-110px);
+}
+
+.art-fg .fg-clock2 {
+  transform: translateY(-154px);
+}
+
+/* ---- run 1 ---- */
+
+.is-visible .art-fg .fg-b1 {
+  animation:
+    fg-b1 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-b2 {
+  animation:
+    fg-b2 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-b3 {
+  animation:
+    fg-b3 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-b4 {
+  animation:
+    fg-b4 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-b5 {
+  animation:
+    fg-b5 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-b6 {
+  animation:
+    fg-b6 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-b7 {
+  animation:
+    fg-b7 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+
+@keyframes fg-b1 {
+  0% {
+    transform: scaleX(0);
+  }
+  6.588% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-b2 {
+  0%,
+  6.588% {
+    transform: scaleX(0);
+  }
+  14.824% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-b3 {
+  0%,
+  14.824% {
+    transform: scaleX(0);
+  }
+  18.824% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-b4 {
+  0%,
+  18.824% {
+    transform: scaleX(0);
+  }
+  24.941% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-b5 {
+  0%,
+  24.941% {
+    transform: scaleX(0);
+  }
+  26.118% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-b6 {
+  0%,
+  26.118% {
+    transform: scaleX(0);
+  }
+  27.765% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-b7 {
+  0%,
+  27.765% {
+    transform: scaleX(0);
+  }
+  29.412% {
+    transform: scaleX(1);
+  }
+}
+
+.is-visible .art-fg .fg-p1 {
+  animation: fg-p1 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-p2 {
+  animation: fg-p2 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-p3 {
+  animation: fg-p3 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-p4 {
+  animation: fg-p4 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-p5 {
+  animation: fg-p5 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-p6 {
+  animation: fg-p6 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-p7 {
+  animation: fg-p7 var(--fg-dur) linear infinite;
+}
+
+/* worker 1: textures, then audio */
+@keyframes fg-p1 {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  4% {
+    transform: scaleX(1);
+  }
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+@keyframes fg-p2 {
+  0%,
+  4% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  10.118% {
+    transform: scaleX(1);
+  }
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+/* worker 2: shaders, then the level */
+@keyframes fg-p3 {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  8.235% {
+    transform: scaleX(1);
+  }
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+@keyframes fg-p4 {
+  0%,
+  8.235% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  9.412% {
+    transform: scaleX(1);
+  }
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+/* worker 3: scripts, navigation, and — freeing first — the bundle */
+@keyframes fg-p5 {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  6.588% {
+    transform: scaleX(1);
+  }
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+@keyframes fg-p6 {
+  0%,
+  6.588% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  8.235% {
+    transform: scaleX(1);
+  }
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+@keyframes fg-p7 {
+  0%,
+  10.118% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  11.765% {
+    transform: scaleX(1);
+  }
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+
+/* ---- run 2 ---- */
+
+.is-visible .art-fg .fg-q1 {
+  animation:
+    fg-q1 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-q2 {
+  animation:
+    fg-q2 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-q3 {
+  animation:
+    fg-q3 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-q4 {
+  animation:
+    fg-q4 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-q5 {
+  animation:
+    fg-q5 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-q6 {
+  animation: fg-q6 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-q7 {
+  animation:
+    fg-q7 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-q8 {
+  animation:
+    fg-q8 var(--fg-dur) linear infinite,
+    fg-exit var(--fg-dur) linear infinite;
+}
+
+@keyframes fg-q1 {
+  0%,
+  47.059% {
+    transform: scaleX(0);
+  }
+  51.059% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-q2 {
+  0%,
+  51.059% {
+    transform: scaleX(0);
+  }
+  57.176% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-q3 {
+  0%,
+  57.176% {
+    transform: scaleX(0);
+  }
+  58.824% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-q4 {
+  0%,
+  58.824% {
+    transform: scaleX(0);
+  }
+  60% {
+    transform: scaleX(1);
+  }
+}
+@keyframes fg-q5 {
+  0%,
+  61.882% {
+    transform: scaleX(0);
+  }
+  63.529% {
+    transform: scaleX(1);
+  }
+}
+/* worker 2 runs for 0.40s and then stops for good */
+@keyframes fg-q6 {
+  0%,
+  47.059% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  51.765% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  52.471% {
+    opacity: 0;
+  }
+}
+@keyframes fg-q7 {
+  0%,
+  47.059% {
+    transform: scaleX(0);
+  }
+  53.647% {
+    transform: scaleX(1);
+  }
+}
+/* the reassigned task, run again from the top on worker 3 */
+@keyframes fg-q8 {
+  0%,
+  53.647% {
+    transform: scaleX(0);
+  }
+  61.882% {
+    transform: scaleX(1);
+  }
+}
+
+.is-visible .art-fg .fg-dead,
+.is-visible .art-fg .fg-x {
+  animation: fg-dead var(--fg-dur) linear infinite;
+}
+
+@keyframes fg-dead {
+  0%,
+  51.765% {
+    opacity: 0;
+  }
+  52.471% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.is-visible .art-fg .fg-token {
+  animation: fg-token var(--fg-dur) linear infinite;
+}
+
+@keyframes fg-token {
+  0%,
+  51.765% {
+    opacity: 0;
+    transform: translate(-33px, -24px);
+  }
+  52.2% {
+    opacity: 1;
+  }
+  53.647% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  54.3% {
+    opacity: 0;
+  }
+}
+
+/* ---- titles, marks and readout ---- */
+
+.is-visible .art-fg .fg-title1 {
+  animation: fg-title1 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-title2,
+.is-visible .art-fg .fg-run2-out {
+  animation: fg-title2 var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-mark1,
+.is-visible .art-fg .fg-in-a {
+  animation: fg-in-a var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-mark2,
+.is-visible .art-fg .fg-in-b {
+  animation: fg-in-b var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-run1-out {
+  animation: fg-exit var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-base-out {
+  animation: fg-base-out var(--fg-dur) linear infinite;
+}
+.is-visible .art-fg .fg-cache {
+  animation: fg-cache var(--fg-dur) linear infinite;
+}
+
+@keyframes fg-title1 {
+  0%,
+  43.529% {
+    opacity: 1;
+  }
+  47.059% {
+    opacity: 0;
+  }
+}
+@keyframes fg-title2 {
+  0%,
+  47.059% {
+    opacity: 0;
+  }
+  49.5% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fg-in-a {
+  0%,
+  11.765% {
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fg-in-b {
+  0%,
+  63.529% {
+    opacity: 0;
+  }
+  65.8% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fg-base-out {
+  0%,
+  29.412% {
+    opacity: 0;
+  }
+  31.5% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fg-cache {
+  0%,
+  76.471% {
+    opacity: 0;
+  }
+  81.176% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* One shared exit: in the last 0.3s everything drawn dissolves, so the loop
+   turns over instead of snapping. The axis and the lane labels never move. */
+@keyframes fg-exit {
+  0% {
+    opacity: 0;
+  }
+  2.4% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The clocks are odometers: a strip of values behind a one-line window,
+   stepped so the reading ticks rather than slides. */
+.is-visible .art-fg .fg-clock1 {
+  animation: fg-clock1 var(--fg-dur) steps(5, end) infinite;
+}
+.is-visible .art-fg .fg-clock2 {
+  animation: fg-clock2 var(--fg-dur) steps(7, end) infinite;
+}
+
+@keyframes fg-clock1 {
+  0% {
+    transform: translateY(0);
+  }
+  11.765% {
+    transform: translateY(-110px);
+  }
+}
+@keyframes fg-clock2 {
+  0%,
+  47.059% {
+    transform: translateY(0);
+  }
+  63.529% {
+    transform: translateY(-154px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-visible .art-fg *,
+  .art-fg * {
+    animation: none !important;
+  }
+}
