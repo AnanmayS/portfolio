@@ -45,14 +45,7 @@ function measure(now: number, live: boolean) {
   };
 }
 
-export function DegreeProgress({
-  buildNow,
-  compact = false,
-}: {
-  buildNow: number;
-  /* The one-line version used once the demos became the page's gesture. */
-  compact?: boolean;
-}) {
+export function DegreeProgress({ buildNow }: { buildNow: number }) {
   /* Rendered from build time so the prerendered HTML and hydration agree. */
   const seed = measure(buildNow, true);
 
@@ -98,39 +91,31 @@ export function DegreeProgress({
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const bar = compact
-    ? { view: "0 0 720 6", y: 0, h: 6 }
-    : { view: "0 0 720 44", y: 8, h: 28 };
-
   return (
-    <figure className={`degree${compact ? " is-compact" : ""}`}>
+    <figure className="degree">
       <figcaption className="degree-what">
-        degree progress · b.s. computer engineering, umd
+        <span>B.S. Computer Engineering, University of Maryland</span>
+        <span className="mono">2024 – 28</span>
       </figcaption>
 
       <svg
         className="degree-svg"
         ref={svg}
-        viewBox={bar.view}
+        viewBox="0 0 720 20"
         role="img"
         aria-label="Progress through a B.S. in Computer Engineering, 28 August 2024 to an expected 18 May 2028."
         fill="none"
       >
-        <rect
-          x="0.5"
-          y={bar.y + 0.5}
-          width="719"
-          height={bar.h - 1}
-          stroke="var(--rule)"
-        />
+        <rect x="0.5" y="0.5" width="719" height="19" rx="3" stroke="var(--border)" />
         <rect
           className="degree-fill"
           ref={fill}
           x="0"
-          y={bar.y}
+          y="0"
           width={720 * seed.fraction}
-          height={bar.h}
-          fill="var(--accent)"
+          height="20"
+          rx="3"
+          fill="var(--foreground)"
         />
       </svg>
 
@@ -143,7 +128,7 @@ export function DegreeProgress({
             </span>
             %
           </span>
-          <span className="degree-span"> of aug 2024 → may 2028</span>
+          <span className="degree-span"> of the way through</span>
         </span>
         <span className="degree-left" ref={left}>
           {seed.left}

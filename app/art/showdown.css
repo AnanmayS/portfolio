@@ -1,0 +1,627 @@
+/*
+  ShowdownRL illustration. One 8s loop: four turns of a battle on the left,
+  the policy's seven actions re-weighted on the right, then the measured win
+  rate below. Every rule is scoped to `.art-sd` so the `sd-` prefix cannot
+  collide, and the un-classed state below is the FINISHED frame: opponent at
+  zero, the turn-four distribution, both result fills full. The keyframes only
+  run under an `.is-visible` ancestor and only when motion is welcome.
+*/
+
+/* The page's `.art` rule already sizes the figure; this keeps the component
+   self-sufficient if it is ever dropped in somewhere else. */
+.art-sd {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.art-sd text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.01em;
+}
+
+.art-sd .sd-head,
+.art-sd .sd-side,
+.art-sd .sd-row,
+.art-sd .sd-note,
+.art-sd .sd-chip-text {
+  fill: var(--faint);
+}
+
+.art-sd .sd-move,
+.art-sd .sd-res-lead {
+  fill: var(--foreground);
+}
+
+.art-sd .sd-chip-text {
+  font-size: 9.5px;
+}
+
+.art-sd .sd-track,
+.art-sd .sd-chip {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.art-sd .sd-rule {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.art-sd .sd-strike {
+  stroke: var(--faint);
+  stroke-width: 1;
+}
+
+.art-sd .sd-hp {
+  fill: var(--foreground);
+}
+
+.art-sd .sd-res-base {
+  fill: var(--faint);
+}
+
+.art-sd .sd-res-top {
+  fill: var(--foreground);
+}
+
+/* Everything that changes width scales from its own left edge. */
+.art-sd .sd-hp,
+.art-sd .sd-bar,
+.art-sd .sd-strike,
+.art-sd .sd-res-base,
+.art-sd .sd-res-top {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+/* ---------- the finished frame (no class, or reduced motion) ---------- */
+
+.art-sd .sd-hp-opp {
+  transform: scaleX(0);
+}
+.art-sd .sd-hp-agent {
+  transform: scaleX(0.6);
+}
+
+.art-sd .sd-bar {
+  fill: var(--muted);
+}
+.art-sd .sd-bar-1 {
+  transform: scaleX(0.06);
+}
+.art-sd .sd-bar-2 {
+  transform: scaleX(0.07);
+}
+.art-sd .sd-bar-3 {
+  transform: scaleX(0.71);
+  fill: var(--foreground);
+}
+.art-sd .sd-bar-4 {
+  transform: scaleX(0.05);
+}
+.art-sd .sd-bar-5 {
+  transform: scaleX(0.04);
+}
+.art-sd .sd-bar-6 {
+  transform: scaleX(0.04);
+}
+.art-sd .sd-bar-7 {
+  transform: scaleX(0.03);
+}
+
+.art-sd .sd-move-1,
+.art-sd .sd-move-2,
+.art-sd .sd-move-3 {
+  opacity: 0;
+}
+.art-sd .sd-move-4 {
+  opacity: 1;
+}
+
+.art-sd .sd-mask {
+  opacity: 0;
+}
+.art-sd .sd-strike {
+  transform: scaleX(1);
+}
+
+.art-sd .sd-res-base {
+  transform: scaleX(0.752);
+}
+.art-sd .sd-res-top {
+  transform: scaleX(0.79);
+}
+.art-sd .sd-res-label {
+  opacity: 1;
+}
+
+/* ---------- the loop ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-visible .art-sd .sd-hp-opp,
+  .is-visible .art-sd .sd-hp-agent,
+  .is-visible .art-sd .sd-move,
+  .is-visible .art-sd .sd-bar,
+  .is-visible .art-sd .sd-mask,
+  .is-visible .art-sd .sd-strike,
+  .is-visible .art-sd .sd-res-base,
+  .is-visible .art-sd .sd-res-top,
+  .is-visible .art-sd .sd-res-label {
+    animation-duration: 8s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+  }
+
+  /* health: refills across the loop seam, then four turns of damage */
+  .is-visible .art-sd .sd-hp-opp {
+    animation-name: sd-opp;
+  }
+  .is-visible .art-sd .sd-hp-agent {
+    animation-name: sd-agent;
+  }
+
+  /* the move chosen on each turn, beside the agent's bar */
+  .is-visible .art-sd .sd-move-1 {
+    animation-name: sd-move-1;
+  }
+  .is-visible .art-sd .sd-move-2 {
+    animation-name: sd-move-2;
+  }
+  .is-visible .art-sd .sd-move-3 {
+    animation-name: sd-move-3;
+  }
+  .is-visible .art-sd .sd-move-4 {
+    animation-name: sd-move-4;
+  }
+
+  /* the distribution re-laying out, and the chosen row taking the ink */
+  .is-visible .art-sd .sd-bar-1 {
+    animation-name: sd-p1, sd-pick-t1;
+  }
+  .is-visible .art-sd .sd-bar-2 {
+    animation-name: sd-p2, sd-pick-t2;
+  }
+  .is-visible .art-sd .sd-bar-3 {
+    animation-name: sd-p3, sd-pick-t4;
+  }
+  .is-visible .art-sd .sd-bar-4 {
+    animation-name: sd-p4;
+  }
+  .is-visible .art-sd .sd-bar-5 {
+    animation-name: sd-p5, sd-pick-t3;
+  }
+  .is-visible .art-sd .sd-bar-6 {
+    animation-name: sd-p6;
+  }
+  .is-visible .art-sd .sd-bar-7 {
+    animation-name: sd-p7;
+  }
+
+  /* turn two: Recover is illegal at full health */
+  .is-visible .art-sd .sd-mask {
+    animation-name: sd-mask;
+  }
+  .is-visible .art-sd .sd-strike {
+    animation-name: sd-strike;
+  }
+
+  /* the result, growing once the battle is won */
+  .is-visible .art-sd .sd-res-base {
+    animation-name: sd-res-base;
+  }
+  .is-visible .art-sd .sd-res-top {
+    animation-name: sd-res-top;
+  }
+  .is-visible .art-sd .sd-res-label {
+    animation-name: sd-res-label;
+  }
+}
+
+/* 0-0.5s reset · turns at 0.9 / 1.9 / 2.9 / 3.9s · result 4.5-6.0s · rest to 8s */
+
+@keyframes sd-opp {
+  0% {
+    transform: scaleX(0);
+  }
+  6%,
+  11% {
+    transform: scaleX(1);
+  }
+  14%,
+  23.5% {
+    transform: scaleX(0.7);
+  }
+  26.5%,
+  35.5% {
+    transform: scaleX(0.46);
+  }
+  38.5%,
+  48% {
+    transform: scaleX(0.34);
+  }
+  52%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes sd-agent {
+  0% {
+    transform: scaleX(0.6);
+  }
+  6%,
+  24% {
+    transform: scaleX(1);
+  }
+  27%,
+  36.5% {
+    transform: scaleX(0.82);
+  }
+  39.5%,
+  100% {
+    transform: scaleX(0.6);
+  }
+}
+
+@keyframes sd-move-1 {
+  0%,
+  6.5% {
+    opacity: 0;
+  }
+  9%,
+  13.5% {
+    opacity: 1;
+  }
+  15.5%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sd-move-2 {
+  0%,
+  16.5% {
+    opacity: 0;
+  }
+  19%,
+  26% {
+    opacity: 1;
+  }
+  28%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sd-move-3 {
+  0%,
+  29% {
+    opacity: 0;
+  }
+  31.5%,
+  38.5% {
+    opacity: 1;
+  }
+  40.5%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sd-move-4 {
+  0% {
+    opacity: 1;
+  }
+  3%,
+  41.5% {
+    opacity: 0;
+  }
+  44%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Ice Beam */
+@keyframes sd-p1 {
+  0%,
+  2% {
+    transform: scaleX(0.06);
+  }
+  5.5%,
+  15% {
+    transform: scaleX(0.62);
+  }
+  18%,
+  27.5% {
+    transform: scaleX(0.21);
+  }
+  30.5%,
+  40% {
+    transform: scaleX(0.1);
+  }
+  43%,
+  100% {
+    transform: scaleX(0.06);
+  }
+}
+
+/* Earthquake */
+@keyframes sd-p2 {
+  0%,
+  2% {
+    transform: scaleX(0.07);
+  }
+  5.5%,
+  15% {
+    transform: scaleX(0.18);
+  }
+  18%,
+  27.5% {
+    transform: scaleX(0.55);
+  }
+  30.5%,
+  40% {
+    transform: scaleX(0.08);
+  }
+  43%,
+  100% {
+    transform: scaleX(0.07);
+  }
+}
+
+/* Thunderbolt */
+@keyframes sd-p3 {
+  0%,
+  2% {
+    transform: scaleX(0.71);
+  }
+  5.5%,
+  15% {
+    transform: scaleX(0.09);
+  }
+  18%,
+  27.5% {
+    transform: scaleX(0.12);
+  }
+  30.5%,
+  40% {
+    transform: scaleX(0.13);
+  }
+  43%,
+  100% {
+    transform: scaleX(0.71);
+  }
+}
+
+/* Recover: masked to zero on turn two */
+@keyframes sd-p4 {
+  0%,
+  2% {
+    transform: scaleX(0.05);
+  }
+  5.5%,
+  15% {
+    transform: scaleX(0.04);
+  }
+  18%,
+  27.5% {
+    transform: scaleX(0);
+  }
+  30.5%,
+  40% {
+    transform: scaleX(0.06);
+  }
+  43%,
+  100% {
+    transform: scaleX(0.05);
+  }
+}
+
+/* switch 1 */
+@keyframes sd-p5 {
+  0%,
+  2% {
+    transform: scaleX(0.04);
+  }
+  5.5%,
+  15% {
+    transform: scaleX(0.03);
+  }
+  18%,
+  27.5% {
+    transform: scaleX(0.05);
+  }
+  30.5%,
+  40% {
+    transform: scaleX(0.49);
+  }
+  43%,
+  100% {
+    transform: scaleX(0.04);
+  }
+}
+
+/* switch 2 */
+@keyframes sd-p6 {
+  0%,
+  2% {
+    transform: scaleX(0.04);
+  }
+  5.5%,
+  15% {
+    transform: scaleX(0.02);
+  }
+  18%,
+  27.5% {
+    transform: scaleX(0.04);
+  }
+  30.5%,
+  40% {
+    transform: scaleX(0.09);
+  }
+  43%,
+  100% {
+    transform: scaleX(0.04);
+  }
+}
+
+/* switch 3 */
+@keyframes sd-p7 {
+  0%,
+  2% {
+    transform: scaleX(0.03);
+  }
+  5.5%,
+  15% {
+    transform: scaleX(0.02);
+  }
+  18%,
+  27.5% {
+    transform: scaleX(0.03);
+  }
+  30.5%,
+  40% {
+    transform: scaleX(0.05);
+  }
+  43%,
+  100% {
+    transform: scaleX(0.03);
+  }
+}
+
+/* the chosen row is ink, the rest are grey */
+@keyframes sd-pick-t1 {
+  0%,
+  2.5% {
+    fill: var(--muted);
+  }
+  4%,
+  14.5% {
+    fill: var(--foreground);
+  }
+  16%,
+  100% {
+    fill: var(--muted);
+  }
+}
+
+@keyframes sd-pick-t2 {
+  0%,
+  15% {
+    fill: var(--muted);
+  }
+  16.5%,
+  27% {
+    fill: var(--foreground);
+  }
+  28.5%,
+  100% {
+    fill: var(--muted);
+  }
+}
+
+@keyframes sd-pick-t3 {
+  0%,
+  27.5% {
+    fill: var(--muted);
+  }
+  29%,
+  39.5% {
+    fill: var(--foreground);
+  }
+  41%,
+  100% {
+    fill: var(--muted);
+  }
+}
+
+@keyframes sd-pick-t4 {
+  0% {
+    fill: var(--foreground);
+  }
+  3%,
+  40% {
+    fill: var(--muted);
+  }
+  41.5%,
+  100% {
+    fill: var(--foreground);
+  }
+}
+
+@keyframes sd-mask {
+  0%,
+  16% {
+    opacity: 0;
+  }
+  18.5%,
+  26.5% {
+    opacity: 1;
+  }
+  28.5%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sd-strike {
+  0% {
+    transform: scaleX(1);
+  }
+  5%,
+  17% {
+    transform: scaleX(0);
+  }
+  20%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes sd-res-base {
+  0%,
+  3% {
+    transform: scaleX(0.752);
+  }
+  9%,
+  56% {
+    transform: scaleX(0);
+  }
+  75%,
+  100% {
+    transform: scaleX(0.752);
+  }
+}
+
+@keyframes sd-res-top {
+  0%,
+  3% {
+    transform: scaleX(0.79);
+  }
+  9%,
+  56% {
+    transform: scaleX(0);
+  }
+  75%,
+  100% {
+    transform: scaleX(0.79);
+  }
+}
+
+@keyframes sd-res-label {
+  0% {
+    opacity: 1;
+  }
+  5%,
+  66% {
+    opacity: 0;
+  }
+  74%,
+  100% {
+    opacity: 1;
+  }
+}

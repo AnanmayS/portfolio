@@ -1,190 +1,95 @@
 ---
-version: beta
-name: Measured
-description: A minimal recruiter-first personal site in dark and light. One saturated accent spent only on measured results, and every strong claim drawn to scale as a mark the reader can see rather than only read.
+version: 2
+name: Quiet
+description: A neutral, list-first personal page. No accent colour, one ink, two greys, hairlines; motion only where it measures something.
 colors:
-  dark:
-    ground: "#0F1216"
-    surface: "#171B21"
-    ink: "#E8EBEF"
-    muted: "#AAB2BD"
-    faint: "#838C99"
-    rule: "#262C34"
-    slow: "#39424D"
-    accent: "#7B93FF"
-    on-accent: "#0F1216"
   light:
-    ground: "#FAFAFB"
-    surface: "#F1F2F5"
-    ink: "#14181D"
-    muted: "#4C545F"
-    faint: "#6A7280"
-    rule: "#E2E5EA"
-    slow: "#BCC3CD"
-    accent: "#2743E8"
-    on-accent: "#FFFFFF"
+    background: "#FFFFFF"
+    foreground: "#171717"
+    muted: "#6B6B6B"
+    faint: "#9A9A9A"
+    border: "#EBEBEB"
+  dark:
+    background: "#131313"
+    foreground: "#F2F2F2"
+    muted: "#9A9A9A"
+    faint: "#6B6B6B"
+    border: "rgba(255,255,255,0.10)"
 typography:
-  display:
-    fontFamily: "Familjen Grotesk"
-    fontWeight: 700
-    usage: "Name, entry titles, closing line"
-  body:
-    fontFamily: "Schibsted Grotesk"
-    fontWeight: 400
-    usage: "Lead, bullets, project ledes, skill values"
-  utility:
-    fontFamily: "Azeret Mono"
-    fontWeight: 400
-    usage: "Dates, section labels, stacks, actions, all diagram annotation"
+  sans:
+    fontFamily: "Geist"
+    weights: [400, 500]
+    usage: "Everything that is a sentence, a name, or a row"
+  mono:
+    fontFamily: "Geist Mono"
+    weight: 400
+    usage: "Dates, readouts, stacks, labels inside illustrations"
 layout:
-  shell: 44rem
-  gutter: 1.5rem
-  radius: 4px
-  block-gap: 5.5rem
+  shell: 42rem
+  base-size: 14.5px
+  section-gap: 3rem
 motion:
-  degree-fill: 1100ms
-  diagram-grow: 640ms
-  readout: every animation frame (60s under reduced motion)
+  enter: 640ms blur-and-rise, staggered 60ms per block
+  degree-fill: 1100ms once
+  art: one 6–9 s loop per project, only while on screen
 ---
 
 ## Overview
 
-Measured is built for one reader in a hurry: someone deciding, in well under a
-minute, whether to keep reading. The organizing idea comes from the work
-itself — nearly every strong line about it is a measured delta (2.5 s to 1.0 s,
-4 hours to 95 minutes, 59% faster, 79% over 1,000 matches). So the page does
-not just state those numbers. Each project is a working model of the real
-mechanism that the reader operates in the browser, and each number is a claim
-that opens to the run it came from. The reader sees the size of the improvement
-by causing it.
+Quiet is built for a reader who is deciding, in under a minute, whether to
+keep reading. It borrows its posture from the best personal sites: a short
+column, small type, sections as plain rows with a hairline between them,
+nothing decorated. Three projects, three roles, one stack line, one bar.
 
-Minimal here means precise, not sparse: separation is carried by space first,
-hairlines only where a row genuinely needs an edge, and a single accent.
+The bar is the degree progress: drawn to scale across the whole degree with
+a live readout, the first thing after the name, and the only large gesture.
+Under each project row sits one looping illustration that tells that
+project's story in about eight seconds. Those four things move; nothing else
+does except the entrance.
 
-## Colors
+## Colour
 
-Near-monochrome in both themes, with one saturated accent.
+Greyscale in both themes. There is no accent. Emphasis is the foreground;
+the "before" or baseline state in a comparison is `--faint` or `--border`;
+fills are the foreground at five percent (`--surface`). A severed feed or a
+dead worker is drawn dashed, never red. `--danger` exists only for a form
+error.
 
-Dark is the default and lives on bare `:root`; light is the override, keyed on
-`data-appearance="light"` on the root element. The attribute is deliberately
-not `data-theme`: some hosts stamp that themselves, and would override the
-reader's own choice. An explicit choice is stored in `localStorage` and applied
-by a tiny script before first paint, so a reader who picked light never sees a
-flash of dark.
+The page follows the system theme until the reader picks one. The choice is
+stamped as `data-appearance` on the root and kept in localStorage.
 
-Every colour is declared as a token in the bare `:root` block and only
-redefined in the light block. Nothing is styled with a literal, so both themes
-resolve as a complete set — this is why the diagrams invert correctly without
-having any theme logic of their own.
+## Type
 
-The accent shifts between themes rather than staying fixed: cobalt on light,
-lifted to a paler blue on dark so it keeps its contrast against a dark ground.
-`--on-accent` carries the text colour that sits on top of the accent, which
-flips from white to near-black; it is never assumed.
-
-The accent is reserved for a measured result and nothing else: the degree bar,
-the flagged gaps in Tape, the 59% mark, the win rate, the resume action, focus
-rings, and link hover.
-
-`--slow` is the deliberate neutral for the un-improved side of a comparison. It
-must stay visibly distinct from `--rule` in both themes, or the baseline reads
-as an empty track instead of the slow run.
-
-## Typography
-
-Three roles. Familjen Grotesk speaks and is used with restraint — the name,
-entry titles, the closing line. Schibsted Grotesk carries all reading text.
-Azeret Mono is the measuring voice: anything that is a date, a label, a stack,
-an action, or a number read off a run.
+Geist at 14.5px, weight 400, with 500 for names and the heading. Geist Mono
+for anything that is read as a number or a label. The heading is the only
+thing above 1rem.
 
 ## Structure
 
-Single column, 44rem, ordered so the work leads: who and how to reach them, a
-one-line "currently" strip read from GitHub at build, then the projects as
-runnable demos with the question each one answers, then the smaller things by
-name, then experience, then the stack measured from the repos, then contact.
+Name and one-line tagline, the degree bar, then sections: Work, Experience,
+Stack, and a sticky bottom bar of links that fades the page under it.
 
-Each project entry is: name and year, the question it answers in italic, a
-lede whose numbers are claims (dotted accent underline, a tiny mono label)
-that open an evidence drawer, the demo in the bordered figure, then the stack
-as chips.
+A row is the unit. Left column eight rem wide carries the name; the body
+carries a title and a right-aligned tabular date. Rows that link expand on
+hover into the margin with a soft fill and an arrow. A project is a row, a
+two-sentence lede, the illustration in a bordered figure, and a mono stack
+line.
 
-Experience uses short bullets rather than prose. A reader scanning for scope
-should not have to parse a paragraph.
+## Illustrations
 
-A quiet fixed bar appears once the hero scrolls away, keeping the resume and
-email one click from anywhere on the page. It is function, not chrome — nothing
-lives in it that is not an action.
-
-## Degree progress
-
-Once the signature; now a single hairline under the hero actions, because the
-demos are the page's gesture and the bar would compete with them. It still
-answers the question a recruiter has first — when is this person available —
-with a bar drawn to scale across the whole degree, 28 August 2024 to an
-expected 18 May 2028, and a readout that counts down live beside it.
-
-The bar alone would look static: it advances about 0.07% a day, far below what
-a viewer can see. The readout is what makes it read as live, so the two are one
-device, not a bar with a decoration attached. Both endpoints are real dates —
-the first day of term and expected commencement — so the figure is not an
-estimate. Both stay labelled on the page so the span it is measured against is
-always visible.
-
-The percentage carries nine decimals because progress advances 8.6e-7 percent
-a second: fewer places and the figure sits still. The leading two decimals stay
-at full strength and the fine tail is dimmed, so the number reads as "54.14"
-with live precision behind it rather than as noise. Updates are written
-straight to the DOM, not through state, so a per-frame counter does not
-re-render the tree sixty times a second.
-
-It also answers the question a recruiter has first: when is this person
-available.
-
-The readout is the only thing on the page that changes on its own. Under
-`prefers-reduced-motion` it drops to two decimals and whole days and updates
-once a minute — a spinning number is motion too. Screen readers are given one
-steady figure rather than a moving one.
-
-The demos are allowed to be louder than this; nothing else on the page is.
-
-## Motion
-
-Four moments on the page itself, all purposeful:
-
-1. The hero rises on load, staggered.
-2. The degree bar fills once on load, then only its readout changes.
-3. The fixed bar slides in past the hero.
-4. Dialogs (contact, evidence, command palette) rise in.
-
-Inside a demo, motion is only ever the model moving: a build running, a feed
-replaying, a turn advancing, a book being hit. Nothing decorative animates.
-Every demo reads `prefers-reduced-motion` and steps instead of animating.
-
-The reveal CSS is written so the un-classed state is the finished state: if the
-IntersectionObserver never runs, diagrams render complete rather than staying
-invisible. Under `prefers-reduced-motion` everything lands immediately.
-
-## Quality floor
-
-- Responsive to 390px. Diagrams scroll inside their own bordered figure rather
-  than scaling their type below legibility; the page never scrolls sideways.
-- All small mono text meets WCAG AA against the ground (measured at 4.65:1);
-  body text is far above it.
-- Visible keyboard focus in the accent on every interactive element.
-- Every diagram carries a descriptive `aria-label` and repeats nothing that is
-  unavailable in text.
+Each is an SVG animated with CSS, greyscale, in one synchronised loop that
+plays only while the figure is on screen and rests at its finished frame
+under reduced motion. It shows the mechanism, not a picture of it: Tape
+captures, loses the feed, flags the hole, replays compressed, and matches
+the digest; ForgeGrid schedules seven tasks over three workers against a
+one-worker baseline, loses a worker, and finishes anyway; ShowdownRL plays
+four turns with the masked policy beside the board and lands on the
+measured win rate over the baseline.
 
 ## Do's and Don'ts
 
-- Do draw a number to scale rather than enlarging its type.
-- Do keep the accent scarce enough that one blue mark reads as the answer.
-- Do write experience as short bullets a scanner can skim.
-- Don't add a second accent, a gradient, or a shadow that is not the dialog's.
-- Don't style anything with a colour literal; both themes resolve through
-  tokens, and a literal breaks one of them.
-- Don't turn the hero into a stats row; the work is the hero.
-- Don't state a number in a lede without an evidence entry behind it.
-- Don't add a demo that shows a picture of the mechanism; it has to run it.
-- Don't let a decorative element animate. Motion is for things that measure.
-- Don't reach for `data-theme`; this page owns `data-appearance`.
+- Do keep the page to three projects. A fourth needs to beat one of them.
+- Do let a number stay in prose; the illustration is where it gets drawn.
+- Don't add a colour. If something needs emphasis, it is the foreground.
+- Don't animate anything that does not measure or move in the model.
+- Don't add a section that is a list of claims.

@@ -3,29 +3,29 @@
 import { useEffect, useState } from "react";
 
 /*
-  Dark is the default; this only ever stores an explicit choice. The attribute
-  is `data-appearance` rather than `data-theme` so a host that stamps its own
-  theme on the root cannot override the reader's choice here.
+  The page follows the system theme until the reader picks one. The choice is
+  stamped on the root as data-appearance and stored under this key; the
+  inline script in layout.tsx replays it before first paint.
 */
 export const THEME_KEY = "appearance";
 
+function effective(): "light" | "dark" {
+  const set = document.documentElement.dataset.appearance;
+  if (set === "light" || set === "dark") return set;
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 export function ThemeToggle() {
-  const [light, setLight] = useState(false);
+  const [dark, setDark] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setLight(document.documentElement.dataset.appearance === "light");
+    setDark(effective() === "dark");
   }, []);
 
   const flip = () => {
-    const next = light ? "dark" : "light";
-    setLight(!light);
-
-    if (next === "light") {
-      document.documentElement.dataset.appearance = "light";
-    } else {
-      delete document.documentElement.dataset.appearance;
-    }
-
+    const next = effective() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.appearance = next;
+    setDark(next === "dark");
     try {
       localStorage.setItem(THEME_KEY, next);
     } catch {
@@ -34,8 +34,8 @@ export function ThemeToggle() {
   };
 
   return (
-    <button className="theme-toggle" onClick={flip} type="button">
-      {light ? "dark mode" : "light mode"}
+    <button onClick={flip} type="button" aria-label="Toggle light and dark">
+      {dark === null ? "theme" : dark ? "light" : "dark"}
     </button>
   );
 }
