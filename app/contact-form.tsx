@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const EMAIL_ADDRESS = "ananmays20@gmail.com";
+const EMAIL_ADDRESS = "ananmaysom@gmail.com";
 const FORM_ENDPOINT = `https://formsubmit.co/ajax/${EMAIL_ADDRESS}`;
 
 type FormStatus = "idle" | "sending" | "success" | "error";

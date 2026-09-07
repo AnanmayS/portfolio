@@ -205,7 +205,7 @@ export default function Home() {
         <section className="close">
           <h2>Happy to talk about any of this.</h2>
           <div className="close-actions">
-            <EmailAction label="ananmays20@gmail.com" />
+            <EmailAction label="ananmaysom@gmail.com" />
             <ContactForm />
             <a href="https://github.com/AnanmayS" rel="noreferrer" target="_blank">
               github

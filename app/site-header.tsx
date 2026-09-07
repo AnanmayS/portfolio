@@ -23,7 +23,7 @@ export function SiteHeader({ resumeHref }: { resumeHref: string }) {
       <div className="topbar-inner">
         <span className="topbar-name">Ananmay Som Singh</span>
         <nav className="topbar-links" aria-label="Quick links">
-          <a href="mailto:ananmays20@gmail.com">email</a>
+          <a href="mailto:ananmaysom@gmail.com">email</a>
           <ThemeToggle />
           <a className="topbar-cta" href={resumeHref} target="_blank">
             résumé
