@@ -1,4 +1,16 @@
 @import "tailwindcss";
+@import "./evidence.css";
+@import "./currently.css";
+@import "./skills-heatmap.css";
+@import "./command-palette.css";
+@import "./terminal-mode.css";
+@import "./demos/tape-replay.css";
+@import "./demos/forgegrid-sandbox.css";
+@import "./demos/showdown-replay.css";
+@import "./demos/orderbook.css";
+@import "./demos/option-pricing.css";
+@import "./demos/polymarket.css";
+@import "./demos/dailydelve.css";
 
 /*
   "Measured". Near-white ground, blue-black ink, and exactly one saturated
@@ -317,6 +329,35 @@ p {
   color: var(--faint);
 }
 
+/* Compact degree: one line under the hero actions, the bar a hairline. The
+   demos are the page's gesture now, so this only answers "when are you free". */
+.degree.is-compact {
+  margin-top: 2.5rem;
+  border-top: 0;
+  padding-top: 0;
+}
+
+.degree.is-compact .degree-what {
+  display: none;
+}
+
+.degree.is-compact .degree-svg {
+  margin-top: 0;
+}
+
+.degree.is-compact .degree-read {
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+}
+
+kbd {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.05rem 0.3rem;
+  font-family: var(--font-code);
+  font-size: 0.9em;
+}
+
 /* ---------- blocks ---------- */
 
 .block {
@@ -413,11 +454,80 @@ p {
   color: var(--accent);
 }
 
+.stack-work {
+  gap: 4.5rem;
+}
+
+.work-year {
+  margin-left: 0.5rem;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.work-question {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
 .work-lede {
   max-width: 62ch;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   font-size: 0.875rem;
   text-wrap: pretty;
+}
+
+.work-demo {
+  overflow-x: visible;
+}
+
+.more-title {
+  margin-top: 4.5rem;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.more {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.more li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: baseline;
+  border-top: 1px solid var(--rule);
+  padding: 0.6rem 0;
+  font-size: 0.875rem;
+}
+
+.more li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.more a {
+  font-weight: 500;
+}
+
+.more a:hover {
+  color: var(--accent);
+}
+
+.more-what {
+  color: var(--muted);
+  font-size: 0.8125rem;
 }
 
 .work-figure {
@@ -430,43 +540,21 @@ p {
 }
 
 .work-stack {
-  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
   color: var(--faint);
   font-family: var(--font-code);
   font-size: 0.6875rem;
 }
 
-.diagram {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.d-label {
-  fill: var(--faint);
-  font-family: var(--font-code);
-  font-size: 11px;
-}
-
-.d-note {
-  fill: var(--accent);
-  font-family: var(--font-code);
-  font-size: 11px;
-}
-
-/* Un-classed is the finished state, so the diagrams still read if the
-   observer never runs. */
-.reveal .d-grow {
-  transform-box: fill-box;
-  transform-origin: left center;
-}
-
-.reveal.is-visible .d-grow {
-  animation: d-grow 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.reveal.is-visible .d-fade {
-  animation: d-fade 400ms ease both;
+.work-stack li {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.1rem 0.45rem;
 }
 
 /* ---------- skills ---------- */
@@ -750,26 +838,6 @@ p {
   }
 }
 
-@keyframes d-grow {
-  from {
-    transform: scaleX(0);
-  }
-
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes d-fade {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes rise {
   from {
     opacity: 0;
@@ -802,14 +870,6 @@ p {
   .skills div {
     grid-template-columns: 1fr;
     gap: 0.2rem;
-  }
-
-  .diagram {
-    min-width: 30rem;
-  }
-
-  .diagram text {
-    font-size: 13px;
   }
 
   .contact-dialog-header,

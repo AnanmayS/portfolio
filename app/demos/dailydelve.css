@@ -1,0 +1,45 @@
+/*
+  The clip sits in a 16:9 panel on --surface. The recording is 2870x1578
+  (1.82:1), slightly wider than the box, so `contain` leaves a hairline band
+  above and below — surface-coloured, so it reads as the panel rather than as
+  a black letterbox.
+*/
+
+.dd-frame {
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.dd-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+  object-fit: contain;
+}
+
+.dd-fallback {
+  display: grid;
+  height: 100%;
+  place-content: center;
+  padding: 1.25rem;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+.dd-fallback a {
+  color: var(--accent);
+}
+
+.dd-caption {
+  margin-top: 0.85rem;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+}

@@ -45,7 +45,14 @@ function measure(now: number, live: boolean) {
   };
 }
 
-export function DegreeProgress({ buildNow }: { buildNow: number }) {
+export function DegreeProgress({
+  buildNow,
+  compact = false,
+}: {
+  buildNow: number;
+  /* The one-line version used once the demos became the page's gesture. */
+  compact?: boolean;
+}) {
   /* Rendered from build time so the prerendered HTML and hydration agree. */
   const seed = measure(buildNow, true);
 
@@ -91,8 +98,12 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
     return () => cancelAnimationFrame(frame);
   }, []);
 
+  const bar = compact
+    ? { view: "0 0 720 6", y: 0, h: 6 }
+    : { view: "0 0 720 44", y: 8, h: 28 };
+
   return (
-    <figure className="degree">
+    <figure className={`degree${compact ? " is-compact" : ""}`}>
       <figcaption className="degree-what">
         degree progress · b.s. computer engineering, umd
       </figcaption>
@@ -100,19 +111,25 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
       <svg
         className="degree-svg"
         ref={svg}
-        viewBox="0 0 720 44"
+        viewBox={bar.view}
         role="img"
         aria-label="Progress through a B.S. in Computer Engineering, 28 August 2024 to an expected 18 May 2028."
         fill="none"
       >
-        <rect x="0.5" y="8.5" width="719" height="27" stroke="var(--rule)" />
+        <rect
+          x="0.5"
+          y={bar.y + 0.5}
+          width="719"
+          height={bar.h - 1}
+          stroke="var(--rule)"
+        />
         <rect
           className="degree-fill"
           ref={fill}
           x="0"
-          y="8"
+          y={bar.y}
           width={720 * seed.fraction}
-          height="28"
+          height={bar.h}
           fill="var(--accent)"
         />
       </svg>

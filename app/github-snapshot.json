@@ -1,0 +1,84 @@
+{
+  "fetchedAt": "2026-09-07T16:00:00.000Z",
+  "user": "AnanmayS",
+  "recentCommits": [
+    {
+      "repo": "tape",
+      "message": "docs: show what the recordings are good for, not whose they are",
+      "date": "2026-08-26T03:33:17.000Z",
+      "url": "https://github.com/AnanmayS/tape/commit/250dac5fb9bbe70cda5709f129cb5c00a510e2c3"
+    },
+    {
+      "repo": "forgegrid",
+      "message": "Add recruiter visuals and worker scaling lab (#1)",
+      "date": "2026-07-29T23:09:07.000Z",
+      "url": "https://github.com/AnanmayS/forgegrid/commit/4059730149110ec108ed412db2b90b2847663257"
+    },
+    {
+      "repo": "polymarket-papertrade-agent",
+      "message": "feat: add POST /reset endpoint to wipe portfolio data",
+      "date": "2026-06-29T06:19:14.000Z",
+      "url": "https://github.com/AnanmayS/polymarket-papertrade-agent/commit/7dd8dcdadaa16cc6a47d42043ec705ecae19e3fb"
+    },
+    {
+      "repo": "ShowdownRL",
+      "message": "move demo video into About section",
+      "date": "2026-06-26T14:41:54.000Z",
+      "url": "https://github.com/AnanmayS/ShowdownRL/commit/bec9f2dae4f56f52e3c74238641b5eda78ab3ad4"
+    },
+    {
+      "repo": "limit-order-book-simulator",
+      "message": "Update README",
+      "date": "2025-10-21T22:02:00.000Z",
+      "url": "https://github.com/AnanmayS/limit-order-book-simulator/commit/17e0bcdd906f0fe292bf0d75bbd5c9a7c1726dcd"
+    }
+  ],
+  "activeRepo": {
+    "name": "portfolio",
+    "pushedAt": "2026-09-07T15:12:40.000Z",
+    "url": "https://github.com/AnanmayS/portfolio"
+  },
+  "languages": [
+    {
+      "name": "Python",
+      "bytes": 1153414
+    },
+    {
+      "name": "Go",
+      "bytes": 595608
+    },
+    {
+      "name": "TypeScript",
+      "bytes": 352335
+    },
+    {
+      "name": "JavaScript",
+      "bytes": 133264
+    },
+    {
+      "name": "CSS",
+      "bytes": 44196
+    },
+    {
+      "name": "Shell",
+      "bytes": 25246
+    },
+    {
+      "name": "HCL",
+      "bytes": 25218
+    },
+    {
+      "name": "Lua",
+      "bytes": 17600
+    },
+    {
+      "name": "HTML",
+      "bytes": 14303
+    },
+    {
+      "name": "C",
+      "bytes": 12742
+    }
+  ],
+  "repoCount": 15
+}

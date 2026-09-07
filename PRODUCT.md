@@ -25,10 +25,10 @@ Avoid resume-template portfolio pages, corporate career-site layouts, and pages 
 ## Design Principles
 
 1. Make the site feel personal before it feels polished.
-2. Let projects show capability through concrete, inspectable details rather than resume-style claims.
-3. Keep the page quiet and simple, then add motion or visuals only where they create delight or clarity.
-4. Preserve fast scanning for recruiters while leaving casual visitors small things to discover.
-5. Treat the site as a living personal artifact, not a static credential sheet.
+2. Let projects show capability through things the visitor can run, not claims they have to take on trust. Every project entry is a working demo of the real mechanism, and every number is a claim that opens to the run it came from.
+3. Keep the page quiet and simple, then add motion or visuals only where they measure something.
+4. Preserve fast scanning for recruiters while leaving casual visitors things to discover: a command palette, a terminal, a feed to sever, a worker to kill.
+5. Treat the site as a living personal artifact, not a static credential sheet. The "currently" strip is read from GitHub at build; the skills section is measured from the repos rather than typed.
 
 ## Accessibility & Inclusion
 

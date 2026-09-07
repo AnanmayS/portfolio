@@ -1,143 +1,137 @@
+import { CommandPalette, CommandPaletteTrigger } from "./command-palette";
 import { ContactForm } from "./contact-form";
-import { EmailAction } from "./email-action";
+import { Currently } from "./currently";
 import { DegreeProgress } from "./degree-progress";
-import { Reveal } from "./reveal";
+import { EmailAction } from "./email-action";
+import { Lede } from "./evidence";
+import { loadGitHubSnapshot } from "./github-data";
 import { SiteHeader } from "./site-header";
+import { SkillsHeatmap } from "./skills-heatmap";
+import { TerminalMode } from "./terminal-mode";
 import { ThemeToggle } from "./theme-toggle";
-import {
-  ForgeGridDiagram,
-  ShowdownDiagram,
-  TapeDiagram,
-} from "./diagrams";
+import { more, person, projects, roles, type Project } from "./content";
+
+import { DailyDelve } from "./demos/dailydelve";
+import { ForgeGridSandbox } from "./demos/forgegrid-sandbox";
+import { OptionPricing } from "./demos/option-pricing";
+import { OrderBook } from "./demos/orderbook";
+import { PolymarketSandbox } from "./demos/polymarket";
+import { ShowdownReplay } from "./demos/showdown-replay";
+import { TapeReplay } from "./demos/tape-replay";
 
 const basePath = process.env.PAGES_BASE_PATH ?? "";
 const resumeHref = `${basePath}/resume.pdf`;
 
-type Role = {
-  company: string;
-  title: string;
-  where: string;
-  when: string;
-  points: string[];
+/* Which demo a project renders. Keyed so content.ts stays free of React. */
+const demos: Record<NonNullable<Project["demo"]>, () => React.ReactElement> = {
+  tape: TapeReplay,
+  forgegrid: ForgeGridSandbox,
+  showdown: ShowdownReplay,
+  orderbook: OrderBook,
+  options: OptionPricing,
+  polymarket: PolymarketSandbox,
+  dailydelve: DailyDelve,
 };
 
-type Work = {
-  name: string;
-  href: string;
-  lede: string;
-  stack: string;
-  diagram: () => React.ReactElement;
-};
+export default async function Home() {
+  const snapshot = await loadGitHubSnapshot();
 
-const roles: Role[] = [
-  {
-    company: "GSAlpha Labs",
-    title: "Software Engineering Intern",
-    where: "San Francisco",
-    when: "May 2026 — now",
-    points: [
-      "Built HomeFlow AI, a Next.js and TypeScript platform that does the transaction-coordinator work California brokerages outsource at $400–600 a file.",
-      "Cut purchase-agreement intake to under 30 seconds with an LLM pipeline that validates all 52 fields against a Zod schema: 96% field-level accuracy across 15 real closed transactions, with a human signing off before anything is filed.",
-      "Scored OpenAI, Anthropic and DeepSeek field by field on accuracy, latency and cost per contract, then shipped the one that held accuracy at 8× lower cost.",
-    ],
-  },
-  {
-    company: "SEDS @ UMD",
-    title: "Software Engineer, SatFab CubeSat GPS",
-    where: "College Park",
-    when: "Sep 2024 — Feb 2026",
-    points: [
-      "Built and documented the Python test framework for 26 Verilog modules in a CubeSat GPS receiver, trained 6 engineers on it, and it became the standard for every new module.",
-      "Cut the full hardware regression from 4 hours to 95 minutes by running independent testbenches in parallel. What used to run overnight now runs before every merge.",
-    ],
-  },
-  {
-    company: "theconviction.ai",
-    title: "Software Engineering Intern",
-    where: "Remote",
-    when: "May 2025 — Aug 2025",
-    points: [
-      "Replaced 12 hours a week of analyst hand-collection with a Dockerized FastAPI and PostgreSQL pipeline pulling SEC filings, earnings transcripts and news for 50+ companies into one queryable record.",
-      "Shipped a Next.js research tool the 4-person research team used daily, putting each company on a timeline and linking every finding back to its source filing.",
-    ],
-  },
-];
-
-const work: Work[] = [
-  {
-    name: "Tape",
-    href: "https://github.com/AnanmayS/tape",
-    lede: "Records live exchange feeds to S3 and replays them byte-identical, so a backtest run twice over the same window answers the same way twice. Fault-injection tests severed the feed every 25 seconds; Tape caught all three gaps and flags those windows, so nothing silently backtests on missing data.",
-    stack: "Go · AWS S3 · ECS · CloudWatch · Terraform · Docker",
-    diagram: TapeDiagram,
-  },
-  {
-    name: "ForgeGrid",
-    href: "https://github.com/AnanmayS/forgegrid",
-    lede: "Spreads a build across worker machines and starts each task the moment its dependencies finish. A content-addressed cache skips any task whose inputs have not changed, and a worker dying mid-build gets its tasks reassigned instead of failing the run. Past three workers the longest dependency chain sets the floor.",
-    stack: "Node.js · JavaScript · Docker · Linux",
-    diagram: ForgeGridDiagram,
-  },
-  {
-    name: "ShowdownRL",
-    href: "https://github.com/AnanmayS/ShowdownRL",
-    lede: "A PPO agent that plays live Pokémon Showdown battles through Playwright, reading a 106-feature view of the board and masked out of illegal moves so it never wastes a turn. Every battle log is saved, so a reported win rate traces back to the games behind it.",
-    stack: "Python · PyTorch · Gymnasium · Playwright",
-    diagram: ShowdownDiagram,
-  },
-];
-
-const skills: [string, string][] = [
-  ["languages", "Go, Python, Java, C++, C, TypeScript, JavaScript, SQL, Verilog"],
-  [
-    "backend",
-    "FastAPI, Node.js, PostgreSQL, Drizzle, SQLAlchemy, Supabase, Zod, WebSockets, concurrency",
-  ],
-  [
-    "infra",
-    "AWS (S3, ECS, CloudWatch), Terraform, Docker, Linux, GitHub Actions, Vercel, pytest, Vitest",
-  ],
-  ["frameworks", "React, Next.js, PyTorch, LLM extraction and evaluation"],
-];
-
-export default function Home() {
   return (
     <>
       <SiteHeader resumeHref={resumeHref} />
+      <CommandPalette resumeHref={resumeHref} />
+      <TerminalMode resumeHref={resumeHref} />
 
       <main className="shell">
         <header className="hero">
-          <h1>Ananmay Som Singh</h1>
+          <h1>{person.name}</h1>
           <p className="hero-meta">
-            computer engineering · umd 2028 · college park, md
+            {person.school} · {person.where.toLowerCase()}
           </p>
           <p className="hero-lead">
-            Hey, I&apos;m Ananmay. I build backend and infrastructure things,
-            and I keep the receipts — every number on this page came from a run
-            I still have the logs for.
+            Hey, I&apos;m {person.short}. I build backend and infrastructure
+            things. Everything on this page runs, right here, and every number
+            on it links to the run it came from.
           </p>
           <nav className="hero-actions" aria-label="Links">
             <a className="action-primary" href={resumeHref} target="_blank">
               résumé (pdf)
             </a>
             <EmailAction label="email" />
-            <a href="https://github.com/AnanmayS" rel="noreferrer" target="_blank">
+            <a href={person.github} rel="noreferrer" target="_blank">
               github
             </a>
-            <a
-              href="https://www.linkedin.com/in/ananmaysingh"
-              rel="noreferrer"
-              target="_blank"
-            >
+            <a href={person.linkedin} rel="noreferrer" target="_blank">
               linkedin
             </a>
+            <CommandPaletteTrigger />
             <ThemeToggle />
           </nav>
-          <DegreeProgress buildNow={Date.now()} />
+          <DegreeProgress buildNow={Date.now()} compact />
         </header>
 
-        <section className="block">
-          <h2 className="block-title">Experience</h2>
+        <Currently snapshot={snapshot} />
+
+        <section className="block" id="work">
+          <h2 className="block-title">Work you can run</h2>
+          <div className="stack stack-work">
+            {projects.map((item) => {
+              const Demo = item.demo ? demos[item.demo] : null;
+
+              return (
+                <article
+                  key={item.slug}
+                  className="work"
+                  id={`project-${item.slug}`}
+                >
+                  <div className="work-head">
+                    <h3>
+                      {item.name}
+                      <span className="work-year"> {item.year}</span>
+                    </h3>
+                    <a
+                      className="work-link"
+                      href={item.href}
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      repo ↗
+                    </a>
+                  </div>
+                  <p className="work-question">{item.question}</p>
+                  <p className="work-lede">
+                    <Lede text={item.lede} evidence={item.evidence} />
+                  </p>
+                  {Demo ? (
+                    <div className="work-figure work-demo">
+                      <Demo />
+                    </div>
+                  ) : null}
+                  <ul className="work-stack" aria-label="Stack">
+                    {item.stack.map((tool) => (
+                      <li key={tool}>{tool}</li>
+                    ))}
+                  </ul>
+                </article>
+              );
+            })}
+          </div>
+
+          <h3 className="more-title">Smaller things</h3>
+          <ul className="more">
+            {more.map((item) => (
+              <li key={item.name}>
+                <a href={item.href} rel="noreferrer" target="_blank">
+                  {item.name}
+                </a>
+                <span className="more-what">{item.what}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="block" id="experience">
+          <h2 className="block-title">Where I&apos;ve done this for other people</h2>
           <div className="stack">
             {roles.map((role) => (
               <article key={role.company}>
@@ -158,67 +152,26 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="block">
-          <h2 className="block-title">Selected work</h2>
-          <div className="stack">
-            {work.map((item) => {
-              const Diagram = item.diagram;
-
-              return (
-                <article key={item.name}>
-                  <div className="work-head">
-                    <h3>{item.name}</h3>
-                    <a
-                      className="work-link"
-                      href={item.href}
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      repo ↗
-                    </a>
-                  </div>
-                  <p className="work-lede">{item.lede}</p>
-                  <Reveal className="work-figure">
-                    <Diagram />
-                  </Reveal>
-                  <p className="work-stack">{item.stack}</p>
-                </article>
-              );
-            })}
-          </div>
+        <section className="block" id="skills">
+          <h2 className="block-title">What the repos are written in</h2>
+          <SkillsHeatmap snapshot={snapshot} />
         </section>
 
-        <section className="block">
-          <h2 className="block-title">Skills</h2>
-          <dl className="skills">
-            {skills.map(([label, value]) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>
-                  <p>{value}</p>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="close">
+        <section className="close" id="contact">
           <h2>Happy to talk about any of this.</h2>
           <div className="close-actions">
-            <EmailAction label="ananmaysom@gmail.com" />
+            <EmailAction label={person.email} />
             <ContactForm />
-            <a href="https://github.com/AnanmayS" rel="noreferrer" target="_blank">
+            <a href={person.github} rel="noreferrer" target="_blank">
               github
             </a>
-            <a
-              href="https://www.linkedin.com/in/ananmaysingh"
-              rel="noreferrer"
-              target="_blank"
-            >
+            <a href={person.linkedin} rel="noreferrer" target="_blank">
               linkedin
             </a>
           </div>
-          <p className="close-where">College Park, MD</p>
+          <p className="close-where">
+            {person.where} · press <kbd>⌘K</kbd> or type <kbd>~~</kbd>
+          </p>
         </section>
       </main>
     </>

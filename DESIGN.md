@@ -50,11 +50,13 @@ motion:
 ## Overview
 
 Measured is built for one reader in a hurry: someone deciding, in well under a
-minute, whether to keep reading. The organizing idea comes from the resume
-itself — nearly every strong line on it is a measured delta (35 minutes to 30
-seconds, 4 hours to 95 minutes, 59% faster, 79% over 1,000 matches). So the page
-does not just state those numbers. It draws them to scale, and the reader sees
-the size of the improvement before they finish reading the sentence.
+minute, whether to keep reading. The organizing idea comes from the work
+itself — nearly every strong line about it is a measured delta (2.5 s to 1.0 s,
+4 hours to 95 minutes, 59% faster, 79% over 1,000 matches). So the page does
+not just state those numbers. Each project is a working model of the real
+mechanism that the reader operates in the browser, and each number is a claim
+that opens to the run it came from. The reader sees the size of the improvement
+by causing it.
 
 Minimal here means precise, not sparse: separation is carried by space first,
 hairlines only where a row genuinely needs an edge, and a single accent.
@@ -97,9 +99,15 @@ an action, or a number read off a run.
 
 ## Structure
 
-Single column, 44rem, ordered the way a recruiter reads: who and how to reach
-them, then the signature measurement, then experience, then work with evidence,
-then stack, then contact.
+Single column, 44rem, ordered so the work leads: who and how to reach them, a
+one-line "currently" strip read from GitHub at build, then the projects as
+runnable demos with the question each one answers, then the smaller things by
+name, then experience, then the stack measured from the repos, then contact.
+
+Each project entry is: name and year, the question it answers in italic, a
+lede whose numbers are claims (dotted accent underline, a tiny mono label)
+that open an evidence drawer, the demo in the bordered figure, then the stack
+as chips.
 
 Experience uses short bullets rather than prose. A reader scanning for scope
 should not have to parse a paragraph.
@@ -110,9 +118,11 @@ lives in it that is not an action.
 
 ## Degree progress
 
-The signature, and the only place a large gesture is spent. A bar drawn to
-scale across the whole degree — 28 August 2024 to an expected 18 May 2028 —
-with a readout that counts down live beside it.
+Once the signature; now a single hairline under the hero actions, because the
+demos are the page's gesture and the bar would compete with them. It still
+answers the question a recruiter has first — when is this person available —
+with a bar drawn to scale across the whole degree, 28 August 2024 to an
+expected 18 May 2028, and a readout that counts down live beside it.
 
 The bar alone would look static: it advances about 0.07% a day, far below what
 a viewer can see. The readout is what makes it read as live, so the two are one
@@ -136,17 +146,20 @@ The readout is the only thing on the page that changes on its own. Under
 once a minute — a spinning number is motion too. Screen readers are given one
 steady figure rather than a moving one.
 
-Everything else stays quiet so this lands. If a new element competes with it,
-the new element is wrong.
+The demos are allowed to be louder than this; nothing else on the page is.
 
 ## Motion
 
-Four moments, all purposeful:
+Four moments on the page itself, all purposeful:
 
 1. The hero rises on load, staggered.
 2. The degree bar fills once on load, then only its readout changes.
-3. Project diagrams draw in when scrolled into view.
-4. The fixed bar slides in past the hero.
+3. The fixed bar slides in past the hero.
+4. Dialogs (contact, evidence, command palette) rise in.
+
+Inside a demo, motion is only ever the model moving: a build running, a feed
+replaying, a turn advancing, a book being hit. Nothing decorative animates.
+Every demo reads `prefers-reduced-motion` and steps instead of animating.
 
 The reveal CSS is written so the un-classed state is the finished state: if the
 IntersectionObserver never runs, diagrams render complete rather than staying
@@ -170,6 +183,8 @@ invisible. Under `prefers-reduced-motion` everything lands immediately.
 - Don't add a second accent, a gradient, or a shadow that is not the dialog's.
 - Don't style anything with a colour literal; both themes resolve through
   tokens, and a literal breaks one of them.
-- Don't turn the hero into a stats row; the degree bar is the hero.
+- Don't turn the hero into a stats row; the work is the hero.
+- Don't state a number in a lede without an evidence entry behind it.
+- Don't add a demo that shows a picture of the mechanism; it has to run it.
 - Don't let a decorative element animate. Motion is for things that measure.
 - Don't reach for `data-theme`; this page owns `data-appearance`.

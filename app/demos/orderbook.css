@@ -1,0 +1,407 @@
+/* Limit order book demo — app/demos/orderbook.tsx. Prefix: ob- */
+
+.ob {
+  font-family: var(--font-code);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- order entry ---------- */
+
+.ob-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.ob-seg {
+  display: flex;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.ob-seg-btn {
+  border: 0;
+  background: transparent;
+  padding: 0.45rem 0.7rem;
+  color: var(--faint);
+  font: 0.75rem var(--font-code);
+  cursor: pointer;
+}
+
+.ob-seg-btn + .ob-seg-btn {
+  border-left: 1px solid var(--rule);
+}
+
+.ob-seg-btn:hover {
+  color: var(--accent);
+}
+
+.ob-seg-btn.is-on {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.ob-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--faint);
+  font-size: 0.6875rem;
+}
+
+.ob-field input {
+  width: 5.5rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.5rem;
+  background: var(--ground);
+  color: var(--ink);
+  font: 0.75rem var(--font-code);
+  font-variant-numeric: tabular-nums;
+}
+
+.ob-field input:disabled {
+  border-style: dashed;
+  color: var(--faint);
+  cursor: not-allowed;
+}
+
+.ob-submit {
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: var(--accent);
+  padding: 0.45rem 0.9rem;
+  color: var(--on-accent);
+  font: 0.75rem var(--font-code);
+  cursor: pointer;
+}
+
+.ob-submit:hover {
+  background: var(--accent-ink);
+}
+
+/* Held open so a message appearing does not shove the book down a line. */
+.ob-error {
+  min-height: 1.15rem;
+  margin-top: 0.4rem;
+  color: var(--danger);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+}
+
+/* ---------- book and tape ---------- */
+
+.ob-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14rem;
+  gap: 1rem;
+  align-items: start;
+  margin-top: 0.35rem;
+}
+
+.ob-market {
+  min-width: 0;
+}
+
+.ob-ladder {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.ob-col-head,
+.ob-tape-head {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.3rem;
+  color: var(--faint);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+
+.ob-rows,
+.ob-tape-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Fixed height so the layout does not jump as levels come and go. */
+.ob-rows {
+  min-height: 11.6rem; /* 8 rows */
+}
+
+.ob-row {
+  position: relative;
+  display: flex;
+  height: 1.45rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.35rem;
+  overflow: hidden;
+  border-radius: 2px;
+  font-size: 0.6875rem;
+}
+
+/* Cumulative depth, drawn to scale across both sides and anchored to the
+   spread so the two ladders grow outward from the touch. */
+.ob-depth {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 2px;
+  background: var(--slow);
+  opacity: 0.4;
+}
+
+.ob-side-bid .ob-depth {
+  right: 0;
+}
+
+.ob-side-ask .ob-depth {
+  left: 0;
+}
+
+.ob-size,
+.ob-price {
+  position: relative;
+}
+
+.ob-size {
+  color: var(--faint);
+}
+
+.ob-side-bid .ob-price {
+  color: var(--muted);
+}
+
+.ob-side-ask .ob-price {
+  color: var(--ink);
+}
+
+/* The touch is the one measured figure in the ladder, so it takes the accent. */
+.ob-row.is-best .ob-price {
+  color: var(--accent);
+}
+
+.ob-row.is-hit {
+  animation: ob-hit 460ms ease-out both;
+}
+
+.ob-row-empty {
+  justify-content: center;
+  color: var(--faint);
+}
+
+.ob-touch {
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.5rem;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+/* ---------- the visitor's own resting orders ---------- */
+
+.ob-mine {
+  margin-top: 0.85rem;
+  font-size: 0.6875rem;
+}
+
+.ob-mine-head {
+  display: block;
+  color: var(--faint);
+}
+
+.ob-mine-none {
+  color: var(--faint);
+}
+
+.ob-mine-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  gap: 0.2rem;
+  list-style: none;
+}
+
+.ob-mine-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.ob-mine-id {
+  color: var(--faint);
+}
+
+.ob-mine-buy {
+  color: var(--accent);
+}
+
+.ob-mine-sell {
+  color: var(--ink);
+}
+
+.ob-mine-qty,
+.ob-mine-at {
+  color: var(--muted);
+}
+
+.ob-cancel {
+  margin-left: auto;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--faint);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.ob-cancel:hover {
+  color: var(--accent);
+}
+
+/* ---------- tape ---------- */
+
+.ob-tape {
+  min-width: 0;
+  border-left: 1px solid var(--rule);
+  padding-left: 1rem;
+}
+
+.ob-tape-list {
+  min-height: 13.5rem; /* 10 rows */
+}
+
+.ob-tape-list li {
+  display: flex;
+  height: 1.35rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+.ob-tape-at {
+  color: var(--faint);
+}
+
+.ob-tape-buy {
+  color: var(--accent);
+}
+
+.ob-tape-sell {
+  color: var(--ink);
+}
+
+.ob-tape-qty,
+.ob-tape-px {
+  color: var(--muted);
+}
+
+/* ---------- controls, stats, caption ---------- */
+
+.ob-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.9rem;
+}
+
+.ob-btn {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: transparent;
+  padding: 0.45rem 0.7rem;
+  color: var(--ink);
+  font: 0.75rem var(--font-code);
+  cursor: pointer;
+}
+
+.ob-btn:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.ob-btn.is-on {
+  background: var(--surface);
+}
+
+.ob-btn:disabled {
+  color: var(--faint);
+  cursor: default;
+}
+
+.ob-stats {
+  margin-left: auto;
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+}
+
+.ob-note,
+.ob-caption {
+  color: var(--faint);
+  font-family: var(--font-code);
+  font-size: 0.6875rem;
+}
+
+.ob-note {
+  min-height: 1.15rem;
+  margin-top: 0.5rem;
+}
+
+.ob-caption {
+  margin-top: 0.35rem;
+  text-wrap: pretty;
+}
+
+@keyframes ob-hit {
+  from {
+    opacity: 0.15;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 44rem) {
+  .ob-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ob-tape {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+    padding-top: 0.85rem;
+    padding-left: 0;
+  }
+
+  .ob-tape-list {
+    min-height: 6.75rem; /* 5 rows; the tape is below the fold here */
+  }
+
+  .ob-stats {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ob-row.is-hit {
+    animation: none;
+  }
+}
