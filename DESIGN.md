@@ -31,6 +31,7 @@ layout:
 motion:
   enter: 640ms blur-and-rise, staggered 60ms per block
   degree-fill: 1100ms once
+  countdown: each digit reel slides 460ms to the numeral in play
   art: one 6–9 s loop per project, only while on screen
 ---
 
@@ -42,7 +43,9 @@ column, small type, sections as plain rows with a hairline between them,
 nothing decorated. Three projects, three roles, one stack line, one bar.
 
 The bar is the degree progress: drawn to scale across the whole degree with
-a live readout, the first thing after the name, and the only large gesture.
+a live countdown under it, the first thing after the name, and the only large
+gesture. The readout is time left rather than a percentage — days, hours,
+minutes, seconds, each digit on a reel that slides to the numeral in play.
 Under each project row sits one looping illustration that tells that
 project's story in about eight seconds. Those four things move; nothing else
 does except the entrance.
@@ -66,8 +69,10 @@ thing above 1rem.
 
 ## Structure
 
-Name and one-line tagline, the degree bar, then sections: Work, Experience,
+Name and one-line tagline, the degree bar, then sections: Experience, Work,
 Stack, and a sticky bottom bar of links that fades the page under it.
+Experience leads because it is the thing a hiring reader checks first; the
+projects, being longer, read better once they know who is writing them.
 
 A row is the unit. Left column eight rem wide carries the name; the body
 carries a title and a right-aligned tabular date. Rows that link expand on

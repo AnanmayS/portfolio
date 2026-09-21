@@ -27,8 +27,8 @@ Avoid resume-template portfolio pages, corporate career-site layouts, and pages 
 1. Make the site feel personal before it feels polished.
 2. Show the three best projects and show how each one works, as a short looping illustration of the mechanism, rather than listing everything ever built.
 3. Keep the page quiet and simple: one column, small type, plain rows, no accent colour. Add motion only where it measures something.
-4. Preserve fast scanning for recruiters: name, degree progress, three projects, three roles, a stack line, and the links, in that order.
-5. Treat the site as a living personal artifact. The degree bar moves on its own; the illustrations play when they come into view.
+4. Preserve fast scanning for recruiters: name, degree progress, three roles, three projects, a stack line, and the links, in that order.
+5. Treat the site as a living personal artifact. The degree bar counts down on its own; the illustrations play when they come into view.
 
 ## Accessibility & Inclusion
 

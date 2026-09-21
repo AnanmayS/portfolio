@@ -49,6 +49,38 @@ export default function Home() {
 
       <div className="sections">
         <section className="section in" style={{ "--i": 1 } as React.CSSProperties}>
+          <h2 className="section-title">Experience</h2>
+          <div>
+            {roles.map((role) => (
+              <article key={role.company} className="row">
+                <div className="row-lead">{role.company}</div>
+                <div className="row-body">
+                  <div className="row-line">
+                    <span className="row-title">
+                      {role.title}
+                      <span className="row-sub"> · {role.where}</span>
+                    </span>
+                    <span className="row-when">
+                      {role.start}
+                      {role.end === null
+                        ? " –"
+                        : role.end !== role.start
+                          ? ` – ${role.end.slice(2)}`
+                          : ""}
+                    </span>
+                  </div>
+                  <ul className="row-points">
+                    {role.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section in" style={{ "--i": 2 } as React.CSSProperties}>
           <h2 className="section-title">Work</h2>
           <div>
             {projects.map((item) => {
@@ -81,38 +113,6 @@ export default function Home() {
                 </article>
               );
             })}
-          </div>
-        </section>
-
-        <section className="section in" style={{ "--i": 2 } as React.CSSProperties}>
-          <h2 className="section-title">Experience</h2>
-          <div>
-            {roles.map((role) => (
-              <article key={role.company} className="row">
-                <div className="row-lead">{role.company}</div>
-                <div className="row-body">
-                  <div className="row-line">
-                    <span className="row-title">
-                      {role.title}
-                      <span className="row-sub"> · {role.where}</span>
-                    </span>
-                    <span className="row-when">
-                      {role.start}
-                      {role.end === null
-                        ? " –"
-                        : role.end !== role.start
-                          ? ` – ${role.end.slice(2)}`
-                          : ""}
-                    </span>
-                  </div>
-                  <ul className="row-points">
-                    {role.points.map((point) => (
-                      <li key={point}>{point}</li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
           </div>
         </section>
 

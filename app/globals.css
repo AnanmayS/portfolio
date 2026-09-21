@@ -207,29 +207,79 @@ h1 {
 
 .degree-read {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
 
-.degree-pct {
+/* The countdown. Each digit sits in a one-character window over a reel of
+   all ten numerals; the reel slides to the numeral in play, so the seconds
+   move the way a mechanical counter does rather than blinking over. */
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--foreground);
   font-weight: 500;
+  line-height: 1;
 }
 
-/* The fine digits move every frame; dimming them keeps the readable figure
-   in front and the precision behind it. */
-.degree-tail {
-  opacity: 0.4;
+.cd-unit {
+  display: inline-flex;
+  align-items: center;
 }
 
-.degree-span,
-.degree-left {
+.cd-digit {
+  display: inline-block;
+  width: 0.62em;
+  height: 1em;
+  overflow: hidden;
+}
+
+/* At rest the column shows its top slot. The transition lives on the rolling
+   class alone, so re-parking it for the next tick never animates. */
+.cd-reel {
+  display: flex;
+  flex-direction: column;
+}
+
+.cd-reel.is-rolling {
+  transform: translateY(-1em);
+  transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cd-reel > span {
+  height: 1em;
+  line-height: 1;
+  text-align: center;
+}
+
+.cd-label {
+  margin-left: 0.1em;
   color: var(--faint);
+}
+
+.degree-until {
+  color: var(--faint);
+}
+
+/* Present to a screen reader, absent to the eye: one steady figure in place
+   of a readout that changes every second. */
+.u-quiet {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 /* ---------- sections and rows ---------- */

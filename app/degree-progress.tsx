@@ -1,95 +1,111 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 /*
-  Live progress through the degree. The bar advances about 8.6e-7 percent a
-  second, so the readout carries enough decimals for the tail to move every
-  frame while the leading digits stay steady and readable. Updates are written
-  straight to the DOM rather than through state, so a 60fps counter does not
-  re-render the tree sixty times a second.
+  Time left on the degree, counted down rather than totted up. The bar still
+  draws the whole span to scale, but the readout is the part a reader can act
+  on: how long is left. Each digit sits in its own column that rolls one step
+  on every tick, so the seconds read as a number moving rather than as text
+  being swapped out.
 */
 const START = Date.UTC(2024, 7, 28); /* first day of term at UMD */
 const END = Date.UTC(2028, 4, 18); /* expected commencement */
 const SPAN = END - START;
-const DAY = 86_400_000;
-const PLACES = 9;
+
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
 
 function pad(value: number) {
   return String(value).padStart(2, "0");
 }
 
-function measure(now: number, live: boolean) {
-  const done = Math.min(Math.max(now - START, 0), SPAN);
+function measure(now: number) {
   const left = Math.max(END - now, 0);
-  const days = Math.floor(left / DAY);
-  const percent = (done / SPAN) * 100;
-  const fraction = done / SPAN;
-
-  if (!live) {
-    return { fraction, head: percent.toFixed(2), tail: "", left: `${days}d left` };
-  }
-
-  const text = percent.toFixed(PLACES);
-  const dot = text.indexOf(".");
-  const rest = left % DAY;
-  const clock = `${pad(Math.floor(rest / 3_600_000))}:${pad(
-    Math.floor(rest / 60_000) % 60,
-  )}:${pad(Math.floor(rest / 1000) % 60)}`;
 
   return {
-    fraction,
-    head: text.slice(0, dot + 3),
-    tail: text.slice(dot + 3),
-    left: `${days}d ${clock} left`,
+    fraction: Math.min(Math.max(now - START, 0), SPAN) / SPAN,
+    days: String(Math.floor(left / DAY)),
+    hours: pad(Math.floor(left / HOUR) % 24),
+    minutes: pad(Math.floor(left / MINUTE) % 60),
+    seconds: pad(Math.floor(left / SECOND) % 60),
+    spoken: Math.floor(left / DAY),
   };
 }
 
-export function DegreeProgress({ buildNow }: { buildNow: number }) {
-  /* Rendered from build time so the prerendered HTML and hydration agree. */
-  const seed = measure(buildNow, true);
-
-  const fill = useRef<SVGRectElement>(null);
-  const head = useRef<HTMLSpanElement>(null);
-  const tail = useRef<HTMLSpanElement>(null);
-  const left = useRef<HTMLSpanElement>(null);
-  const svg = useRef<SVGSVGElement>(null);
+/*
+  One digit, as a two-slot column inside a one-character window: the numeral
+  that was showing sits above the one showing now, and the column travels a
+  single step each tick. Holding only two numerals rather than all ten is
+  what makes a 0 following a 9 roll forward like any other tick instead of
+  sweeping back through eight numerals.
+*/
+function Digit({ numeral }: { numeral: string }) {
+  const [slots, setSlots] = useState({ was: numeral, now: numeral, rolling: false });
 
   useEffect(() => {
-    const still =
+    /* The old numeral is parked at the top and the transform reset, which is
+       invisible: what was on screen is exactly what is on screen now. */
+    setSlots((prev) =>
+      prev.now === numeral ? prev : { was: prev.now, now: numeral, rolling: false },
+    );
+  }, [numeral]);
+
+  useEffect(() => {
+    if (slots.rolling || slots.was === slots.now) return;
+
+    /* A frame later the column is let go, and the transition carries it. */
+    const frame = requestAnimationFrame(() =>
+      setSlots((prev) => ({ ...prev, rolling: true })),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [slots]);
+
+  return (
+    <span className="cd-digit">
+      <span className={slots.rolling ? "cd-reel is-rolling" : "cd-reel"}>
+        <span>{slots.was}</span>
+        <span>{slots.now}</span>
+      </span>
+    </span>
+  );
+}
+
+/* One unit of the countdown: its digits, then the letter that names it. */
+function Unit({ value, label }: { value: string; label: string }) {
+  return (
+    <span className="cd-unit">
+      {value.split("").map((numeral, index) => (
+        /* The digit count is part of the key, so a day count dropping from
+           three digits to two remounts instead of sliding sideways. */
+        <Digit key={`${value.length}-${index}`} numeral={numeral} />
+      ))}
+      <span className="cd-label">{label}</span>
+    </span>
+  );
+}
+
+export function DegreeProgress({ buildNow }: { buildNow: number }) {
+  /* Seeded from build time so the prerendered HTML and hydration agree. */
+  const [now, setNow] = useState(buildNow);
+  const [still, setStill] = useState(false);
+
+  useEffect(() => {
+    const quiet =
       typeof matchMedia === "function" &&
       matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const paint = () => {
-      const next = measure(Date.now(), !still);
-      if (fill.current) fill.current.setAttribute("width", String(720 * next.fraction));
-      if (head.current) head.current.textContent = next.head;
-      if (tail.current) tail.current.textContent = next.tail;
-      if (left.current) left.current.textContent = next.left;
-    };
+    setStill(quiet);
+    setNow(Date.now());
 
-    paint();
-
-    /* Screen readers get one steady figure, not a spinning one. */
-    if (svg.current) {
-      svg.current.setAttribute(
-        "aria-label",
-        `${measure(Date.now(), false).head} percent through a B.S. in Computer ` +
-          `Engineering, 28 August 2024 to an expected 18 May 2028.`,
-      );
-    }
-
-    if (still) {
-      const timer = setInterval(paint, 60_000);
-      return () => clearInterval(timer);
-    }
-
-    let frame = requestAnimationFrame(function loop() {
-      paint();
-      frame = requestAnimationFrame(loop);
-    });
-    return () => cancelAnimationFrame(frame);
+    /* A reader who asked for less motion gets the minute, not the second. */
+    const timer = setInterval(() => setNow(Date.now()), quiet ? MINUTE : SECOND);
+    return () => clearInterval(timer);
   }, []);
+
+  const left = measure(now);
 
   return (
     <figure className="degree">
@@ -100,7 +116,6 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
 
       <svg
         className="degree-svg"
-        ref={svg}
         viewBox="0 0 720 20"
         role="img"
         aria-label="Progress through a B.S. in Computer Engineering, 28 August 2024 to an expected 18 May 2028."
@@ -109,10 +124,9 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
         <rect x="0.5" y="0.5" width="719" height="19" rx="3" stroke="var(--border)" />
         <rect
           className="degree-fill"
-          ref={fill}
           x="0"
           y="0"
-          width={720 * seed.fraction}
+          width={720 * left.fraction}
           height="20"
           rx="3"
           fill="var(--foreground)"
@@ -120,19 +134,16 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
       </svg>
 
       <div className="degree-read">
-        <span>
-          <span className="degree-pct">
-            <span ref={head}>{seed.head}</span>
-            <span className="degree-tail" ref={tail}>
-              {seed.tail}
-            </span>
-            %
-          </span>
-          <span className="degree-span"> of the way through</span>
+        <span className="countdown" aria-hidden="true">
+          <Unit value={left.days} label="d" />
+          <Unit value={left.hours} label="h" />
+          <Unit value={left.minutes} label="m" />
+          {still ? null : <Unit value={left.seconds} label="s" />}
         </span>
-        <span className="degree-left" ref={left}>
-          {seed.left}
+        <span className="u-quiet">
+          {left.spoken} days until commencement on 18 May 2028.
         </span>
+        <span className="degree-until">until commencement</span>
       </div>
     </figure>
   );
