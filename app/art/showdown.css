@@ -1,5 +1,5 @@
 /*
-  ShowdownRL illustration. One 8s loop: four turns of a battle on the left
+  ShowdownRL illustration. One 12s loop: four turns of a battle on the left
   (real sprites: the attacker lunges, the target flinches, a switch on turn
   three, a faint on turn four), the policy's seven actions re-weighted on the
   right, then the measured win rate below. Every rule is scoped to `.art-sd`
@@ -184,7 +184,7 @@
   .is-visible .art-sd .sd-res-base,
   .is-visible .art-sd .sd-res-top,
   .is-visible .art-sd .sd-res-label {
-    animation-duration: 8s;
+    animation-duration: 12s;
     animation-timing-function: ease-out;
     animation-iteration-count: infinite;
   }
@@ -276,7 +276,7 @@
   }
 }
 
-/* 0-0.5s reset · turns at 0.9 / 1.9 / 2.9 / 3.9s · result 4.5-6.0s · rest to 8s */
+/* 0-0.7s reset · turns at 1.35 / 2.85 / 4.35 / 5.85s · result 6.7-9.0s · rest to 12s */
 
 @keyframes sd-opp {
   0% {

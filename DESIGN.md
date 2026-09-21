@@ -39,7 +39,7 @@ layout:
 motion:
   enter: 640ms blur-and-rise, staggered 60ms per block
   degree-fill: 1100ms once
-  art: one 6–9 s loop per project, only while on screen
+  art: one 6–12 s loop per project, only while on screen
 ---
 
 ## Overview
