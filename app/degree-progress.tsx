@@ -3,17 +3,15 @@
 import { useEffect, useRef } from "react";
 
 /*
-  Live progress through the degree. The bar advances about 8.6e-7 percent a
-  second, so the readout carries enough decimals for the tail to move every
-  frame while the leading digits stay steady and readable. Updates are written
-  straight to the DOM rather than through state, so a 60fps counter does not
-  re-render the tree sixty times a second.
+  Live progress through the degree: a bar drawn to scale across the whole
+  programme, and under it a countdown to commencement that ticks once a
+  second like a clock. Updates are written straight to the DOM rather than
+  through state, so the tick does not re-render the tree.
 */
 const START = Date.UTC(2024, 7, 28); /* first day of term at UMD */
 const END = Date.UTC(2028, 4, 18); /* expected commencement */
 const SPAN = END - START;
 const DAY = 86_400_000;
-const PLACES = 9;
 
 function pad(value: number) {
   return String(value).padStart(2, "0");
@@ -23,26 +21,19 @@ function measure(now: number, live: boolean) {
   const done = Math.min(Math.max(now - START, 0), SPAN);
   const left = Math.max(END - now, 0);
   const days = Math.floor(left / DAY);
-  const percent = (done / SPAN) * 100;
   const fraction = done / SPAN;
+  const percent = Math.round((fraction * 100) * 10) / 10;
 
   if (!live) {
-    return { fraction, head: percent.toFixed(2), tail: "", left: `${days}d left` };
+    return { fraction, percent, left: `${days}d left` };
   }
 
-  const text = percent.toFixed(PLACES);
-  const dot = text.indexOf(".");
   const rest = left % DAY;
   const clock = `${pad(Math.floor(rest / 3_600_000))}:${pad(
     Math.floor(rest / 60_000) % 60,
   )}:${pad(Math.floor(rest / 1000) % 60)}`;
 
-  return {
-    fraction,
-    head: text.slice(0, dot + 3),
-    tail: text.slice(dot + 3),
-    left: `${days}d ${clock} left`,
-  };
+  return { fraction, percent, left: `${days}d ${clock} left` };
 }
 
 export function DegreeProgress({ buildNow }: { buildNow: number }) {
@@ -50,8 +41,6 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
   const seed = measure(buildNow, true);
 
   const fill = useRef<SVGRectElement>(null);
-  const head = useRef<HTMLSpanElement>(null);
-  const tail = useRef<HTMLSpanElement>(null);
   const left = useRef<HTMLSpanElement>(null);
   const svg = useRef<SVGSVGElement>(null);
 
@@ -63,8 +52,6 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
     const paint = () => {
       const next = measure(Date.now(), !still);
       if (fill.current) fill.current.setAttribute("width", String(720 * next.fraction));
-      if (head.current) head.current.textContent = next.head;
-      if (tail.current) tail.current.textContent = next.tail;
       if (left.current) left.current.textContent = next.left;
     };
 
@@ -74,66 +61,47 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
     if (svg.current) {
       svg.current.setAttribute(
         "aria-label",
-        `${measure(Date.now(), false).head} percent through a B.S. in Computer ` +
+        `${measure(Date.now(), false).percent} percent through a B.S. in Computer ` +
           `Engineering, 28 August 2024 to an expected 18 May 2028.`,
       );
     }
 
-    if (still) {
-      const timer = setInterval(paint, 60_000);
-      return () => clearInterval(timer);
-    }
-
-    let frame = requestAnimationFrame(function loop() {
-      paint();
-      frame = requestAnimationFrame(loop);
-    });
-    return () => cancelAnimationFrame(frame);
+    const timer = setInterval(paint, still ? 60_000 : 1000);
+    return () => clearInterval(timer);
   }, []);
 
   return (
     <figure className="degree">
-      <figcaption className="degree-what">
-        <span>B.S. Computer Engineering, University of Maryland</span>
-        <span className="mono">2024 – 28</span>
-      </figcaption>
-
       <svg
         className="degree-svg"
         ref={svg}
-        viewBox="0 0 720 20"
+        viewBox="0 0 720 8"
         role="img"
         aria-label="Progress through a B.S. in Computer Engineering, 28 August 2024 to an expected 18 May 2028."
         fill="none"
       >
-        <rect x="0.5" y="0.5" width="719" height="19" rx="3" stroke="var(--border)" />
+        <rect x="0" y="0" width="720" height="8" rx="4" fill="var(--track)" />
         <rect
           className="degree-fill"
           ref={fill}
           x="0"
           y="0"
           width={720 * seed.fraction}
-          height="20"
-          rx="3"
+          height="8"
+          rx="4"
           fill="var(--foreground)"
         />
       </svg>
 
-      <div className="degree-read">
-        <span>
-          <span className="degree-pct">
-            <span ref={head}>{seed.head}</span>
-            <span className="degree-tail" ref={tail}>
-              {seed.tail}
-            </span>
-            %
+      <figcaption className="degree-read">
+        <span className="degree-what">B.S. Computer Engineering, UMD</span>
+        <span className="degree-left">
+          <span ref={left} suppressHydrationWarning>
+            {seed.left}
           </span>
-          <span className="degree-span"> of the way through</span>
+          <span className="degree-dot"> · </span>May 2028
         </span>
-        <span className="degree-left" ref={left}>
-          {seed.left}
-        </span>
-      </div>
+      </figcaption>
     </figure>
   );
 }

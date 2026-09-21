@@ -1,11 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Caveat, Geist_Mono, Public_Sans } from "next/font/google";
 import "./globals.css";
 
-const sans = Geist({
+const sans = Public_Sans({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-geist-sans",
+  weight: ["400", "500", "600"],
+  variable: "--font-sans-face",
+  display: "swap",
+});
+
+const hand = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-hand-face",
   display: "swap",
 });
 
@@ -38,7 +45,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#131313" },
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: light)", color: "#fbfbfb" },
   ],
 };
 
@@ -46,7 +53,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`${sans.variable} ${hand.variable} ${mono.variable}`}>
       <head>
         {/* Apply a stored theme choice before first paint; otherwise follow the system. */}
         <script
