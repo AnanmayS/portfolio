@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
   changing with the active Pokémon. Below: the measured win rate over the
   type-aware baseline.
 
-  One 8s loop, driven entirely from app/art/showdown.css. Every pass of the
+  One 12s loop, driven entirely from app/art/showdown.css. Every pass of the
   loop draws a different matchup from the roster below: the swap happens at
   the seam, while the field is reset, so a new pair simply walks on. The
   un-animated state (no `is-visible` ancestor, or reduced motion) is the
