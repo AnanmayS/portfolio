@@ -71,7 +71,10 @@ fills are the foreground at five percent (`--surface`). Illustrations sit on
 `--panel`, a soft grey a step below the ground, with `--border` nudged
 darker inside it so hairlines still read. Chips (an email, a handle) use
 `--chip`. The only non-grey is the selection blue on the handwritten phrase's
-handles, borrowed from a text editor. A severed feed or a dead worker is
+handles, borrowed from a text editor, and the Pokémon sprites in the
+ShowdownRL illustration, which are Pokémon Showdown's own (public/sprites)
+and are shown in their real colours because a grey Charizard is not a
+Charizard. A severed feed or a dead worker is
 drawn dashed, never red. `--danger` exists only for a form error.
 
 The page follows the system theme until the reader picks one. The choice is
@@ -113,8 +116,9 @@ under reduced motion. It shows the mechanism, not a picture of it: Tape
 captures, loses the feed, flags the hole, replays compressed, and matches
 the digest; ForgeGrid schedules seven tasks over three workers against a
 one-worker baseline, loses a worker, and finishes anyway; ShowdownRL plays
-four turns with the masked policy beside the board and lands on the
-measured win rate over the baseline.
+four turns on a real battlefield, Charizard against Blastoise with a switch
+to Venusaur, the masked policy beside it, and lands on the measured win rate
+over the baseline.
 
 ## Do's and Don'ts
 
