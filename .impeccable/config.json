@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.22, 1.25, 0.36, 1)",
+        "createdAt": "2026-09-21T23:09:40.454Z",
+        "reason": "user asked to match shwn.design's digit-flip, whose measured easing overshoots to ~1.015; the ticker's tick-in curve reproduces that spring deliberately"
+      }
+    ]
+  }
+}
