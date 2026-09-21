@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
   changing with the active Pokémon. Below: the measured win rate over the
   type-aware baseline.
 
-  One 12s loop, driven entirely from app/art/showdown.css. Every pass of the
+  One 7.5s loop, driven entirely from app/art/showdown.css. Every pass of the
   loop draws a different matchup from the roster below: the swap happens at
   the seam, while the field is reset, so a new pair simply walks on. The
   un-animated state (no `is-visible` ancestor, or reduced motion) is the
@@ -71,7 +71,16 @@ export function ShowdownArt({ basePath = "" }: { basePath?: string }) {
 
   const { a, b, opp } = ROSTER[index];
   const sprite = (name: string) => `${basePath}/sprites/${name}.png`;
-  const turns = [a.moves[0], a.moves[1], `switch → ${b.name}`, b.moves[2]];
+  /* Six callouts in the order they play: the agent's four turns and the
+     opponent's two counters, each saying who is acting on whom. */
+  const calls = [
+    { cls: "sd-move-1", move: a.moves[0], who: `${a.name} on ${opp.name}`, dir: "r" },
+    { cls: "sd-move-2", move: a.moves[1], who: `${a.name} on ${opp.name}`, dir: "r" },
+    { cls: "sd-counter-1", move: opp.moves[0], who: `${opp.name} on ${a.name}`, dir: "l" },
+    { cls: "sd-move-3", move: `switch → ${b.name}`, who: `${a.name} comes back`, dir: null },
+    { cls: "sd-counter-2", move: opp.moves[1], who: `${opp.name} on ${b.name}`, dir: "l" },
+    { cls: "sd-move-4", move: b.moves[2], who: `${b.name} on ${opp.name}`, dir: "r" },
+  ] as const;
 
   return (
     <svg
@@ -117,11 +126,21 @@ export function ShowdownArt({ basePath = "" }: { basePath?: string }) {
         <rect className="sd-track" x="290.5" y="152" width="135" height="9" rx="2" />
         <rect className="sd-hp sd-hp-opp" x="291" y="152.5" width="134" height="8" rx="2" />
 
-        {/* the move called each turn, mid-field */}
-        {turns.map((name, i) => (
-          <text key={i} className={`sd-move sd-move-${i + 1}`} x="221" y="72" textAnchor="middle">
-            {name}
-          </text>
+        {/* mid-field: the move, who is using it on whom, and an arrow at the target */}
+        {calls.map((call) => (
+          <g key={call.cls} className={`sd-call ${call.cls}`}>
+            <text className="sd-move" x="221" y="66" textAnchor="middle">
+              {call.move}
+            </text>
+            <text className="sd-who" x="221" y="80" textAnchor="middle">
+              {call.who}
+            </text>
+            {call.dir === "r" ? (
+              <path className="sd-arrow" d="M191 92H251M245 87l6 5-6 5" />
+            ) : call.dir === "l" ? (
+              <path className="sd-arrow" d="M251 92H191M197 87l-6 5 6 5" />
+            ) : null}
+          </g>
         ))}
       </g>
 

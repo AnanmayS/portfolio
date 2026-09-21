@@ -1,8 +1,9 @@
 /*
-  ShowdownRL illustration. One 12s loop: four turns of a battle on the left
+  ShowdownRL illustration. One 7.5s loop: four turns of a battle on the left
   (real sprites: the attacker lunges, the target flinches, a switch on turn
   three, a faint on turn four), the policy's seven actions re-weighted on the
-  right, then the measured win rate below. Every rule is scoped to `.art-sd`
+  right. The next battle starts as soon as this one is won. The measured win
+  rate below is static; it is the summary, not part of any one battle. Every rule is scoped to `.art-sd`
   so the `sd-` prefix cannot collide, and the un-classed state below is the
   FINISHED frame: the opponent fainted, the switch-in out, the turn-four
   distribution, both result fills full. The keyframes only run under an
@@ -51,8 +52,20 @@
   transform-origin: center bottom;
 }
 
-.art-sd .sd-chip-text {
+.art-sd .sd-chip-text,
+.art-sd .sd-who {
   font-size: 9.5px;
+}
+
+.art-sd .sd-who {
+  fill: var(--faint);
+}
+
+.art-sd .sd-arrow {
+  stroke: var(--foreground);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .art-sd .sd-track,
@@ -145,7 +158,9 @@
 
 .art-sd .sd-move-1,
 .art-sd .sd-move-2,
-.art-sd .sd-move-3 {
+.art-sd .sd-move-3,
+.art-sd .sd-counter-1,
+.art-sd .sd-counter-2 {
   opacity: 0;
 }
 .art-sd .sd-move-4 {
@@ -177,14 +192,11 @@
   .is-visible .art-sd .sd-mon,
   .is-visible .art-sd .sd-swap-a,
   .is-visible .art-sd .sd-swap-b,
-  .is-visible .art-sd .sd-move,
+  .is-visible .art-sd .sd-call,
   .is-visible .art-sd .sd-bar,
   .is-visible .art-sd .sd-mask,
-  .is-visible .art-sd .sd-strike,
-  .is-visible .art-sd .sd-res-base,
-  .is-visible .art-sd .sd-res-top,
-  .is-visible .art-sd .sd-res-label {
-    animation-duration: 12s;
+  .is-visible .art-sd .sd-strike {
+    animation-duration: 7.5s;
     animation-timing-function: ease-out;
     animation-iteration-count: infinite;
   }
@@ -233,6 +245,14 @@
     animation-name: sd-move-4;
   }
 
+  /* the opponent's counters, after turns two and three */
+  .is-visible .art-sd .sd-counter-1 {
+    animation-name: sd-counter-1;
+  }
+  .is-visible .art-sd .sd-counter-2 {
+    animation-name: sd-counter-2;
+  }
+
   /* the distribution re-laying out, and the chosen row taking the ink */
   .is-visible .art-sd .sd-bar-1 {
     animation-name: sd-p1, sd-pick-t1;
@@ -263,42 +283,31 @@
   .is-visible .art-sd .sd-strike {
     animation-name: sd-strike;
   }
-
-  /* the result, growing once the battle is won */
-  .is-visible .art-sd .sd-res-base {
-    animation-name: sd-res-base;
-  }
-  .is-visible .art-sd .sd-res-top {
-    animation-name: sd-res-top;
-  }
-  .is-visible .art-sd .sd-res-label {
-    animation-name: sd-res-label;
-  }
 }
 
-/* 0-0.7s reset · turns at 1.35 / 2.85 / 4.35 / 5.85s · result 6.7-9.0s · rest to 12s */
+/* 0-0.7s reset · turns at 1.35 / 2.85 / 4.35 / 5.85s · faint by 6.8s · seam at 7.5s */
 
 @keyframes sd-opp {
   0% {
     transform: scaleX(0);
   }
-  6%,
-  11% {
+  9.68%,
+  17.74% {
     transform: scaleX(1);
   }
-  14%,
-  23.5% {
+  22.58%,
+  37.9% {
     transform: scaleX(0.7);
   }
-  26.5%,
-  35.5% {
+  42.74%,
+  57.26% {
     transform: scaleX(0.46);
   }
-  38.5%,
-  48% {
+  62.1%,
+  77.42% {
     transform: scaleX(0.34);
   }
-  52%,
+  83.87%,
   100% {
     transform: scaleX(0);
   }
@@ -308,15 +317,15 @@
   0% {
     transform: scaleX(0.6);
   }
-  6%,
-  28.5% {
+  9.68%,
+  45.97% {
     transform: scaleX(1);
   }
-  30.5%,
-  41.5% {
+  49.19%,
+  66.94% {
     transform: scaleX(0.82);
   }
-  43.5%,
+  70.16%,
   100% {
     transform: scaleX(0.6);
   }
@@ -329,67 +338,67 @@
     opacity: 0.28;
     transform: translateY(6px);
   }
-  6%,
-  12.5% {
+  9.68%,
+  20.16% {
     opacity: 1;
     transform: none;
   }
-  13% {
+  20.97% {
     opacity: 0.3;
     transform: translateX(-4px);
   }
-  13.5% {
+  21.77% {
     opacity: 1;
     transform: translateX(4px);
   }
-  14%,
-  25% {
+  22.58%,
+  40.32% {
     opacity: 1;
     transform: none;
   }
-  25.5% {
+  41.13% {
     opacity: 0.3;
     transform: translateX(-4px);
   }
-  26% {
+  41.94% {
     opacity: 1;
     transform: translateX(4px);
   }
-  26.5%,
-  27.5% {
+  42.74%,
+  44.35% {
     opacity: 1;
     transform: none;
   }
-  28.25% {
+  45.56% {
     transform: translate(-12px, 8px);
   }
-  29%,
-  40.5% {
+  46.77%,
+  65.32% {
     opacity: 1;
     transform: none;
   }
-  41.25% {
+  66.53% {
     transform: translate(-12px, 8px);
   }
-  42%,
-  50% {
+  67.74%,
+  80.65% {
     opacity: 1;
     transform: none;
   }
-  50.5% {
+  81.45% {
     opacity: 0.3;
     transform: translateX(-4px);
   }
-  51% {
+  82.26% {
     opacity: 1;
     transform: translateX(4px);
   }
-  51.5%,
-  52% {
+  83.06%,
+  83.87% {
     opacity: 1;
     transform: none;
   }
-  56%,
+  90.32%,
   100% {
     opacity: 0.28;
     transform: translateY(6px);
@@ -402,40 +411,40 @@
     opacity: 0;
     transform: translateY(10px);
   }
-  6%,
-  11% {
+  9.68%,
+  17.74% {
     opacity: 1;
     transform: none;
   }
-  11.75% {
+  18.95% {
     transform: translate(12px, -8px);
   }
-  12.5%,
-  23.5% {
+  20.16%,
+  37.9% {
     transform: none;
   }
-  24.25% {
+  39.11% {
     transform: translate(12px, -8px);
   }
-  25%,
-  28.75% {
+  40.32%,
+  46.37% {
     opacity: 1;
     transform: none;
   }
-  29.25% {
+  47.18% {
     opacity: 0.3;
     transform: translateX(4px);
   }
-  29.75% {
+  47.98% {
     opacity: 1;
     transform: translateX(-4px);
   }
-  30.25%,
-  36% {
+  48.79%,
+  58.06% {
     opacity: 1;
     transform: none;
   }
-  37.5%,
+  60.48%,
   100% {
     opacity: 0;
     transform: translateY(10px);
@@ -445,32 +454,32 @@
 /* The switch-in: in on turn 3, takes the counter, lunges on turn 4. */
 @keyframes sd-mon-b {
   0%,
-  37.5% {
+  60.48% {
     opacity: 0;
     transform: translateY(10px);
   }
-  39%,
-  41.75% {
+  62.9%,
+  67.34% {
     opacity: 1;
     transform: none;
   }
-  42.25% {
+  68.15% {
     opacity: 0.3;
     transform: translateX(4px);
   }
-  42.75% {
+  68.95% {
     opacity: 1;
     transform: translateX(-4px);
   }
-  43.25%,
-  48.5% {
+  69.76%,
+  78.23% {
     opacity: 1;
     transform: none;
   }
-  49.25% {
+  79.44% {
     transform: translate(12px, -8px);
   }
-  50%,
+  80.65%,
   100% {
     opacity: 1;
     transform: none;
@@ -481,11 +490,11 @@
   0% {
     opacity: 0;
   }
-  3%,
-  36.5% {
+  4.84%,
+  58.87% {
     opacity: 1;
   }
-  38%,
+  61.29%,
   100% {
     opacity: 0;
   }
@@ -495,11 +504,11 @@
   0% {
     opacity: 1;
   }
-  3%,
-  36.5% {
+  4.84%,
+  58.87% {
     opacity: 0;
   }
-  38%,
+  61.29%,
   100% {
     opacity: 1;
   }
@@ -507,14 +516,14 @@
 
 @keyframes sd-move-1 {
   0%,
-  6.5% {
+  10.48% {
     opacity: 0;
   }
-  9%,
-  13.5% {
+  14.52%,
+  21.77% {
     opacity: 1;
   }
-  15.5%,
+  25%,
   100% {
     opacity: 0;
   }
@@ -522,14 +531,14 @@
 
 @keyframes sd-move-2 {
   0%,
-  16.5% {
+  26.61% {
     opacity: 0;
   }
-  19%,
-  26% {
+  30.65%,
+  41.94% {
     opacity: 1;
   }
-  28%,
+  45.16%,
   100% {
     opacity: 0;
   }
@@ -537,14 +546,14 @@
 
 @keyframes sd-move-3 {
   0%,
-  29% {
+  46.77% {
     opacity: 0;
   }
-  31.5%,
-  38.5% {
+  50.81%,
+  62.1% {
     opacity: 1;
   }
-  40.5%,
+  65.32%,
   100% {
     opacity: 0;
   }
@@ -554,35 +563,65 @@
   0% {
     opacity: 1;
   }
-  3%,
-  41.5% {
+  4.84%,
+  70.97% {
     opacity: 0;
   }
-  44%,
+  74.19%,
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes sd-counter-1 {
+  0%,
+  43.15% {
+    opacity: 0;
+  }
+  44.76%,
+  48.79% {
+    opacity: 1;
+  }
+  50.4%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sd-counter-2 {
+  0%,
+  64.11% {
+    opacity: 0;
+  }
+  65.73%,
+  69.35% {
+    opacity: 1;
+  }
+  70.97%,
+  100% {
+    opacity: 0;
   }
 }
 
 /* slot 1: the turn-one pick */
 @keyframes sd-p1 {
   0%,
-  2% {
+  3.23% {
     transform: scaleX(0.06);
   }
-  5.5%,
-  15% {
+  8.87%,
+  24.19% {
     transform: scaleX(0.62);
   }
-  18%,
-  27.5% {
+  29.03%,
+  44.35% {
     transform: scaleX(0.21);
   }
-  30.5%,
-  40% {
+  49.19%,
+  64.52% {
     transform: scaleX(0.1);
   }
-  43%,
+  69.35%,
   100% {
     transform: scaleX(0.06);
   }
@@ -591,22 +630,22 @@
 /* slot 2: the turn-two pick */
 @keyframes sd-p2 {
   0%,
-  2% {
+  3.23% {
     transform: scaleX(0.07);
   }
-  5.5%,
-  15% {
+  8.87%,
+  24.19% {
     transform: scaleX(0.18);
   }
-  18%,
-  27.5% {
+  29.03%,
+  44.35% {
     transform: scaleX(0.55);
   }
-  30.5%,
-  40% {
+  49.19%,
+  64.52% {
     transform: scaleX(0.08);
   }
-  43%,
+  69.35%,
   100% {
     transform: scaleX(0.07);
   }
@@ -615,22 +654,22 @@
 /* slot 3: the switch-in's finisher, the turn-four pick */
 @keyframes sd-p3 {
   0%,
-  2% {
+  3.23% {
     transform: scaleX(0.71);
   }
-  5.5%,
-  15% {
+  8.87%,
+  24.19% {
     transform: scaleX(0.09);
   }
-  18%,
-  27.5% {
+  29.03%,
+  44.35% {
     transform: scaleX(0.12);
   }
-  30.5%,
-  40% {
+  49.19%,
+  64.52% {
     transform: scaleX(0.13);
   }
-  43%,
+  69.35%,
   100% {
     transform: scaleX(0.71);
   }
@@ -639,22 +678,22 @@
 /* slot 4: masked to zero on turn two */
 @keyframes sd-p4 {
   0%,
-  2% {
+  3.23% {
     transform: scaleX(0.05);
   }
-  5.5%,
-  15% {
+  8.87%,
+  24.19% {
     transform: scaleX(0.04);
   }
-  18%,
-  27.5% {
+  29.03%,
+  44.35% {
     transform: scaleX(0);
   }
-  30.5%,
-  40% {
+  49.19%,
+  64.52% {
     transform: scaleX(0.06);
   }
-  43%,
+  69.35%,
   100% {
     transform: scaleX(0.05);
   }
@@ -663,22 +702,22 @@
 /* switch 1 */
 @keyframes sd-p5 {
   0%,
-  2% {
+  3.23% {
     transform: scaleX(0.04);
   }
-  5.5%,
-  15% {
+  8.87%,
+  24.19% {
     transform: scaleX(0.03);
   }
-  18%,
-  27.5% {
+  29.03%,
+  44.35% {
     transform: scaleX(0.05);
   }
-  30.5%,
-  40% {
+  49.19%,
+  64.52% {
     transform: scaleX(0.49);
   }
-  43%,
+  69.35%,
   100% {
     transform: scaleX(0.04);
   }
@@ -687,22 +726,22 @@
 /* switch 2 */
 @keyframes sd-p6 {
   0%,
-  2% {
+  3.23% {
     transform: scaleX(0.04);
   }
-  5.5%,
-  15% {
+  8.87%,
+  24.19% {
     transform: scaleX(0.02);
   }
-  18%,
-  27.5% {
+  29.03%,
+  44.35% {
     transform: scaleX(0.04);
   }
-  30.5%,
-  40% {
+  49.19%,
+  64.52% {
     transform: scaleX(0.09);
   }
-  43%,
+  69.35%,
   100% {
     transform: scaleX(0.04);
   }
@@ -711,22 +750,22 @@
 /* switch 3 */
 @keyframes sd-p7 {
   0%,
-  2% {
+  3.23% {
     transform: scaleX(0.03);
   }
-  5.5%,
-  15% {
+  8.87%,
+  24.19% {
     transform: scaleX(0.02);
   }
-  18%,
-  27.5% {
+  29.03%,
+  44.35% {
     transform: scaleX(0.03);
   }
-  30.5%,
-  40% {
+  49.19%,
+  64.52% {
     transform: scaleX(0.05);
   }
-  43%,
+  69.35%,
   100% {
     transform: scaleX(0.03);
   }
@@ -735,14 +774,14 @@
 /* the chosen row is ink, the rest are grey */
 @keyframes sd-pick-t1 {
   0%,
-  2.5% {
+  4.03% {
     fill: var(--muted);
   }
-  4%,
-  14.5% {
+  6.45%,
+  23.39% {
     fill: var(--foreground);
   }
-  16%,
+  25.81%,
   100% {
     fill: var(--muted);
   }
@@ -750,14 +789,14 @@
 
 @keyframes sd-pick-t2 {
   0%,
-  15% {
+  24.19% {
     fill: var(--muted);
   }
-  16.5%,
-  27% {
+  26.61%,
+  43.55% {
     fill: var(--foreground);
   }
-  28.5%,
+  45.97%,
   100% {
     fill: var(--muted);
   }
@@ -765,14 +804,14 @@
 
 @keyframes sd-pick-t3 {
   0%,
-  27.5% {
+  44.35% {
     fill: var(--muted);
   }
-  29%,
-  39.5% {
+  46.77%,
+  63.71% {
     fill: var(--foreground);
   }
-  41%,
+  66.13%,
   100% {
     fill: var(--muted);
   }
@@ -782,11 +821,11 @@
   0% {
     fill: var(--foreground);
   }
-  3%,
-  40% {
+  4.84%,
+  64.52% {
     fill: var(--muted);
   }
-  41.5%,
+  66.94%,
   100% {
     fill: var(--foreground);
   }
@@ -794,14 +833,14 @@
 
 @keyframes sd-mask {
   0%,
-  16% {
+  25.81% {
     opacity: 0;
   }
-  18.5%,
-  26.5% {
+  29.84%,
+  42.74% {
     opacity: 1;
   }
-  28.5%,
+  45.97%,
   100% {
     opacity: 0;
   }
@@ -811,56 +850,15 @@
   0% {
     transform: scaleX(1);
   }
-  5%,
-  17% {
+  8.06%,
+  27.42% {
     transform: scaleX(0);
   }
-  20%,
+  32.26%,
   100% {
     transform: scaleX(1);
   }
 }
 
-@keyframes sd-res-base {
-  0%,
-  3% {
-    transform: scaleX(0.752);
-  }
-  9%,
-  56% {
-    transform: scaleX(0);
-  }
-  75%,
-  100% {
-    transform: scaleX(0.752);
-  }
-}
 
-@keyframes sd-res-top {
-  0%,
-  3% {
-    transform: scaleX(0.79);
-  }
-  9%,
-  56% {
-    transform: scaleX(0);
-  }
-  75%,
-  100% {
-    transform: scaleX(0.79);
-  }
-}
 
-@keyframes sd-res-label {
-  0% {
-    opacity: 1;
-  }
-  5%,
-  66% {
-    opacity: 0;
-  }
-  74%,
-  100% {
-    opacity: 1;
-  }
-}
