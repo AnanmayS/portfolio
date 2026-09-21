@@ -6,17 +6,16 @@
 export const person = {
   name: "Ananmay Som Singh",
   first: "Ananmay",
-  /** The handwritten phrase in the intro. */
-  role: "backend & infra",
+  /** The handwritten phrase in the intro; follows "who likes". */
+  role: "building software",
   school: "UMD",
   email: "ananmaysom@gmail.com",
+  /** Only the footer says where; the intro does not. */
   where: "College Park",
   timeZone: "America/New_York",
   github: "https://github.com/AnanmayS",
   handle: "@AnanmayS",
   linkedin: "https://www.linkedin.com/in/ananmaysingh",
-  /** Finishes "I'm open to …" in the intro. */
-  openTo: "summer 2027",
 } as const;
 
 export type Project = {
@@ -88,7 +87,8 @@ export const roles: Role[] = [
   {
     company: "SEDS @ UMD",
     title: "Software Engineer, CubeSat GPS",
-    where: "College Park",
+    /** Only the footer says where; the intro does not. */
+  where: "College Park",
     start: "2024",
     end: "2026",
     points: [
