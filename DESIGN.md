@@ -1,33 +1,41 @@
 ---
-version: 2
+version: 3
 name: Quiet
-description: A neutral, list-first personal page. No accent colour, one ink, two greys, hairlines; motion only where it measures something.
+description: A neutral, prose-first personal page. No accent colour, one ink, two greys, one soft panel tone, hairlines; motion only where it measures something.
 colors:
   light:
-    background: "#FFFFFF"
+    background: "#FBFBFB"
     foreground: "#171717"
-    muted: "#6B6B6B"
+    muted: "#707070"
     faint: "#9A9A9A"
     border: "#EBEBEB"
+    panel: "#F2F2F2"
+    chip: "#ECECEC"
   dark:
     background: "#131313"
     foreground: "#F2F2F2"
     muted: "#9A9A9A"
     faint: "#6B6B6B"
     border: "rgba(255,255,255,0.10)"
+    panel: "#1C1C1C"
+    chip: "#242424"
 typography:
   sans:
-    fontFamily: "Geist"
-    weights: [400, 500]
+    fontFamily: "Public Sans"
+    weights: [400, 500, 600]
     usage: "Everything that is a sentence, a name, or a row"
+  hand:
+    fontFamily: "Caveat"
+    weights: [500, 600]
+    usage: "The one handwritten phrase in the intro, and nothing else"
   mono:
     fontFamily: "Geist Mono"
     weight: 400
-    usage: "Dates, readouts, stacks, labels inside illustrations"
+    usage: "Dates, readouts, stacks, chips, labels inside illustrations"
 layout:
-  shell: 42rem
-  base-size: 14.5px
-  section-gap: 3rem
+  shell: 35rem
+  base-size: 15px
+  section-gap: 3.5rem
 motion:
   enter: 640ms blur-and-rise, staggered 60ms per block
   degree-fill: 1100ms once
@@ -37,9 +45,17 @@ motion:
 ## Overview
 
 Quiet is built for a reader who is deciding, in under a minute, whether to
-keep reading. It borrows its posture from the best personal sites: a short
-column, small type, sections as plain rows with a hairline between them,
-nothing decorated. Three projects, three roles, one stack line, one bar.
+keep reading. It borrows its posture from the best personal sites: a narrow
+column, small type, a few sentences that sound like a person, sections as
+plain rows with a hairline between them, nothing decorated. A pill, a
+paragraph or three, one bar, three roles, three projects.
+
+The page opens as prose rather than a name and a tagline. Body copy is grey;
+the words that carry weight are set in ink with a small glyph beside them,
+and the role is the one handwritten phrase, which behaves like a selected
+text box when clicked. The résumé and the three ways to reach out sit in a
+pill fixed to the top of the window so they are never more than one glance
+away.
 
 The bar is the degree progress: drawn to scale across the whole degree with
 a live readout, the first thing after the name, and the only large gesture.
@@ -51,29 +67,43 @@ does except the entrance.
 
 Greyscale in both themes. There is no accent. Emphasis is the foreground;
 the "before" or baseline state in a comparison is `--faint` or `--border`;
-fills are the foreground at five percent (`--surface`). A severed feed or a
-dead worker is drawn dashed, never red. `--danger` exists only for a form
-error.
+fills are the foreground at five percent (`--surface`). Illustrations sit on
+`--panel`, a soft grey a step below the ground, with `--border` nudged
+darker inside it so hairlines still read. Chips (an email, a handle) use
+`--chip`. The only non-grey is the selection blue on the handwritten phrase's
+handles, borrowed from a text editor. A severed feed or a dead worker is
+drawn dashed, never red. `--danger` exists only for a form error.
 
 The page follows the system theme until the reader picks one. The choice is
 stamped as `data-appearance` on the root and kept in localStorage.
 
 ## Type
 
-Geist at 14.5px, weight 400, with 500 for names and the heading. Geist Mono
-for anything that is read as a number or a label. The heading is the only
-thing above 1rem.
+Public Sans at 15px, weight 400, with 500 for names and the ink words in the
+intro. Geist Mono for anything that is read as a number or a label. Caveat,
+once, for the role. There is no heading; the intro is the largest text on
+the page at 1rem.
 
 ## Structure
 
-Name and one-line tagline, the degree bar, then sections: Work, Experience,
-Stack, and a sticky bottom bar of links that fades the page under it.
+The pill, the intro prose, the degree bar, then sections: Experience, Work,
+and a plain footer with the links, the College Park clock, and the theme
+toggle. Experience comes first because the reader is most often hiring.
+
+Every item in the pill is drawn the same grey disc so none reads as a
+selected tab; the résumé is the only one with a label, and it carries an
+outward arrow because it opens a PDF. Anything that says "email" opens the
+email card: a compose window with the recipient already filled in, a
+subject, a message, and Send. The reader never types an address.
+
+The degree bar has no percentage under it; the readout is the countdown to
+commencement, ticking once a second like the clock in the footer.
 
 A row is the unit. Left column eight rem wide carries the name; the body
 carries a title and a right-aligned tabular date. Rows that link expand on
 hover into the margin with a soft fill and an arrow. A project is a row, a
-two-sentence lede, the illustration in a bordered figure, and a mono stack
-line.
+two-sentence lede, and the illustration on a rounded panel with the mono
+stack line in its corner.
 
 ## Illustrations
 
@@ -89,6 +119,8 @@ measured win rate over the baseline.
 ## Do's and Don'ts
 
 - Do keep the page to three projects. A fourth needs to beat one of them.
+- Do keep the intro to three short paragraphs. Every ink word earns it.
+- Don't add a second handwritten phrase. One is a wink; two is a theme.
 - Do let a number stay in prose; the illustration is where it gets drawn.
 - Don't add a colour. If something needs emphasis, it is the foreground.
 - Don't animate anything that does not measure or move in the model.

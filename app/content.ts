@@ -5,11 +5,18 @@
 
 export const person = {
   name: "Ananmay Som Singh",
-  tagline: "Computer engineering student, backend and infrastructure engineer",
+  first: "Ananmay",
+  /** The handwritten phrase in the intro. */
+  role: "backend & infra",
+  school: "UMD",
   email: "ananmaysom@gmail.com",
-  where: "College Park, MD",
+  where: "College Park",
+  timeZone: "America/New_York",
   github: "https://github.com/AnanmayS",
+  handle: "@AnanmayS",
   linkedin: "https://www.linkedin.com/in/ananmaysingh",
+  /** Finishes "I'm open to …" in the intro. */
+  openTo: "summer 2027",
 } as const;
 
 export type Project = {
@@ -102,5 +109,5 @@ export const roles: Role[] = [
   },
 ];
 
-export const stack =
-  "Go · Python · TypeScript · C · PostgreSQL · AWS · Terraform · Docker · PyTorch";
+/** The three named in the intro; everything else is on the project stack lines. */
+export const languages = ["Go", "Python", "TypeScript"] as const;

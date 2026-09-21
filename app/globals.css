@@ -4,10 +4,11 @@
 @import "./art/showdown.css";
 
 /*
-  "Quiet". A neutral page: white or near-black ground, one ink, two greys,
-  hairlines. There is no accent colour. Emphasis is carried by the ink and
-  by motion that measures something: the degree bar, and one looping
-  illustration per project.
+  "Quiet". A neutral page: warm off-white or near-black ground, one ink, two
+  greys, hairlines, and one soft panel tone for the illustrations. There is
+  no accent colour. Emphasis is carried by the ink and by motion that
+  measures something: the degree bar, and one looping illustration per
+  project. Body copy sits in grey; the words that matter are set in ink.
 
   Theme: the system preference by default. An explicit choice is stamped on
   the root as data-appearance="light" | "dark" and stored in localStorage by
@@ -15,21 +16,30 @@
 */
 :root {
   color-scheme: light;
-  --background: #ffffff;
+  --background: #fbfbfb;
   --foreground: #171717;
-  --muted: #6b6b6b;
+  --muted: #707070;
   --faint: #9a9a9a;
   --border: #ebebeb;
+  --panel: #f2f2f2;
+  --panel-line: #d9d9d9;
+  --track: #e6e6e6;
+  --chip: #ececec;
+  --raised: #ffffff;
   --surface: color-mix(in srgb, var(--foreground) 5%, transparent);
   --danger: #b3261e;
   --shadow: rgba(23, 23, 23, 0.18);
+  --float: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
   --backdrop: rgba(23, 23, 23, 0.35);
+  --handle: #7da7f5;
 
-  --shell: 42rem;
-  --margin: 1rem;
+  --shell: 35rem;
+  --margin: 1.25rem;
   --radius: 8px;
+  --radius-panel: 20px;
 
-  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-sans-face), system-ui, -apple-system, sans-serif;
+  --font-hand: var(--font-hand-face), "Segoe Script", cursive;
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
@@ -47,8 +57,14 @@
     --muted: #9a9a9a;
     --faint: #6b6b6b;
     --border: rgba(255, 255, 255, 0.1);
+    --panel: #1c1c1c;
+    --panel-line: rgba(255, 255, 255, 0.16);
+    --track: #262626;
+    --chip: #242424;
+    --raised: #1f1f1f;
     --danger: #ff8f85;
     --shadow: rgba(0, 0, 0, 0.5);
+    --float: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
     --backdrop: rgba(0, 0, 0, 0.55);
   }
 }
@@ -60,8 +76,14 @@
   --muted: #9a9a9a;
   --faint: #6b6b6b;
   --border: rgba(255, 255, 255, 0.1);
+  --panel: #1c1c1c;
+  --panel-line: rgba(255, 255, 255, 0.16);
+  --track: #262626;
+  --chip: #242424;
+  --raised: #1f1f1f;
   --danger: #ff8f85;
   --shadow: rgba(0, 0, 0, 0.5);
+  --float: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
   --backdrop: rgba(0, 0, 0, 0.55);
 }
 
@@ -82,9 +104,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-size: 0.90625rem; /* 14.5px */
+  font-size: 0.9375rem; /* 15px */
   font-weight: 400;
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
@@ -135,7 +157,7 @@ h1 {
 .shell {
   width: min(100% - (var(--margin) * 2), var(--shell));
   margin: 0 auto;
-  padding-top: 6rem;
+  padding-top: 7.5rem;
 }
 
 /* Staggered entrance, the reference site's blur-and-rise. `--i` is the
@@ -161,42 +183,328 @@ h1 {
   }
 }
 
-/* ---------- intro ---------- */
+/* ---------- the pill ---------- */
+
+.pill {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--raised) 85%, transparent);
+  box-shadow: var(--float);
+  transform: translateX(-50%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pill.in {
+  /* The pill is fixed, so it enters without the translate. */
+  animation-name: enter-pill;
+}
+
+@keyframes enter-pill {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+/* Every item is the same grey disc so none reads as a selected tab. */
+.pill-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  background: var(--chip);
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.pill-item:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.pill-wide {
+  width: auto;
+  gap: 0.4rem;
+  padding: 0 0.85rem 0 0.75rem;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.pill-out {
+  color: var(--faint);
+  transition: color 120ms ease, transform 120ms ease;
+}
+
+.pill-wide:hover .pill-out {
+  color: inherit;
+  transform: translate(1px, -1px);
+}
+
+.pill-in {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+@media (pointer: coarse) {
+  .pill-item {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .pill-wide {
+    width: auto;
+  }
+}
+
+/* ---------- intro prose ---------- */
 
 .intro {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 1.25rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  text-wrap: pretty;
 }
 
-.intro-tagline {
-  color: var(--muted);
-  text-wrap: pretty;
+.intro b {
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+/* A weighted word with its glyph tucked against it. */
+.intro .hi {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  vertical-align: baseline;
+}
+
+.intro .hi svg {
+  position: relative;
+  top: 1px;
+  flex: none;
+}
+
+.intro a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-decoration-color: var(--faint);
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color 120ms ease;
+}
+
+.intro a:hover {
+  text-decoration-color: var(--foreground);
+}
+
+.chip,
+.intro a.chip {
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.05rem 0.5rem;
+  background: var(--chip);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.chip:hover,
+.intro a.chip:hover {
+  background: var(--track);
+}
+
+/* ---------- the handwritten role ---------- */
+
+.role {
+  position: relative;
+  display: inline-block;
+  margin: 0 0.2rem;
+  vertical-align: baseline;
+}
+
+.role-word {
+  position: relative;
+  display: inline-block;
+  border: 1px solid transparent;
+  padding: 0 0.55rem;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  line-height: 1.25;
+  cursor: text;
+  transition: border-color 120ms ease;
+}
+
+.role-word.role-hand {
+  font-family: var(--font-hand);
+  font-size: 1.3em;
+  font-weight: 500;
+}
+
+.role-word.role-sans {
+  font-family: var(--font-sans);
+}
+
+.role-word.role-mono {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.role-word.is-bold.role-hand {
+  font-weight: 600;
+}
+
+.role-word.is-bold.role-sans,
+.role-word.is-bold.role-mono {
+  font-weight: 600;
+}
+
+.role-word.is-italic {
+  font-style: italic;
+}
+
+.role-word:hover,
+.role.is-open .role-word {
+  border-color: var(--handle);
+}
+
+.role-word:focus-visible {
+  outline: none;
+  border-color: var(--handle);
+}
+
+.role-handle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--handle);
+  background: var(--raised);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.role-word:hover .role-handle,
+.role.is-open .role-handle {
+  opacity: 1;
+}
+
+.role-handle:nth-of-type(1) { top: -3px; left: -3px; }
+.role-handle:nth-of-type(2) { top: -3px; right: -3px; }
+.role-handle:nth-of-type(3) { bottom: -3px; left: -3px; }
+.role-handle:nth-of-type(4) { bottom: -3px; right: -3px; }
+
+.role-tools {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  left: 50%;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 8px;
+  background: var(--raised);
+  box-shadow: var(--float);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  animation: enter 160ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.role-tools[hidden] {
+  display: none;
+}
+
+.role-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 1.5rem;
+  border: 0;
+  border-radius: 5px;
+  padding: 0 0.45rem;
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.role-tool:hover {
+  background: var(--surface);
+}
+
+.role-tool[aria-pressed="true"] {
+  background: var(--chip);
+}
+
+.role-tool-face.role-hand {
+  font-family: var(--font-hand);
+  font-size: 0.9rem;
+}
+
+.role-tool-face.role-mono {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.role-tool-face svg {
+  color: var(--faint);
+}
+
+.role-tool-b {
+  font-weight: 700;
+}
+
+.role-tool-i {
+  font-style: italic;
+}
+
+.role-tools-rule {
+  width: 1px;
+  height: 0.9rem;
+  background: var(--border);
 }
 
 /* ---------- degree progress: the signature ---------- */
 
 .degree {
-  margin: 2.5rem 0 0;
-}
-
-.degree-what {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.degree-what .mono {
-  white-space: nowrap;
+  margin: 3rem 0 0;
 }
 
 .degree-svg {
   display: block;
   width: 100%;
   height: auto;
-  margin-top: 0.75rem;
 }
 
 .degree-fill {
@@ -210,26 +518,33 @@ h1 {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
 
-.degree-pct {
+.degree-what {
   color: var(--foreground);
-  font-weight: 500;
 }
 
-/* The fine digits move every frame; dimming them keeps the readable figure
-   in front and the precision behind it. */
-.degree-tail {
-  opacity: 0.4;
-}
-
-.degree-span,
+.degree-dot,
 .degree-left {
   color: var(--faint);
+}
+
+.degree-left {
+  white-space: nowrap;
+}
+
+@media (max-width: 40rem) {
+  .degree-what {
+    display: none;
+  }
+
+  .degree-read {
+    justify-content: flex-end;
+  }
 }
 
 /* ---------- sections and rows ---------- */
@@ -237,8 +552,8 @@ h1 {
 .sections {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
-  padding-top: 3rem;
+  gap: 3.5rem;
+  padding-top: 3.5rem;
 }
 
 .section {
@@ -248,9 +563,10 @@ h1 {
 }
 
 .section-title {
-  color: var(--muted);
-  font-size: 0.875rem;
+  color: var(--faint);
+  font-size: 0.75rem;
   font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 /* A row: hairline above, expands on hover the way the reference site's
@@ -326,9 +642,10 @@ a.row:hover,
 .row-when {
   flex: 0 0 auto;
   min-width: 4.5rem;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  font-size: 0.75rem;
   text-align: right;
+  white-space: nowrap;
 }
 
 .row-arrow {
@@ -397,18 +714,22 @@ a.row:hover,
   text-wrap: pretty;
 }
 
+/* The illustration sits on a soft panel rather than in a hairline box.
+   Hairlines inside the art are nudged darker so they still read on it. */
 .project-figure {
+  --border: var(--panel-line);
   margin: 0.25rem 0 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.25rem 1.25rem 1rem;
+  border-radius: var(--radius-panel);
+  padding: 1.5rem 1.5rem 1rem;
+  background: var(--panel);
   overflow-x: auto;
 }
 
 .project-stack {
+  margin-top: 0.75rem;
   color: var(--faint);
-  font-family: var(--font-mono);
   font-size: 0.6875rem;
+  text-align: right;
 }
 
 .art {
@@ -423,26 +744,16 @@ a.row:hover,
   }
 }
 
-/* ---------- stack line ---------- */
-
-.stack-line {
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-/* ---------- sticky bottom bar ---------- */
+/* ---------- footer ---------- */
 
 .foot {
-  position: sticky;
-  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  margin: 0 calc(var(--margin) * -0.5);
-  padding: 2.5rem calc(var(--margin) * 0.5) 1rem;
-  background: linear-gradient(to bottom, transparent, var(--background) 45%);
-  font-size: 0.875rem;
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 0 3rem;
+  font-size: 0.8125rem;
 }
 
 .foot-group {
@@ -458,6 +769,7 @@ a.row:hover,
   background: transparent;
   color: var(--muted);
   font: inherit;
+  line-height: inherit;
   cursor: pointer;
   transition: color 120ms ease;
 }
@@ -469,212 +781,233 @@ a.row:hover,
 
 .foot-where {
   color: var(--faint);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+}
+
+.clock {
+  display: inline-block;
+  min-width: 4.5em;
 }
 
 @media (max-width: 40rem) {
   .foot {
-    justify-content: space-around;
-  }
-
-  .foot-where {
-    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }
 
-/* ---------- contact dialog ---------- */
+/* ---------- the email card ---------- */
 
-.contact-form-trigger,
-.contact-dialog-close,
-.contact-form-cancel,
-.contact-form-submit {
-  border: 0;
-  background: transparent;
-  font: inherit;
-  cursor: pointer;
-}
-
-.contact-dialog {
-  width: min(calc(100% - 2rem), 30rem);
+.compose {
+  width: min(calc(100% - 2rem), 34rem);
   max-width: none;
-  max-height: min(calc(100dvh - 2rem), 42rem);
+  max-height: min(calc(100dvh - 2rem), 44rem);
   margin: auto;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border: 0;
+  border-radius: 20px;
   padding: 0;
   overflow: hidden;
-  background: var(--background);
+  background: var(--raised);
   color: var(--foreground);
-  box-shadow: 0 1.5rem 4rem var(--shadow);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 32px 80px var(--shadow);
 }
 
-.contact-dialog::backdrop {
+.compose::backdrop {
   background: var(--backdrop);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
-.contact-dialog[open] {
+.compose[open] {
   animation: enter 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.contact-dialog-panel {
+.compose-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
   overflow: auto;
 }
 
-.contact-dialog-header {
+.compose-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
-  border-bottom: 1px solid var(--border);
-  padding: 1rem 1.25rem;
+  padding: 1.25rem 1.5rem 0.5rem;
 }
 
-.contact-dialog-header h2 {
-  font-size: 0.9375rem;
+.compose-head h2 {
+  font-size: 1rem;
   font-weight: 500;
 }
 
-.contact-dialog-close {
+.compose-close {
   display: grid;
   width: 2rem;
   height: 2rem;
   place-items: center;
+  border: 0;
+  border-radius: 999px;
+  margin-right: -0.5rem;
+  background: transparent;
   color: var(--muted);
-  font-size: 1.5rem;
-  line-height: 1;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
-.contact-dialog-close:hover,
-.contact-form-cancel:hover {
+.compose-close:hover {
+  background: var(--chip);
   color: var(--foreground);
 }
 
-.contact-form {
+.compose-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding: 1.25rem;
+  padding: 0.25rem 1.5rem 1.25rem;
 }
 
-.contact-form label {
+.compose-line {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  color: var(--muted);
-  font-size: 0.8125rem;
-}
-
-.contact-recipient {
-  display: grid;
-  grid-template-columns: 3rem 1fr;
+  align-items: center;
   gap: 1rem;
-  align-items: baseline;
+  min-height: 2.75rem;
   border-bottom: 1px solid var(--border);
-  padding-bottom: 1rem;
-  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.compose-key {
+  flex: 0 0 2.5rem;
+  color: var(--faint);
+}
+
+.compose-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  background: var(--chip);
   font-size: 0.8125rem;
 }
 
-.contact-recipient strong {
-  overflow: hidden;
-  color: var(--foreground);
-  font-weight: 400;
-  text-overflow: ellipsis;
+.compose-avatar {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 0.6875rem;
+  font-weight: 600;
 }
 
-.contact-form input,
-.contact-form textarea {
+.compose-from,
+.compose-subject,
+.compose-body {
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.6rem 0.7rem;
-  background: var(--background);
+  border: 0;
+  padding: 0;
+  background: transparent;
   color: var(--foreground);
   font: inherit;
 }
 
-.contact-form textarea {
-  min-height: 7.5rem;
+.compose-from:focus,
+.compose-subject:focus,
+.compose-body:focus {
+  outline: none;
+}
+
+.compose-from {
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.compose-subject {
+  margin-top: 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.compose-body {
+  min-height: 11rem;
+  margin-top: 0.75rem;
+  color: var(--muted);
+  line-height: 1.7;
   resize: vertical;
 }
 
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
+.compose-body:focus {
+  color: var(--foreground);
+}
+
+.compose-from::placeholder,
+.compose-subject::placeholder,
+.compose-body::placeholder {
   color: var(--faint);
 }
 
-.contact-honeypot {
+.compose-honeypot {
   position: absolute;
   left: -10000px;
 }
 
-.contact-form-error {
-  margin-top: -0.25rem;
+.compose-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+}
+
+.compose-error {
   color: var(--danger);
   font-size: 0.8125rem;
 }
 
-.contact-form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.625rem;
-  margin: 0 -1.25rem -1.25rem;
-  border-top: 1px solid var(--border);
-  padding: 1rem 1.25rem;
-}
-
-.contact-form-cancel,
-.contact-form-submit {
-  border-radius: 6px;
-  padding: 0.55rem 0.9rem;
-  font-size: 0.8125rem;
-}
-
-.contact-form-cancel {
-  border: 1px solid var(--border);
-  color: var(--muted);
-}
-
-.contact-form-submit {
+.compose-send {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.65rem 1.1rem;
   background: var(--foreground);
   color: var(--background);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 120ms ease;
 }
 
-.contact-form-submit:hover {
+.compose-send:hover {
   opacity: 0.85;
 }
 
-.contact-form-submit:disabled,
-.contact-form-cancel:disabled {
+.compose-send:disabled {
   cursor: wait;
   opacity: 0.55;
 }
 
-.contact-form-result {
-  padding: 2.5rem 1.25rem 1.25rem;
+.compose-sent {
+  padding: 2rem 1.5rem 1.5rem;
 }
 
-.contact-form-result strong {
+.compose-sent strong {
   font-size: 1.125rem;
   font-weight: 500;
 }
 
-.contact-form-result p {
-  margin: 0.35rem 0 2rem;
+.compose-sent p {
+  margin: 0.35rem 0 1.5rem;
   color: var(--muted);
   font-size: 0.875rem;
-}
-
-.contact-form-result button {
-  width: 100%;
-  border: 0;
-  border-radius: 6px;
-  padding: 0.7rem 1rem;
-  background: var(--foreground);
-  color: var(--background);
-  font: inherit;
-  font-size: 0.8125rem;
-  cursor: pointer;
 }
 
 /* ---------- motion ---------- */

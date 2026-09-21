@@ -1,7 +1,7 @@
 # Ananmay Som Singh — portfolio
 
 A quiet personal site: three projects, each with a looping illustration of
-how it works, a live degree-progress bar, experience, and a stack line.
+how it works, a live degree-progress bar, and experience.
 Next.js as a static export, deployed to GitHub Pages.
 
 ## Run it
