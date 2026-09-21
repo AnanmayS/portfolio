@@ -1,16 +1,15 @@
 import { ComposeTrigger } from "./compose";
-import { languages, person, projects } from "./content";
+import { languages, person } from "./content";
 import { BarsIcon, CapIcon, CodeIcon, LayersIcon } from "./icons";
 import { RoleWord } from "./role-word";
 
 /*
   The page opens as a few sentences rather than a name and a tagline. The
   words that carry weight are set in ink with a small glyph beside them; the
-  rest stays grey. The second paragraph names one number from each project
-  so a reader who stops here still leaves with the three facts.
+  rest stays grey. The projects are not named here; they are two scrolls
+  down, and the intro only has to sound like a person.
 */
 export function Intro() {
-  const [tape, forgegrid, showdown] = projects;
   const [a, b, c] = languages;
 
   return (
@@ -23,26 +22,21 @@ export function Intro() {
           {person.school}
           <CapIcon />
         </b>{" "}
-        who builds <RoleWord>{person.role}</RoleWord> in <b>{person.where}</b>.
+        who likes <RoleWord>{person.role}</RoleWord>.
       </p>
 
       <p>
-        I like{" "}
+        Backend, frontend, the tooling in between &mdash; I like{" "}
         <b className="hi">
-          building
+          shipping
           <LayersIcon />
         </b>{" "}
-        systems you can{" "}
+        things that work end to end, and{" "}
         <b className="hi">
-          measure
+          measuring
           <BarsIcon />
-        </b>
-        {" "}&mdash; a recorder that replays markets at 2,790× (
-        <a href={`#${tape.slug}`}>{tape.name}</a>), a build system that survives
-        a dead worker (<a href={`#${forgegrid.slug}`}>{forgegrid.name}</a>), an
-        agent that wins 79% of its games (
-        <a href={`#${showdown.slug}`}>{showdown.name}</a>). Mostly <b>{a}</b>,{" "}
-        <b>{b}</b> and{" "}
+        </b>{" "}
+        that they do. Mostly <b>{a}</b>, <b>{b}</b> and{" "}
         <b className="hi">
           {c}
           <CodeIcon />
@@ -59,7 +53,7 @@ export function Intro() {
         <a className="chip" href={person.github} rel="noreferrer" target="_blank">
           {person.handle}
         </a>
-        . I&rsquo;m open to <b>{person.openTo}</b> SWE internships.
+        .
       </p>
     </section>
   );
