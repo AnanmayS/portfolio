@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { person } from "./content";
+import { Ticker } from "./ticker";
 
 /*
   Local time in College Park, ticking once a second. Rendered empty on the
@@ -27,8 +28,8 @@ export function Clock() {
   }, []);
 
   return (
-    <span className="clock mono" suppressHydrationWarning>
-      {now}
+    <span className="clock mono">
+      <Ticker value={now} />
     </span>
   );
 }

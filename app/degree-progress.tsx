@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Ticker } from "./ticker";
 
 /*
   Live progress through the degree: a bar drawn to scale across the whole
@@ -25,7 +26,7 @@ function measure(now: number, live: boolean) {
   const percent = Math.round((fraction * 100) * 10) / 10;
 
   if (!live) {
-    return { fraction, percent, left: `${days}d left` };
+    return { fraction, percent, left: `${days}d` };
   }
 
   const rest = left % DAY;
@@ -33,7 +34,7 @@ function measure(now: number, live: boolean) {
     Math.floor(rest / 60_000) % 60,
   )}:${pad(Math.floor(rest / 1000) % 60)}`;
 
-  return { fraction, percent, left: `${days}d ${clock} left` };
+  return { fraction, percent, left: `${days}d ${clock}` };
 }
 
 export function DegreeProgress({ buildNow }: { buildNow: number }) {
@@ -41,8 +42,8 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
   const seed = measure(buildNow, true);
 
   const fill = useRef<SVGRectElement>(null);
-  const left = useRef<HTMLSpanElement>(null);
   const svg = useRef<SVGSVGElement>(null);
+  const [left, setLeft] = useState(seed.left);
 
   useEffect(() => {
     const still =
@@ -52,7 +53,7 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
     const paint = () => {
       const next = measure(Date.now(), !still);
       if (fill.current) fill.current.setAttribute("width", String(720 * next.fraction));
-      if (left.current) left.current.textContent = next.left;
+      setLeft(next.left);
     };
 
     paint();
@@ -96,9 +97,7 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
       <figcaption className="degree-read">
         <span className="degree-what">B.S. Computer Engineering, UMD</span>
         <span className="degree-left">
-          <span ref={left} suppressHydrationWarning>
-            {seed.left}
-          </span>
+          <Ticker value={left} /> left
           <span className="degree-dot"> · </span>May 2028
         </span>
       </figcaption>
