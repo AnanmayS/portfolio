@@ -87,39 +87,39 @@ export function ShowdownArt({ basePath = "" }: { basePath?: string }) {
     >
       {/* ---------- left: the battlefield ---------- */}
       <g className="sd-battle">
-        {/* opponent's box, beside its sprite; the name leans toward it */}
-        <text className="sd-name" x="282" y="30" textAnchor="end">
-          {opp.name}
-        </text>
-        <rect className="sd-track" x="150.5" y="36" width="131" height="9" rx="2" />
-        <rect className="sd-hp sd-hp-opp" x="151" y="36.5" width="130" height="8" rx="2" />
+        {/* the agent's two Pokémon, left; one shows at a time */}
+        <g className="sd-mon sd-mon-a">
+          <image className="sd-sprite" href={sprite(a.sprite)} x="16" y="0" width="136" height="136" />
+        </g>
+        <g className="sd-mon sd-mon-b">
+          <image className="sd-sprite" href={sprite(b.sprite)} x="16" y="0" width="136" height="136" />
+        </g>
 
-        {/* opponent, top-right */}
+        {/* its name and health, directly underneath */}
+        <text className="sd-name sd-swap-a" x="16" y="147">
+          {a.name}
+        </text>
+        <text className="sd-name sd-swap-b" x="16" y="147">
+          {b.name}
+        </text>
+        <rect className="sd-track" x="16.5" y="152" width="135" height="9" rx="2" />
+        <rect className="sd-hp sd-hp-agent" x="17" y="152.5" width="134" height="8" rx="2" />
+
+        {/* the opponent, right */}
         <g className="sd-mon sd-opp-mon">
           <image className="sd-sprite" href={sprite(opp.sprite)} x="290" y="0" width="136" height="136" />
         </g>
 
-        {/* the agent's two Pokémon, bottom-left; one shows at a time */}
-        <g className="sd-mon sd-mon-a">
-          <image className="sd-sprite" href={sprite(a.sprite)} x="16" y="26" width="136" height="136" />
-        </g>
-        <g className="sd-mon sd-mon-b">
-          <image className="sd-sprite" href={sprite(b.sprite)} x="16" y="26" width="136" height="136" />
-        </g>
-
-        {/* agent's box, beside its sprite; the name leans toward it */}
-        <text className="sd-name sd-swap-a" x="160" y="138">
-          {a.name}
+        {/* its name and health, directly underneath */}
+        <text className="sd-name" x="290" y="147">
+          {opp.name}
         </text>
-        <text className="sd-name sd-swap-b" x="160" y="138">
-          {b.name}
-        </text>
-        <rect className="sd-track" x="160.5" y="144" width="131" height="9" rx="2" />
-        <rect className="sd-hp sd-hp-agent" x="161" y="144.5" width="130" height="8" rx="2" />
+        <rect className="sd-track" x="290.5" y="152" width="135" height="9" rx="2" />
+        <rect className="sd-hp sd-hp-opp" x="291" y="152.5" width="134" height="8" rx="2" />
 
         {/* the move called each turn, mid-field */}
         {turns.map((name, i) => (
-          <text key={i} className={`sd-move sd-move-${i + 1}`} x="221" y="94" textAnchor="middle">
+          <text key={i} className={`sd-move sd-move-${i + 1}`} x="221" y="72" textAnchor="middle">
             {name}
           </text>
         ))}

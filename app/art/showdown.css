@@ -106,7 +106,7 @@
 /* The opponent is down; the switch-in is the one on the field. */
 .art-sd .sd-opp-mon {
   opacity: 0.28;
-  transform: translateY(10px);
+  transform: translateY(6px);
 }
 .art-sd .sd-mon-a,
 .art-sd .sd-swap-a {
@@ -327,7 +327,7 @@
 @keyframes sd-opp-mon {
   0% {
     opacity: 0.28;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
   6%,
   12.5% {
@@ -392,7 +392,7 @@
   56%,
   100% {
     opacity: 0.28;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
 }
 
