@@ -4,7 +4,7 @@
   three, a faint on turn four), the policy's seven actions re-weighted on the
   right, then the measured win rate below. Every rule is scoped to `.art-sd`
   so the `sd-` prefix cannot collide, and the un-classed state below is the
-  FINISHED frame: Blastoise fainted, Venusaur out, the turn-four
+  FINISHED frame: the opponent fainted, the switch-in out, the turn-four
   distribution, both result fills full. The keyframes only run under an
   `.is-visible` ancestor and only when motion is welcome.
 */
@@ -103,7 +103,7 @@
   transform: scaleX(0.6);
 }
 
-/* Blastoise is down; Venusaur is the one on the field. */
+/* The opponent is down; the switch-in is the one on the field. */
 .art-sd .sd-opp-mon {
   opacity: 0.28;
   transform: translateY(10px);
@@ -256,7 +256,7 @@
     animation-name: sd-p7;
   }
 
-  /* turn two: Roost is illegal at full health */
+  /* turn two: slot four is illegal, whatever it is this loop */
   .is-visible .art-sd .sd-mask {
     animation-name: sd-mask;
   }
@@ -322,8 +322,8 @@
   }
 }
 
-/* Blastoise: in from the seam, flinches on turns 1, 2 and 4, counter-lunges
-   after turns 2 and 3, faints after turn 4. */
+/* The opponent: in from the seam, flinches on turns 1, 2 and 4,
+   counter-lunges after turns 2 and 3, faints after turn 4. */
 @keyframes sd-opp-mon {
   0% {
     opacity: 0.28;
@@ -396,7 +396,7 @@
   }
 }
 
-/* Charizard: lunges on turns 1 and 2, takes the counter, drops out on 3. */
+/* The lead: lunges on turns 1 and 2, takes the counter, drops out on 3. */
 @keyframes sd-mon-a {
   0% {
     opacity: 0;
@@ -442,7 +442,7 @@
   }
 }
 
-/* Venusaur: in on turn 3, takes the counter, lunges on turn 4. */
+/* The switch-in: in on turn 3, takes the counter, lunges on turn 4. */
 @keyframes sd-mon-b {
   0%,
   37.5% {
@@ -564,7 +564,7 @@
   }
 }
 
-/* slot 1: Flamethrower, then Sludge Bomb */
+/* slot 1: the turn-one pick */
 @keyframes sd-p1 {
   0%,
   2% {
@@ -588,7 +588,7 @@
   }
 }
 
-/* slot 2: Air Slash, then Leech Seed */
+/* slot 2: the turn-two pick */
 @keyframes sd-p2 {
   0%,
   2% {
@@ -612,7 +612,7 @@
   }
 }
 
-/* slot 3: Dragon Pulse, then Solar Beam (the turn-four pick) */
+/* slot 3: the switch-in's finisher, the turn-four pick */
 @keyframes sd-p3 {
   0%,
   2% {
@@ -636,7 +636,7 @@
   }
 }
 
-/* slot 4: Roost, masked to zero on turn two */
+/* slot 4: masked to zero on turn two */
 @keyframes sd-p4 {
   0%,
   2% {
