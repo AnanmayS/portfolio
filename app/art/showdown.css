@@ -1,10 +1,12 @@
 /*
-  ShowdownRL illustration. One 8s loop: four turns of a battle on the left,
-  the policy's seven actions re-weighted on the right, then the measured win
-  rate below. Every rule is scoped to `.art-sd` so the `sd-` prefix cannot
-  collide, and the un-classed state below is the FINISHED frame: opponent at
-  zero, the turn-four distribution, both result fills full. The keyframes only
-  run under an `.is-visible` ancestor and only when motion is welcome.
+  ShowdownRL illustration. One 8s loop: four turns of a battle on the left
+  (real sprites: the attacker lunges, the target flinches, a switch on turn
+  three, a faint on turn four), the policy's seven actions re-weighted on the
+  right, then the measured win rate below. Every rule is scoped to `.art-sd`
+  so the `sd-` prefix cannot collide, and the un-classed state below is the
+  FINISHED frame: Blastoise fainted, Venusaur out, the turn-four
+  distribution, both result fills full. The keyframes only run under an
+  `.is-visible` ancestor and only when motion is welcome.
 */
 
 /* The page's `.art` rule already sizes the figure; this keeps the component
@@ -30,8 +32,23 @@
 }
 
 .art-sd .sd-move,
+.art-sd .sd-name,
 .art-sd .sd-res-lead {
   fill: var(--foreground);
+}
+
+.art-sd .sd-name {
+  font-weight: 500;
+}
+
+/* The sprites are 96px pixel art drawn at 1:1; keep the pixels crisp. */
+.art-sd .sd-sprite {
+  image-rendering: pixelated;
+}
+
+.art-sd .sd-mon {
+  transform-box: fill-box;
+  transform-origin: center bottom;
 }
 
 .art-sd .sd-chip-text {
@@ -84,6 +101,20 @@
 }
 .art-sd .sd-hp-agent {
   transform: scaleX(0.6);
+}
+
+/* Blastoise is down; Venusaur is the one on the field. */
+.art-sd .sd-opp-mon {
+  opacity: 0.28;
+  transform: translateY(10px);
+}
+.art-sd .sd-mon-a,
+.art-sd .sd-swap-a {
+  opacity: 0;
+}
+.art-sd .sd-mon-b,
+.art-sd .sd-swap-b {
+  opacity: 1;
 }
 
 .art-sd .sd-bar {
@@ -143,6 +174,9 @@
 @media (prefers-reduced-motion: no-preference) {
   .is-visible .art-sd .sd-hp-opp,
   .is-visible .art-sd .sd-hp-agent,
+  .is-visible .art-sd .sd-mon,
+  .is-visible .art-sd .sd-swap-a,
+  .is-visible .art-sd .sd-swap-b,
   .is-visible .art-sd .sd-move,
   .is-visible .art-sd .sd-bar,
   .is-visible .art-sd .sd-mask,
@@ -161,6 +195,28 @@
   }
   .is-visible .art-sd .sd-hp-agent {
     animation-name: sd-agent;
+  }
+
+  /* the sprites: lunge, flinch, switch, faint */
+  .is-visible .art-sd .sd-opp-mon {
+    animation-name: sd-opp-mon;
+    animation-timing-function: ease-in-out;
+  }
+  .is-visible .art-sd .sd-mon-a {
+    animation-name: sd-mon-a;
+    animation-timing-function: ease-in-out;
+  }
+  .is-visible .art-sd .sd-mon-b {
+    animation-name: sd-mon-b;
+    animation-timing-function: ease-in-out;
+  }
+
+  /* the name in the agent's box and the four move labels follow the switch */
+  .is-visible .art-sd .sd-swap-a {
+    animation-name: sd-swap-a;
+  }
+  .is-visible .art-sd .sd-swap-b {
+    animation-name: sd-swap-b;
   }
 
   /* the move chosen on each turn, beside the agent's bar */
@@ -200,7 +256,7 @@
     animation-name: sd-p7;
   }
 
-  /* turn two: Recover is illegal at full health */
+  /* turn two: Roost is illegal at full health */
   .is-visible .art-sd .sd-mask {
     animation-name: sd-mask;
   }
@@ -253,16 +309,199 @@
     transform: scaleX(0.6);
   }
   6%,
-  24% {
+  28.5% {
     transform: scaleX(1);
   }
-  27%,
-  36.5% {
+  30.5%,
+  41.5% {
     transform: scaleX(0.82);
   }
-  39.5%,
+  43.5%,
   100% {
     transform: scaleX(0.6);
+  }
+}
+
+/* Blastoise: in from the seam, flinches on turns 1, 2 and 4, counter-lunges
+   after turns 2 and 3, faints after turn 4. */
+@keyframes sd-opp-mon {
+  0% {
+    opacity: 0.28;
+    transform: translateY(10px);
+  }
+  6%,
+  12.5% {
+    opacity: 1;
+    transform: none;
+  }
+  13% {
+    opacity: 0.3;
+    transform: translateX(-4px);
+  }
+  13.5% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+  14%,
+  25% {
+    opacity: 1;
+    transform: none;
+  }
+  25.5% {
+    opacity: 0.3;
+    transform: translateX(-4px);
+  }
+  26% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+  26.5%,
+  27.5% {
+    opacity: 1;
+    transform: none;
+  }
+  28.25% {
+    transform: translate(-12px, 8px);
+  }
+  29%,
+  40.5% {
+    opacity: 1;
+    transform: none;
+  }
+  41.25% {
+    transform: translate(-12px, 8px);
+  }
+  42%,
+  50% {
+    opacity: 1;
+    transform: none;
+  }
+  50.5% {
+    opacity: 0.3;
+    transform: translateX(-4px);
+  }
+  51% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+  51.5%,
+  52% {
+    opacity: 1;
+    transform: none;
+  }
+  56%,
+  100% {
+    opacity: 0.28;
+    transform: translateY(10px);
+  }
+}
+
+/* Charizard: lunges on turns 1 and 2, takes the counter, drops out on 3. */
+@keyframes sd-mon-a {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  6%,
+  11% {
+    opacity: 1;
+    transform: none;
+  }
+  11.75% {
+    transform: translate(12px, -8px);
+  }
+  12.5%,
+  23.5% {
+    transform: none;
+  }
+  24.25% {
+    transform: translate(12px, -8px);
+  }
+  25%,
+  28.75% {
+    opacity: 1;
+    transform: none;
+  }
+  29.25% {
+    opacity: 0.3;
+    transform: translateX(4px);
+  }
+  29.75% {
+    opacity: 1;
+    transform: translateX(-4px);
+  }
+  30.25%,
+  36% {
+    opacity: 1;
+    transform: none;
+  }
+  37.5%,
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Venusaur: in on turn 3, takes the counter, lunges on turn 4. */
+@keyframes sd-mon-b {
+  0%,
+  37.5% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  39%,
+  41.75% {
+    opacity: 1;
+    transform: none;
+  }
+  42.25% {
+    opacity: 0.3;
+    transform: translateX(4px);
+  }
+  42.75% {
+    opacity: 1;
+    transform: translateX(-4px);
+  }
+  43.25%,
+  48.5% {
+    opacity: 1;
+    transform: none;
+  }
+  49.25% {
+    transform: translate(12px, -8px);
+  }
+  50%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sd-swap-a {
+  0% {
+    opacity: 0;
+  }
+  3%,
+  36.5% {
+    opacity: 1;
+  }
+  38%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sd-swap-b {
+  0% {
+    opacity: 1;
+  }
+  3%,
+  36.5% {
+    opacity: 0;
+  }
+  38%,
+  100% {
+    opacity: 1;
   }
 }
 
@@ -325,7 +564,7 @@
   }
 }
 
-/* Ice Beam */
+/* slot 1: Flamethrower, then Sludge Bomb */
 @keyframes sd-p1 {
   0%,
   2% {
@@ -349,7 +588,7 @@
   }
 }
 
-/* Earthquake */
+/* slot 2: Air Slash, then Leech Seed */
 @keyframes sd-p2 {
   0%,
   2% {
@@ -373,7 +612,7 @@
   }
 }
 
-/* Thunderbolt */
+/* slot 3: Dragon Pulse, then Solar Beam (the turn-four pick) */
 @keyframes sd-p3 {
   0%,
   2% {
@@ -397,7 +636,7 @@
   }
 }
 
-/* Recover: masked to zero on turn two */
+/* slot 4: Roost, masked to zero on turn two */
 @keyframes sd-p4 {
   0%,
   2% {
