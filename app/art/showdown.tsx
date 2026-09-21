@@ -1,96 +1,145 @@
-/*
-  ShowdownRL. Left: a battlefield. Blastoise faces the agent's Charizard;
-  four turns play out, the attacker lunging and the target flinching, until
-  the agent switches to Venusaur on turn three and finishes the job with
-  Solar Beam on turn four. Right: the policy's seven actions (four moves,
-  three bench switches) re-weighted every turn, the illegal action struck
-  out by the mask, the move labels changing with the active Pokémon. Below:
-  the measured win rate over the type-aware baseline.
+"use client";
 
-  One 8s loop, driven entirely from app/art/showdown.css. The un-animated
-  state (no `is-visible` ancestor, or reduced motion) is the finished frame:
-  Blastoise fainted, Venusaur out, the result full.
+import { useEffect, useState } from "react";
+
+/*
+  ShowdownRL. Left: a battlefield. The agent's Pokémon faces an opponent;
+  four turns play out, the attacker lunging and the target flinching, until
+  the agent switches on turn three and finishes the job on turn four. Right:
+  the policy's seven actions (four moves, three bench switches) re-weighted
+  every turn, the illegal action struck out by the mask, the move labels
+  changing with the active Pokémon. Below: the measured win rate over the
+  type-aware baseline.
+
+  One 8s loop, driven entirely from app/art/showdown.css. Every pass of the
+  loop draws a different matchup from the roster below: the swap happens at
+  the seam, while the field is reset, so a new pair simply walks on. The
+  un-animated state (no `is-visible` ancestor, or reduced motion) is the
+  finished frame: the opponent fainted, the switch-in out, the result full.
 
   Sprites are Pokémon Showdown's own, served from public/sprites; the one
   place on the page with colour.
 */
 
-const basePath = process.env.PAGES_BASE_PATH ?? "";
-const sprite = (name: string) => `${basePath}/sprites/${name}.png`;
+type Mon = { sprite: string; name: string; moves: readonly [string, string, string, string] };
 
-const AGENT = {
-  a: { name: "Charizard", moves: ["Flamethrower", "Air Slash", "Dragon Pulse", "Roost"] },
-  b: { name: "Venusaur", moves: ["Sludge Bomb", "Leech Seed", "Solar Beam", "Synthesis"] },
-} as const;
+type Matchup = {
+  /** Leads; uses slot 1 on turn one, slot 2 on turn two. Slot 4 is masked. */
+  a: Mon;
+  /** Switches in on turn three; uses slot 3 on turn four. */
+  b: Mon;
+  opp: Mon;
+};
+
+const ROSTER: readonly Matchup[] = [
+  {
+    a: { sprite: "charizard-back", name: "Charizard", moves: ["Flamethrower", "Air Slash", "Dragon Pulse", "Roost"] },
+    b: { sprite: "venusaur-back", name: "Venusaur", moves: ["Sludge Bomb", "Leech Seed", "Solar Beam", "Synthesis"] },
+    opp: { sprite: "blastoise", name: "Blastoise", moves: ["Surf", "Ice Beam", "Rapid Spin", "Rest"] },
+  },
+  {
+    a: { sprite: "garchomp-back", name: "Garchomp", moves: ["Earthquake", "Dragon Claw", "Stone Edge", "Rest"] },
+    b: { sprite: "heatran-back", name: "Heatran", moves: ["Earth Power", "Flash Cannon", "Magma Storm", "Taunt"] },
+    opp: { sprite: "ferrothorn", name: "Ferrothorn", moves: ["Power Whip", "Gyro Ball", "Leech Seed", "Rest"] },
+  },
+  {
+    a: { sprite: "gengar-back", name: "Gengar", moves: ["Shadow Ball", "Sludge Bomb", "Focus Blast", "Substitute"] },
+    b: { sprite: "tyranitar-back", name: "Tyranitar", moves: ["Crunch", "Stone Edge", "Pursuit", "Dragon Dance"] },
+    opp: { sprite: "alakazam", name: "Alakazam", moves: ["Psychic", "Focus Blast", "Shadow Ball", "Recover"] },
+  },
+  {
+    a: { sprite: "pikachu-back", name: "Pikachu", moves: ["Thunderbolt", "Volt Tackle", "Iron Tail", "Substitute"] },
+    b: { sprite: "lapras-back", name: "Lapras", moves: ["Surf", "Freeze-Dry", "Ice Beam", "Rest"] },
+    opp: { sprite: "dragonite", name: "Dragonite", moves: ["Outrage", "Extreme Speed", "Fire Punch", "Roost"] },
+  },
+];
 
 const SWITCHES = ["switch 1", "switch 2", "switch 3"];
 
-const TURNS = ["Flamethrower", "Air Slash", "switch → Venusaur", "Solar Beam"];
+function another(current: number) {
+  const next = Math.floor(Math.random() * (ROSTER.length - 1));
+  return next >= current ? next + 1 : next;
+}
 
-export function ShowdownArt() {
+export function ShowdownArt({ basePath = "" }: { basePath?: string }) {
+  const [index, setIndex] = useState(0);
+
+  /* A random opener, chosen before the loop starts so nothing visibly swaps. */
+  useEffect(() => {
+    setIndex(Math.floor(Math.random() * ROSTER.length));
+  }, []);
+
+  const { a, b, opp } = ROSTER[index];
+  const sprite = (name: string) => `${basePath}/sprites/${name}.png`;
+  const turns = [a.moves[0], a.moves[1], `switch → ${b.name}`, b.moves[2]];
+
   return (
     <svg
       className="art art-sd"
-      viewBox="0 0 720 188"
+      viewBox="0 0 720 230"
       role="img"
-      aria-label="Four turns of a battle, Charizard against Blastoise: the agent's action probabilities re-weight each turn, one illegal action is struck out by the mask, the agent switches to Venusaur, and Blastoise faints. Below, the measured result: the PPO policy wins 79.0 percent of 1,000 simulator episodes, against 75.2 percent for the type-aware heuristic."
+      aria-label={`Four turns of a battle, ${a.name} against ${opp.name}: the agent's action probabilities re-weight each turn, one illegal action is struck out by the mask, the agent switches to ${b.name}, and ${opp.name} faints. Below, the measured result: the PPO policy wins 79.0 percent of 1,000 simulator episodes, against 75.2 percent for the type-aware heuristic.`}
       fill="none"
+      onAnimationIteration={(event) => {
+        /* One element's loop is the clock for the whole scene. */
+        if (event.animationName === "sd-opp") setIndex((i) => another(i));
+      }}
     >
       {/* ---------- left: the battlefield ---------- */}
       <g className="sd-battle">
-        {/* opponent's box, top-left */}
-        <text className="sd-name" x="0" y="14">
-          Blastoise
+        {/* opponent's box, beside its sprite; the name leans toward it */}
+        <text className="sd-name" x="282" y="30" textAnchor="end">
+          {opp.name}
         </text>
-        <rect className="sd-track" x="0.5" y="20" width="189" height="9" rx="2" />
-        <rect className="sd-hp sd-hp-opp" x="1" y="20.5" width="188" height="8" rx="2" />
+        <rect className="sd-track" x="150.5" y="36" width="131" height="9" rx="2" />
+        <rect className="sd-hp sd-hp-opp" x="151" y="36.5" width="130" height="8" rx="2" />
 
         {/* opponent, top-right */}
         <g className="sd-mon sd-opp-mon">
-          <image className="sd-sprite" href={sprite("blastoise")} x="316" y="0" width="96" height="96" />
+          <image className="sd-sprite" href={sprite(opp.sprite)} x="290" y="0" width="136" height="136" />
         </g>
 
         {/* the agent's two Pokémon, bottom-left; one shows at a time */}
         <g className="sd-mon sd-mon-a">
-          <image className="sd-sprite" href={sprite("charizard-back")} x="36" y="30" width="96" height="96" />
+          <image className="sd-sprite" href={sprite(a.sprite)} x="16" y="26" width="136" height="136" />
         </g>
         <g className="sd-mon sd-mon-b">
-          <image className="sd-sprite" href={sprite("venusaur-back")} x="36" y="30" width="96" height="96" />
+          <image className="sd-sprite" href={sprite(b.sprite)} x="16" y="26" width="136" height="136" />
         </g>
 
-        {/* agent's box, bottom-right */}
-        <text className="sd-name sd-swap-a" x="246" y="108">
-          {AGENT.a.name}
+        {/* agent's box, beside its sprite; the name leans toward it */}
+        <text className="sd-name sd-swap-a" x="160" y="138">
+          {a.name}
         </text>
-        <text className="sd-name sd-swap-b" x="246" y="108">
-          {AGENT.b.name}
+        <text className="sd-name sd-swap-b" x="160" y="138">
+          {b.name}
         </text>
-        <rect className="sd-track" x="246.5" y="114" width="189" height="9" rx="2" />
-        <rect className="sd-hp sd-hp-agent" x="247" y="114.5" width="188" height="8" rx="2" />
+        <rect className="sd-track" x="160.5" y="144" width="131" height="9" rx="2" />
+        <rect className="sd-hp sd-hp-agent" x="161" y="144.5" width="130" height="8" rx="2" />
 
         {/* the move called each turn, mid-field */}
-        {TURNS.map((name, i) => (
-          <text key={name} className={`sd-move sd-move-${i + 1}`} x="224" y="66" textAnchor="middle">
+        {turns.map((name, i) => (
+          <text key={i} className={`sd-move sd-move-${i + 1}`} x="221" y="94" textAnchor="middle">
             {name}
           </text>
         ))}
       </g>
 
-      <line className="sd-rule" x1="436" y1="22" x2="436" y2="120" />
+      <line className="sd-rule" x1="436" y1="22" x2="436" y2="160" />
 
       {/* ---------- right: the policy ---------- */}
       <g className="sd-policy">
-        <text className="sd-head" x="452" y="14">
+        <text className="sd-head" x="452" y="34">
           policy
         </text>
-        <line className="sd-rule" x1="539.5" y1="24" x2="539.5" y2="118" />
+        <line className="sd-rule" x1="539.5" y1="44" x2="539.5" y2="138" />
 
-        {[...AGENT.a.moves, ...SWITCHES].map((label, i) => {
-          const cy = 30 + i * 14;
-          const swap = i < 4 ? AGENT.b.moves[i] : null;
+        {[...a.moves, ...SWITCHES].map((label, i) => {
+          const cy = 50 + i * 14;
+          const swap = i < 4 ? b.moves[i] : null;
 
           return (
-            <g key={label}>
+            <g key={i}>
               {swap ? (
                 <>
                   <text className="sd-row sd-swap-a" x="452" y={cy + 3.8}>
@@ -117,35 +166,35 @@ export function ShowdownArt() {
           );
         })}
 
-        {/* the mask: Roost is illegal at full health, so its weight is zero */}
+        {/* the mask: slot four is illegal this turn, so its weight is zero */}
         <g className="sd-mask">
-          <line className="sd-strike" x1="450" y1="72" x2="486" y2="72" />
-          <rect className="sd-chip" x="540.5" y="66.5" width="45" height="11" rx="2" />
-          <text className="sd-chip-text" x="546" y="74.5">
+          <line className="sd-strike" x1="450" y1="92" x2="530" y2="92" />
+          <rect className="sd-chip" x="540.5" y="86.5" width="45" height="11" rx="2" />
+          <text className="sd-chip-text" x="546" y="94.5">
             masked
           </text>
         </g>
       </g>
 
-      <line className="sd-rule" x1="0" y1="127.5" x2="720" y2="127.5" />
+      <line className="sd-rule" x1="0" y1="169.5" x2="720" y2="169.5" />
 
       {/* ---------- below: the measured result ---------- */}
       <g className="sd-result">
-        <text className="sd-res-lead sd-res-label" x="567" y="142" textAnchor="end">
+        <text className="sd-res-lead sd-res-label" x="567" y="184" textAnchor="end">
           ppo v11 79.0%
         </text>
-        <text className="sd-note sd-res-label" x="720" y="142" textAnchor="end">
+        <text className="sd-note sd-res-label" x="720" y="184" textAnchor="end">
           1,000 episodes
         </text>
 
-        <rect className="sd-track" x="0.5" y="148" width="719" height="16" rx="2" />
-        <rect className="sd-res-base" x="1" y="148.5" width="718" height="15" rx="2" />
-        <rect className="sd-res-top" x="1" y="152.5" width="718" height="7" rx="2" />
+        <rect className="sd-track" x="0.5" y="190" width="719" height="16" rx="2" />
+        <rect className="sd-res-base" x="1" y="190.5" width="718" height="15" rx="2" />
+        <rect className="sd-res-top" x="1" y="194.5" width="718" height="7" rx="2" />
 
-        <text className="sd-note sd-res-label" x="540" y="181" textAnchor="end">
+        <text className="sd-note sd-res-label" x="540" y="223" textAnchor="end">
           type-aware 75.2%
         </text>
-        <text className="sd-note sd-res-label" x="720" y="181" textAnchor="end">
+        <text className="sd-note sd-res-label" x="720" y="223" textAnchor="end">
           790-41-169
         </text>
       </g>

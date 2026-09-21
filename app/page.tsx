@@ -15,8 +15,9 @@ import { TapeArt } from "./art/tape";
 const basePath = process.env.PAGES_BASE_PATH ?? "";
 const resumeHref = `${basePath}/resume.pdf`;
 
-/* One looping illustration per project, keyed so content.ts stays free of React. */
-const art: Record<Project["slug"], () => React.ReactElement> = {
+/* One looping illustration per project, keyed so content.ts stays free of React.
+   Each gets the base path in case it serves an image. */
+const art: Record<Project["slug"], (props: { basePath: string }) => React.ReactElement> = {
   tape: TapeArt,
   forgegrid: ForgeGridArt,
   showdownrl: ShowdownArt,
@@ -95,7 +96,7 @@ export default function Home() {
                     <p className="project-lede">{item.lede}</p>
                     <Reveal>
                       <figure className="project-figure">
-                        <Art />
+                        <Art basePath={basePath} />
                         <figcaption className="project-stack mono">{item.stack}</figcaption>
                       </figure>
                     </Reveal>
