@@ -5,15 +5,19 @@ import { ComposeTrigger } from "./compose";
 import { SendIcon } from "./icons";
 
 /*
-  "Ask about me", under the work. MOCK: answers come from the short list
-  below, matched by keyword, so the box can be seen and tried before a
-  model is wired in. Every answer is written from the résumé and content.ts;
-  anything outside them gets the honest fallback, which points at email.
+  "Ask about me", under the work. Questions go to the `ask` edge function
+  (supabase/functions/ask), which answers from Ananmay's profile with a
+  cheap model and turns everything else away. If it can't be reached, or
+  isn't switched on, the box answers from the short list below instead,
+  matched by keyword, so it never just breaks. Answers it can't give end
+  with an Email me button.
 
   Answers type out a few words at a time, or appear at once under reduced
   motion. The thread scrolls inside a fixed height so the page never grows.
 */
-type Turn = { from: "you" | "me"; text: string; fallback?: boolean };
+const ENDPOINT = "https://njfzybsstljchczpslsf.supabase.co/functions/v1/ask";
+
+type Turn = { from: "you" | "me"; text: string; fallback?: boolean; pending?: boolean };
 
 const STARTERS = ["What's Wildebeest?", "What does he do at GSAlpha Labs?", "What's he best at?"];
 
@@ -51,7 +55,8 @@ const ANSWERS: { keys: string[]; text: string }[] = [
 const FALLBACK =
   "I don't have an answer for that one. Ananmay can tell you himself: the Email me button reaches him directly.";
 
-function answer(question: string): Turn {
+/* The built-in answers, for when the edge function can't be used. */
+function offline(question: string): Turn {
   const q = question.toLowerCase();
   const hit = ANSWERS.find((entry) => entry.keys.some((key) => q.includes(key)));
   return hit ? { from: "me", text: hit.text } : { from: "me", text: FALLBACK, fallback: true };
@@ -64,11 +69,12 @@ export function Ask() {
   const thread = useRef<HTMLDivElement>(null);
 
   const last = turns[turns.length - 1];
-  const typing = last?.from === "me" && shown < last.text.split(" ").length;
+  const typing =
+    last?.from === "me" && (last.pending === true || shown < last.text.split(" ").length);
 
   /* Type the newest answer out, three words a tick. */
   useEffect(() => {
-    if (!last || last.from !== "me") return;
+    if (!last || last.from !== "me" || last.pending) return;
     const words = last.text.split(" ").length;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setShown(words);
@@ -88,12 +94,37 @@ export function Ask() {
     thread.current?.scrollTo({ top: thread.current.scrollHeight });
   }, [turns, shown]);
 
-  const ask = (question: string) => {
+  const ask = async (question: string) => {
     const text = question.trim();
     if (!text || typing) return;
+    const history = [...turns, { from: "you" as const, text }];
     setShown(0);
-    setTurns((t) => [...t, { from: "you", text }, answer(text)]);
+    setTurns([...history, { from: "me", text: "", pending: true }]);
     setDraft("");
+
+    let reply: Turn;
+    try {
+      const response = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: history.slice(-6).map((turn) => ({
+            role: turn.from === "you" ? "user" : "assistant",
+            content: turn.text,
+          })),
+        }),
+      });
+      const data = await response.json().catch(() => null);
+      if (!data?.answer) throw new Error("no answer");
+      reply = {
+        from: "me",
+        text: data.answer,
+        fallback: data.kind === "not_in_profile" || data.kind === "limited",
+      };
+    } catch {
+      reply = offline(text);
+    }
+    setTurns([...history, reply]);
   };
 
   return (
@@ -116,7 +147,7 @@ export function Ask() {
             const text = isLast && turn.from === "me" ? words.slice(0, shown).join(" ") : turn.text;
             return (
               <p key={i} className={turn.from === "you" ? "ask-you" : "ask-me"}>
-                {text}
+                {turn.pending ? <span className="ask-wait" aria-label="Thinking" /> : text}
                 {turn.fallback && (!isLast || !typing) && (
                   <>
                     {" "}

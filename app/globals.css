@@ -718,7 +718,7 @@ p {
   }
 }
 
-/* ---------- ask about me (mock) ---------- */
+/* ---------- ask about me ---------- */
 
 /* A quiet box under the work: a short thread that scrolls inside a fixed
    height, three starter questions, and one input. */
@@ -767,6 +767,34 @@ p {
   padding: 0.3rem 0.7rem;
   background: var(--chip);
   color: var(--foreground);
+}
+
+/* Three dots breathing while the answer is on its way. */
+.ask-wait {
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.5rem;
+  background:
+    radial-gradient(circle, var(--faint) 45%, transparent 50%) 0 50% / 0.5rem 0.5rem no-repeat,
+    radial-gradient(circle, var(--faint) 45%, transparent 50%) 50% 50% / 0.5rem 0.5rem no-repeat,
+    radial-gradient(circle, var(--faint) 45%, transparent 50%) 100% 50% / 0.5rem 0.5rem no-repeat;
+  animation: ask-wait 1s ease-in-out infinite;
+}
+
+@keyframes ask-wait {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ask-wait {
+    animation: none;
+  }
 }
 
 .ask-mail {

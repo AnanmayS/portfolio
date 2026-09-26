@@ -22,4 +22,9 @@ npm run build      # static export to ./out
 - `app/degree-progress.tsx` — the bar drawn to scale across the degree with a
   live readout.
 - `app/page.tsx`, `app/globals.css` — the page and the whole theme.
+- `app/ask.tsx` — the "Ask about me" box. It calls `supabase/functions/ask`,
+  an edge function that answers from `profile.ts` with a cheap OpenRouter
+  model and turns off-topic questions away before they cost anything;
+  rate limits live in `supabase/migrations`. Without the function it falls
+  back to a few built-in answers.
 - `DESIGN.md`, `PRODUCT.md` — why it looks and reads the way it does.
