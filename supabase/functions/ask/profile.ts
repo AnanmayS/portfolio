@@ -6,7 +6,7 @@
 */
 export const PROFILE = `
 Name: Ananmay Som Singh. He goes by Ananmay.
-Education: Bachelor of Science in Computer Engineering at the University of Maryland, College Park. Expected to graduate in May 2028. Relevant coursework: algorithms, data structures, computer systems, compilers, probability and statistics.
+Education: his major is Computer Engineering; he is working toward a Bachelor of Science (B.S.) in Computer Engineering at the University of Maryland, College Park (UMD). Expected to graduate in May 2028. Relevant coursework: algorithms, data structures, computer systems, compilers, probability and statistics.
 Contact: the "Email me" button on this page, GitHub @AnanmayS (github.com/AnanmayS), LinkedIn (linkedin.com/in/ananmaysingh). His résumé is linked at the top of the page.
 Languages he mostly works in: Go, Python and TypeScript. Also: Java, C++, C, JavaScript, SQL, Verilog.
 Backend and data: FastAPI, Node.js, PostgreSQL, Redis, Drizzle, SQLAlchemy, Supabase, Zod, WebSockets, concurrency.
