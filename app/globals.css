@@ -598,160 +598,123 @@ p {
   min-width: 4.5em;
 }
 
-/* The work, one project at a time: the chosen illustration large on the
-   panel tone, then the three projects as rows that choose it. */
-.show {
+/* Each project is one compact row: its illustration always playing, small,
+   on the left; on the right its name, the number that says it works, one
+   sentence, and the stack. The whole row links to the code. */
+.projects {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.625rem;
+}
+
+.project {
+  display: flex;
+  align-items: stretch;
+  border-radius: 0.875rem;
+  background: var(--panel);
+  overflow: hidden;
+  transition: background-color 160ms ease;
+}
+
+.project:hover {
+  background: var(--chip);
 }
 
 /* Hairlines inside the art are nudged darker so they still read on it. */
-.show-panel {
+.project-art {
   --border: var(--panel-line);
-  border-radius: var(--radius-panel);
-  background: var(--panel);
-  overflow: hidden;
-}
-
-/* The tallest drawing sets the height, so the panel doesn't jump when the
-   project changes. */
-.show-art {
   display: flex;
+  flex: 0 0 min(27.5rem, 55%);
   align-items: center;
-  min-height: 17.5rem;
-  padding: 1.5rem 1.5rem 0.5rem;
-  overflow-x: auto;
+  padding: 0.625rem 0.875rem;
+  background: color-mix(in srgb, var(--foreground) 3%, var(--panel));
 }
 
-.show-art .art {
+.project-art .art {
   display: block;
   width: 100%;
   height: auto;
 }
 
-/* On a phone the drawing keeps a readable width and scrolls sideways. */
-@media (max-width: 40rem) {
-  .show-art {
-    min-height: 0;
-    padding: 1.25rem 1rem 0.5rem;
-  }
-
-  .show-art .art {
-    min-width: 30rem;
-  }
+/* The art enlarges its type on narrow screens for a full-width figure; in a
+   row it keeps its drawn size. */
+.project-art .tape-label,
+.project-art .tape-num {
+  font-size: 11px;
 }
 
-.show-foot {
+.project-art .art-wb {
+  --wb-fs: 11px;
+  --wb-fs-num: 12px;
+}
+
+.project-body {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.75rem 1.5rem 1.25rem;
+  gap: 0.2rem;
+  padding: 0.875rem 1.125rem;
 }
 
-.show-lede {
-  color: var(--muted);
-  text-wrap: pretty;
-}
-
-.show-meta {
+.project-line {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
+  gap: 0.5rem;
 }
 
-.show-stack {
+.project-name {
+  font-weight: 600;
+}
+
+.project-year {
+  margin-left: auto;
   color: var(--faint);
   font-size: 0.75rem;
 }
 
-.show-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
+.project-out {
+  align-self: center;
+  color: var(--faint);
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.project:hover .project-out {
   color: var(--foreground);
-  font-size: 0.8125rem;
-  text-decoration: underline;
-  text-decoration-color: var(--faint);
-  text-underline-offset: 0.2em;
-  transition: text-decoration-color 120ms ease;
+  transform: translate(1px, -1px);
 }
 
-.show-link:hover {
-  text-decoration-color: var(--foreground);
-}
-
-.show-tabs {
-  display: flex;
-  flex-direction: column;
-}
-
-.show-tab {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  width: 100%;
-  border: 0;
-  border-radius: var(--radius);
-  padding: 0.8rem 1rem;
-  background: transparent;
-  color: var(--foreground);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: inset 0 0.5px 0 var(--border);
-  transition: background-color 160ms ease;
-}
-
-.show-tab:hover {
-  background: var(--surface);
-}
-
-.show-tab[aria-selected="true"] {
-  background: var(--panel);
-  box-shadow: none;
-}
-
-.show-tab[aria-selected="true"] + .show-tab {
-  box-shadow: none;
-}
-
-.show-name {
-  flex: 0 0 7.5rem;
-  font-weight: 500;
-}
-
-.show-metric {
-  flex: 1;
+.project-metric {
   color: var(--muted);
   font-size: 0.875rem;
 }
 
-.show-metric b {
+.project-metric b {
   color: var(--foreground);
   font-weight: 500;
 }
 
-.show-year {
-  color: var(--faint);
-  font-size: 0.75rem;
+.project-lede {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-wrap: pretty;
 }
 
+.project-stack {
+  margin-top: auto;
+  padding-top: 0.25rem;
+  color: var(--faint);
+  font-size: 0.6875rem;
+}
+
+/* Too narrow for art and words side by side: art on top. */
 @media (max-width: 40rem) {
-  .show-tab {
-    flex-wrap: wrap;
-    gap: 0.15rem 1rem;
+  .project {
+    flex-direction: column;
   }
 
-  .show-name {
-    flex: 1 0 auto;
-  }
-
-  .show-metric {
-    order: 3;
-    flex-basis: 100%;
+  .project-art {
+    flex-basis: auto;
   }
 }
 

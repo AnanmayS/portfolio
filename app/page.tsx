@@ -2,9 +2,9 @@ import { Clock } from "./clock";
 import { Compose } from "./compose";
 import { Contact } from "./contact";
 import { DegreeProgress } from "./degree-progress";
+import { OutIcon } from "./icons";
 import { Intro } from "./intro";
 import { Reveal } from "./reveal";
-import { Showcase } from "./showcase";
 import { ThemeToggle } from "./theme-toggle";
 import { person, projects, roles, type Project, type Role } from "./content";
 
@@ -84,12 +84,38 @@ export default function Home() {
             </div>
           </div>
 
-          <Showcase
-            items={projects.map((item) => {
+          <div className="projects">
+            {projects.map((item) => {
               const Art = art[item.slug];
-              return { ...item, art: <Art basePath={basePath} /> };
+
+              return (
+                <a
+                  key={item.slug}
+                  className="project"
+                  id={item.slug}
+                  href={item.href}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <Reveal className="project-art">
+                    <Art basePath={basePath} />
+                  </Reveal>
+                  <div className="project-body">
+                    <div className="project-line">
+                      <span className="project-name">{item.name}</span>
+                      <span className="project-year mono">{item.year}</span>
+                      <OutIcon size={11} className="project-out" />
+                    </div>
+                    <p className="project-metric">
+                      <b>{item.metric.value}</b> {item.metric.label}
+                    </p>
+                    <p className="project-lede">{item.lede}</p>
+                    <p className="project-stack mono">{item.stack}</p>
+                  </div>
+                </a>
+              );
             })}
-          />
+          </div>
         </section>
       </main>
 
