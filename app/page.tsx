@@ -2,9 +2,9 @@ import { Clock } from "./clock";
 import { Compose } from "./compose";
 import { Contact } from "./contact";
 import { DegreeProgress } from "./degree-progress";
-import { ArrowIcon } from "./icons";
 import { Intro } from "./intro";
 import { Reveal } from "./reveal";
+import { Showcase } from "./showcase";
 import { ThemeToggle } from "./theme-toggle";
 import { person, projects, roles, type Project, type Role } from "./content";
 
@@ -84,37 +84,12 @@ export default function Home() {
             </div>
           </div>
 
-          {projects.map((item) => {
-            const Art = art[item.slug];
-
-            return (
-              <a
-                key={item.slug}
-                className="card"
-                id={item.slug}
-                href={item.href}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <Reveal className="card-art">
-                  <Art basePath={basePath} />
-                </Reveal>
-                <div className="card-body">
-                  <div className="card-line">
-                    <span className="card-name">{item.name}</span>
-                    <span className="card-year mono">{item.year}</span>
-                    <ArrowIcon className="card-arrow" />
-                  </div>
-                  <p className="card-lede">{item.lede}</p>
-                  <p className="card-metric">
-                    <span className="card-value">{item.metric.value}</span>
-                    <span className="card-label">{item.metric.label}</span>
-                  </p>
-                  <p className="card-stack mono">{item.stack}</p>
-                </div>
-              </a>
-            );
-          })}
+          <Showcase
+            items={projects.map((item) => {
+              const Art = art[item.slug];
+              return { ...item, art: <Art basePath={basePath} /> };
+            })}
+          />
         </section>
       </main>
 
