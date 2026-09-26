@@ -1,3 +1,4 @@
+import { Ask } from "./ask";
 import { Clock } from "./clock";
 import { Compose } from "./compose";
 import { Contact } from "./contact";
@@ -116,6 +117,8 @@ export default function Home() {
               );
             })}
           </div>
+
+          <Ask />
         </section>
       </main>
 
