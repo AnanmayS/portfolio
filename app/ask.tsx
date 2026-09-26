@@ -47,8 +47,8 @@ const ANSWERS: { keys: string[]; text: string }[] = [
     text: "At SEDS @ UMD he built the Python test framework for 26 Verilog modules in a CubeSat GPS receiver, which became the team standard, and cut the hardware regression from 4 hours to 95 minutes by running testbenches in parallel.",
   },
   {
-    keys: ["school", "umd", "maryland", "graduate", "degree", "study"],
-    text: "He studies computer engineering at the University of Maryland and expects to graduate in May 2028.",
+    keys: ["school", "umd", "maryland", "university", "college", "graduat", "degree", "major", "study", "studies"],
+    text: "He majors in computer engineering (B.S.) at the University of Maryland, College Park, and expects to graduate in May 2028.",
   },
 ];
 
