@@ -2,7 +2,7 @@ import { Clock } from "./clock";
 import { Compose } from "./compose";
 import { Contact } from "./contact";
 import { DegreeProgress } from "./degree-progress";
-import { ArrowIcon } from "./icons";
+import { OutIcon } from "./icons";
 import { Intro } from "./intro";
 import { Reveal } from "./reveal";
 import { ThemeToggle } from "./theme-toggle";
@@ -84,37 +84,38 @@ export default function Home() {
             </div>
           </div>
 
-          {projects.map((item) => {
-            const Art = art[item.slug];
+          <div className="projects">
+            {projects.map((item) => {
+              const Art = art[item.slug];
 
-            return (
-              <a
-                key={item.slug}
-                className="card"
-                id={item.slug}
-                href={item.href}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <Reveal className="card-art">
-                  <Art basePath={basePath} />
-                </Reveal>
-                <div className="card-body">
-                  <div className="card-line">
-                    <span className="card-name">{item.name}</span>
-                    <span className="card-year mono">{item.year}</span>
-                    <ArrowIcon className="card-arrow" />
+              return (
+                <a
+                  key={item.slug}
+                  className="project"
+                  id={item.slug}
+                  href={item.href}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <Reveal className="project-art">
+                    <Art basePath={basePath} />
+                  </Reveal>
+                  <div className="project-body">
+                    <div className="project-line">
+                      <span className="project-name">{item.name}</span>
+                      <span className="project-year mono">{item.year}</span>
+                      <OutIcon size={11} className="project-out" />
+                    </div>
+                    <p className="project-metric">
+                      <b>{item.metric.value}</b> {item.metric.label}
+                    </p>
+                    <p className="project-lede">{item.lede}</p>
+                    <p className="project-stack mono">{item.stack}</p>
                   </div>
-                  <p className="card-lede">{item.lede}</p>
-                  <p className="card-metric">
-                    <span className="card-value">{item.metric.value}</span>
-                    <span className="card-label">{item.metric.label}</span>
-                  </p>
-                  <p className="card-stack mono">{item.stack}</p>
-                </div>
-              </a>
-            );
-          })}
+                </a>
+              );
+            })}
+          </div>
         </section>
       </main>
 
