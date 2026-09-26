@@ -1,24 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, Geist_Mono, Public_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const sans = Public_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+/* The three faces live in app/fonts (Latin, variable weight, all SIL OFL)
+   rather than being fetched from Google at build time, which failed often
+   enough to break deploys. */
+const sans = localFont({
+  src: "./fonts/public-sans.woff2",
+  weight: "400 600",
   variable: "--font-sans-face",
   display: "swap",
 });
 
-const hand = Caveat({
-  subsets: ["latin"],
-  weight: ["500", "600"],
+const hand = localFont({
+  src: "./fonts/caveat.woff2",
+  weight: "500 600",
   variable: "--font-hand-face",
   display: "swap",
 });
 
-const mono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const mono = localFont({
+  src: "./fonts/geist-mono.woff2",
+  weight: "400 500",
   variable: "--font-geist-mono",
   display: "swap",
 });
