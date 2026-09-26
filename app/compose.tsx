@@ -12,8 +12,8 @@ import { SendIcon } from "./icons";
   but optional.
 
   One dialog is mounted on the page (<Compose />). Any number of triggers
-  (<ComposeTrigger />) open it by dispatching an event on the window, so the
-  pill, the footer, and the chip in the intro all reach the same card.
+  (<ComposeTrigger />) open it by dispatching an event on the window, so any
+  button that says email reaches the same card.
 */
 
 const OPEN_EVENT = "compose:open";
