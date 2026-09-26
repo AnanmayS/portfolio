@@ -6,8 +6,8 @@ import { Ticker } from "./ticker";
 
 /*
   Local time in College Park, ticking once a second. Rendered empty on the
-  server so the prerendered HTML and hydration agree; the footer keeps its
-  height because the line beside it is always there.
+  server so the prerendered HTML and hydration agree; the line keeps its
+  height because the place name beside it is always there.
 */
 const format = new Intl.DateTimeFormat("en-US", {
   timeZone: person.timeZone,

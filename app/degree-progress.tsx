@@ -95,7 +95,7 @@ export function DegreeProgress({ buildNow }: { buildNow: number }) {
       </svg>
 
       <figcaption className="degree-read">
-        <span className="degree-what">B.S. Computer Engineering, UMD</span>
+        <span className="degree-what">B.S. Computer Engineering</span>
         <span className="degree-left">
           <Ticker value={left} /> left
           <span className="degree-dot"> · </span>May 2028
