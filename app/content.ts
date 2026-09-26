@@ -10,7 +10,7 @@ export const person = {
   role: "building software",
   school: "UMD",
   email: "ananmaysom@gmail.com",
-  /** Only the footer says where; the intro does not. */
+  /** Shown beside the clock above the work; the intro does not say where. */
   where: "College Park",
   timeZone: "America/New_York",
   github: "https://github.com/AnanmayS",
@@ -22,10 +22,10 @@ export type Project = {
   slug: string;
   name: string;
   href: string;
-  /** One line, shown beside the name. */
-  what: string;
-  /** Two sentences at most, shown under the row. */
+  /** One sentence, shown on the card beside the illustration. */
   lede: string;
+  /** The number that says the project works, and what it measures. */
+  metric: { value: string; label: string };
   year: string;
   stack: string;
 };
@@ -35,9 +35,9 @@ export const projects: Project[] = [
     slug: "wildebeest",
     name: "Wildebeest",
     href: "https://github.com/AnanmayS/wildebeest",
-    what: "A fault-tolerant camera-trap pipeline",
     lede:
-      "Sorts camera-trap photos with two vision models across a pool of workers, on a scheduler written from scratch on Postgres and Redis. A crashed worker's photos are back in play in 0.16 s instead of 5.6 s, and across 30 injected faults not one photo was lost or counted twice.",
+      "A fault-tolerant camera-trap pipeline: two vision models, a scheduler built from scratch on Postgres and Redis.",
+    metric: { value: "0.16 s", label: "to recover a crashed worker, was 5.6 s" },
     year: "2026",
     stack: "TypeScript · Python · PostgreSQL · Redis · Docker",
   },
@@ -45,9 +45,9 @@ export const projects: Project[] = [
     slug: "tape",
     name: "Tape",
     href: "https://github.com/AnanmayS/tape",
-    what: "Market data capture and deterministic replay",
     lede:
-      "Records live exchange feeds to S3 and replays them byte for byte, at 2,790× real time. Every hole the recorder finds is written into the data where replay stops, so a backtest never quietly runs on missing trades.",
+      "Records live exchange feeds to S3 and replays them byte for byte, with every gap written into the data.",
+    metric: { value: "2,790×", label: "real-time replay, byte-identical" },
     year: "2026",
     stack: "Go · AWS S3 · ECS · Terraform",
   },
@@ -55,9 +55,9 @@ export const projects: Project[] = [
     slug: "showdownrl",
     name: "ShowdownRL",
     href: "https://github.com/AnanmayS/ShowdownRL",
-    what: "A reinforcement learning agent for Pokémon Showdown",
     lede:
-      "A MaskablePPO policy that plays live battles through a real browser, reading a 106-feature view of the board and masked out of illegal moves. It wins 79% of 1,000 simulator episodes against the type-aware heuristic, which alone wins 75%.",
+      "A MaskablePPO agent that plays live Pokémon Showdown battles through a real browser.",
+    metric: { value: "79%", label: "win rate over 1,000 battles" },
     year: "2026",
     stack: "Python · PyTorch · Gymnasium · Playwright",
   },
@@ -65,47 +65,35 @@ export const projects: Project[] = [
 
 export type Role = {
   company: string;
+  /** Short enough to share a line with the company. */
   title: string;
-  where: string;
+  /** What came of it, in one line. */
+  result: string;
   start: string;
   end: string | null;
-  points: string[];
 };
 
 export const roles: Role[] = [
   {
     company: "GSAlpha Labs",
-    title: "Software Engineering Intern",
-    where: "San Francisco",
+    title: "SWE Intern",
+    result: "HomeFlow AI, 30 s contract intake at 96% accuracy",
     start: "2026",
     end: null,
-    points: [
-      "Built HomeFlow AI, a Next.js platform that does the transaction-coordinator work California brokerages outsource at $400–600 a file.",
-      "Cut purchase-agreement intake to under 30 seconds with an LLM pipeline validated against a 52-field schema, at 96% field accuracy on real closed transactions.",
-    ],
   },
   {
     company: "SEDS @ UMD",
-    title: "Software Engineer, CubeSat GPS",
-    /** Only the footer says where; the intro does not. */
-  where: "College Park",
+    title: "CubeSat GPS",
+    result: "Regression cut from 4 h to 95 min",
     start: "2024",
     end: "2026",
-    points: [
-      "Built the Python test framework for 26 Verilog modules in a GPS receiver; it became the standard for every new module.",
-      "Cut the full hardware regression from 4 hours to 95 minutes by running independent testbenches in parallel.",
-    ],
   },
   {
     company: "theconviction.ai",
-    title: "Software Engineering Intern",
-    where: "Remote",
+    title: "SWE Intern",
+    result: "Research pipeline for 50+ companies",
     start: "2025",
     end: "2025",
-    points: [
-      "Replaced 12 hours a week of hand-collection with a FastAPI and PostgreSQL pipeline pulling filings, transcripts and news for 50+ companies into one record.",
-      "Shipped the Next.js research tool the team used daily, linking every finding back to its source filing.",
-    ],
   },
 ];
 

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
   up to the first difference stay where they are; from there on, the old
   ones lift out (up, smaller, blurred) while the new ones drop in from
   below with a small overshoot. Used for the degree countdown and the
-  footer clock, so a tick reads as one digit turning over rather than a
+  College Park clock, so a tick reads as one digit turning over rather than a
   whole line repainting.
 
   Each character carries the tick at which it last changed; that is its

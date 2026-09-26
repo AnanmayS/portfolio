@@ -1,13 +1,14 @@
 import { Clock } from "./clock";
-import { Compose, ComposeTrigger } from "./compose";
+import { Compose } from "./compose";
+import { Contact } from "./contact";
 import { DegreeProgress } from "./degree-progress";
 import { ArrowIcon } from "./icons";
 import { Intro } from "./intro";
-import { Pill } from "./pill";
 import { Reveal } from "./reveal";
 import { ThemeToggle } from "./theme-toggle";
-import { person, projects, roles, type Project } from "./content";
+import { person, projects, roles, type Project, type Role } from "./content";
 
+import { PondArt } from "./art/pond";
 import { ShowdownArt } from "./art/showdown";
 import { TapeArt } from "./art/tape";
 import { WildebeestArt } from "./art/wildebeest";
@@ -23,110 +24,98 @@ const art: Record<Project["slug"], (props: { basePath: string }) => React.ReactE
   showdownrl: ShowdownArt,
 };
 
+/* "2026 –" while ongoing, "2024 – 26" across years, "2025" within one. */
+function when(role: Role) {
+  if (role.end === null) return `${role.start} –`;
+  if (role.end !== role.start) return `${role.start} – ${role.end.slice(2)}`;
+  return role.start;
+}
+
 export default function Home() {
   return (
     <>
-      <Pill resumeHref={resumeHref} />
+      <main className="split">
+        <div className="side">
+          <div className="in" style={{ "--i": 0 } as React.CSSProperties}>
+            <Reveal>
+              <PondArt />
+            </Reveal>
+          </div>
 
-      <main className="shell">
-        <header className="in" style={{ "--i": 0 } as React.CSSProperties}>
-          <Intro />
-        </header>
+          <header className="in" style={{ "--i": 1 } as React.CSSProperties}>
+            <Intro />
+          </header>
 
-        <div className="in" style={{ "--i": 1 } as React.CSSProperties}>
-          <DegreeProgress buildNow={Date.now()} />
+          <div className="in" style={{ "--i": 2 } as React.CSSProperties}>
+            <Contact resumeHref={resumeHref} />
+          </div>
+
+          <div className="in" style={{ "--i": 3 } as React.CSSProperties}>
+            <DegreeProgress buildNow={Date.now()} />
+          </div>
+
+          <section className="xp in" style={{ "--i": 4 } as React.CSSProperties}>
+            <h2 className="section-title">Experience</h2>
+            <ul className="xp-list">
+              {roles.map((role) => (
+                <li key={role.company} className="xp-row">
+                  <div className="xp-line">
+                    <span>
+                      <b className="xp-company">{role.company}</b>
+                      <span className="xp-title"> · {role.title}</span>
+                    </span>
+                    <span className="xp-when mono">{when(role)}</span>
+                  </div>
+                  <span className="xp-result">{role.result}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
 
-        <div className="sections">
-          <section className="section in" style={{ "--i": 2 } as React.CSSProperties}>
-            <h2 className="section-title">Experience</h2>
-            <div>
-              {roles.map((role) => (
-                <article key={role.company} className="row">
-                  <div className="row-lead">{role.company}</div>
-                  <div className="row-body">
-                    <div className="row-line">
-                      <span className="row-title">
-                        {role.title}
-                        <span className="row-sub"> · {role.where}</span>
-                      </span>
-                      <span className="row-when mono">
-                        {role.start}
-                        {role.end === null
-                          ? " –"
-                          : role.end !== role.start
-                            ? ` – ${role.end.slice(2)}`
-                            : ""}
-                      </span>
-                    </div>
-                    <ul className="row-points">
-                      {role.points.map((point) => (
-                        <li key={point}>{point}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="section in" style={{ "--i": 3 } as React.CSSProperties}>
+        <section className="work in" style={{ "--i": 2 } as React.CSSProperties}>
+          <div className="work-head">
             <h2 className="section-title">Work</h2>
-            <div>
-              {projects.map((item) => {
-                const Art = art[item.slug];
-
-                return (
-                  <article key={item.slug} className="project" id={item.slug}>
-                    <a
-                      className="row is-link"
-                      href={item.href}
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <div className="row-lead">{item.name}</div>
-                      <div className="row-body">
-                        <div className="row-line">
-                          <span className="row-title">{item.what}</span>
-                          <span className="row-when mono">{item.year}</span>
-                        </div>
-                      </div>
-                      <ArrowIcon className="row-arrow" />
-                    </a>
-                    <p className="project-lede">{item.lede}</p>
-                    <Reveal>
-                      <figure className="project-figure">
-                        <Art basePath={basePath} />
-                        <figcaption className="project-stack mono">{item.stack}</figcaption>
-                      </figure>
-                    </Reveal>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
-
-          <footer className="foot in" style={{ "--i": 4 } as React.CSSProperties}>
-            <nav className="foot-group" aria-label="Contact">
-              <ComposeTrigger>email</ComposeTrigger>
-              <a href={person.github} rel="noreferrer" target="_blank">
-                github
-              </a>
-              <a href={person.linkedin} rel="noreferrer" target="_blank">
-                linkedin
-              </a>
-              <a href={resumeHref} target="_blank">
-                résumé
-              </a>
-            </nav>
-            <div className="foot-group">
-              <span className="foot-where">
+            <div className="work-meta">
+              <span>
                 {person.where} · <Clock />
               </span>
               <ThemeToggle />
             </div>
-          </footer>
-        </div>
+          </div>
+
+          {projects.map((item) => {
+            const Art = art[item.slug];
+
+            return (
+              <a
+                key={item.slug}
+                className="card"
+                id={item.slug}
+                href={item.href}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <Reveal className="card-art">
+                  <Art basePath={basePath} />
+                </Reveal>
+                <div className="card-body">
+                  <div className="card-line">
+                    <span className="card-name">{item.name}</span>
+                    <span className="card-year mono">{item.year}</span>
+                    <ArrowIcon className="card-arrow" />
+                  </div>
+                  <p className="card-lede">{item.lede}</p>
+                  <p className="card-metric">
+                    <span className="card-value">{item.metric.value}</span>
+                    <span className="card-label">{item.metric.label}</span>
+                  </p>
+                  <p className="card-stack mono">{item.stack}</p>
+                </div>
+              </a>
+            );
+          })}
+        </section>
       </main>
 
       <Compose />

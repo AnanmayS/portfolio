@@ -1,23 +1,21 @@
-import { ComposeTrigger } from "./compose";
 import { languages, person } from "./content";
 import { BarsIcon, CapIcon, CodeIcon, LayersIcon } from "./icons";
 import { RoleWord } from "./role-word";
 
 /*
-  The page opens as a few sentences rather than a name and a tagline. The
-  words that carry weight are set in ink with a small glyph beside them; the
-  rest stays grey. The projects are not named here; they are two scrolls
-  down, and the intro only has to sound like a person.
+  A name and two sentences that sound like a person. The words that carry
+  weight are set in ink with a small glyph beside them; the rest stays grey.
+  The projects are not named here; they sit beside it, on the right.
 */
 export function Intro() {
   const [a, b, c] = languages;
 
   return (
     <section className="intro" aria-label="Introduction">
-      <p>Hey,</p>
+      <h1 className="intro-name">{person.name}</h1>
 
       <p>
-        I&rsquo;m <b>{person.first}</b>, a computer engineering student at{" "}
+        I&rsquo;m a computer engineering student at{" "}
         <b className="hi">
           {person.school}
           <CapIcon />
@@ -26,7 +24,7 @@ export function Intro() {
       </p>
 
       <p>
-        Backend, frontend, the tooling in between &mdash; I like{" "}
+        Backend, frontend, the tooling in between. I like{" "}
         <b className="hi">
           shipping
           <LayersIcon />
@@ -41,18 +39,6 @@ export function Intro() {
           {c}
           <CodeIcon />
         </b>
-        .
-      </p>
-
-      <p>
-        Reach out at{" "}
-        <ComposeTrigger className="chip" title="Opens an email card">
-          {person.email}
-        </ComposeTrigger>{" "}
-        or{" "}
-        <a className="chip" href={person.github} rel="noreferrer" target="_blank">
-          {person.handle}
-        </a>
         .
       </p>
     </section>

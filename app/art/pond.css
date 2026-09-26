@@ -1,0 +1,278 @@
+/*
+  The pond — every loop divides 24s, the terrapin's lap.
+
+    pd-swim    one lap of an ellipse (centre 320,205; radii 185 x 100),
+               sampled every 10 degrees with the heading taken from the
+               tangent so the terrapin always faces where it is going
+    pd-fl      flippers paddle in pairs, 1.5s a stroke
+    pd-pad     lily pads bob and drift, 12s there and back
+    pd-sway    reeds sway at 4, 6 and 12s from their roots
+    pd-light   two layers of sunlight drift against each other, 12s
+
+  Unclassed (no .is-visible) and under reduced motion it rests: the terrapin
+  at the start of its lap, everything else still.
+*/
+
+.art-pond {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.art-pond .pd-swim {
+  transform: translate(505.0px, 205.0px) rotate(90.0deg);
+}
+
+.art-pond .pd-fl {
+  transform-box: fill-box;
+  transform-origin: 10% 50%;
+}
+
+.art-pond .pd-fl-back {
+  transform-origin: 90% 50%;
+}
+
+.art-pond .pd-pad,
+.art-pond .pd-leaf {
+  transform-box: view-box;
+}
+
+.art-pond .pd-light {
+  mix-blend-mode: screen;
+}
+
+.art-pond .pd-light-a {
+  opacity: 0.4;
+}
+
+.art-pond .pd-light-b {
+  opacity: 0.28;
+}
+
+.art-pond .pd-grain {
+  mix-blend-mode: overlay;
+  opacity: 0.42;
+}
+
+/* ---- the loop ---- */
+
+.is-visible .art-pond .pd-swim {
+  animation: pd-swim 24s linear infinite;
+}
+
+.is-visible .art-pond .pd-fl {
+  animation: pd-paddle 1.5s ease-in-out infinite;
+}
+
+.is-visible .art-pond .pd-fl-late {
+  animation-delay: -0.75s;
+}
+
+.is-visible .art-pond .pd-pad {
+  animation: pd-pad 12s ease-in-out infinite;
+}
+
+.is-visible .art-pond .pd-pad-alt {
+  animation-name: pd-pad-alt;
+}
+
+.is-visible .art-pond .pd-sway-a {
+  animation: pd-sway 4s ease-in-out infinite;
+}
+
+.is-visible .art-pond .pd-sway-b {
+  animation: pd-sway 6s ease-in-out infinite;
+}
+
+.is-visible .art-pond .pd-sway-c {
+  animation: pd-sway 12s ease-in-out infinite;
+}
+
+.is-visible .art-pond .pd-light-a {
+  animation: pd-light-a 12s ease-in-out infinite;
+}
+
+.is-visible .art-pond .pd-light-b {
+  animation: pd-light-b 12s ease-in-out infinite;
+}
+
+@keyframes pd-swim {
+  0% {
+    transform: translate(505.0px, 205.0px) rotate(90.0deg);
+  }
+  2.778% {
+    transform: translate(502.2px, 222.4px) rotate(108.1deg);
+  }
+  5.556% {
+    transform: translate(493.8px, 239.2px) rotate(124.0deg);
+  }
+  8.333% {
+    transform: translate(480.2px, 255.0px) rotate(136.9deg);
+  }
+  11.111% {
+    transform: translate(461.7px, 269.3px) rotate(147.2deg);
+  }
+  13.889% {
+    transform: translate(438.9px, 281.6px) rotate(155.6deg);
+  }
+  16.667% {
+    transform: translate(412.5px, 291.6px) rotate(162.7deg);
+  }
+  19.444% {
+    transform: translate(383.3px, 299.0px) rotate(168.9deg);
+  }
+  22.222% {
+    transform: translate(352.1px, 303.5px) rotate(174.6deg);
+  }
+  25% {
+    transform: translate(320.0px, 305.0px) rotate(180.0deg);
+  }
+  27.778% {
+    transform: translate(287.9px, 303.5px) rotate(185.4deg);
+  }
+  30.556% {
+    transform: translate(256.7px, 299.0px) rotate(191.1deg);
+  }
+  33.333% {
+    transform: translate(227.5px, 291.6px) rotate(197.3deg);
+  }
+  36.111% {
+    transform: translate(201.1px, 281.6px) rotate(204.4deg);
+  }
+  38.889% {
+    transform: translate(178.3px, 269.3px) rotate(212.8deg);
+  }
+  41.667% {
+    transform: translate(159.8px, 255.0px) rotate(223.1deg);
+  }
+  44.444% {
+    transform: translate(146.2px, 239.2px) rotate(236.0deg);
+  }
+  47.222% {
+    transform: translate(137.8px, 222.4px) rotate(251.9deg);
+  }
+  50% {
+    transform: translate(135.0px, 205.0px) rotate(270.0deg);
+  }
+  52.778% {
+    transform: translate(137.8px, 187.6px) rotate(288.1deg);
+  }
+  55.556% {
+    transform: translate(146.2px, 170.8px) rotate(304.0deg);
+  }
+  58.333% {
+    transform: translate(159.8px, 155.0px) rotate(316.9deg);
+  }
+  61.111% {
+    transform: translate(178.3px, 140.7px) rotate(327.2deg);
+  }
+  63.889% {
+    transform: translate(201.1px, 128.4px) rotate(335.6deg);
+  }
+  66.667% {
+    transform: translate(227.5px, 118.4px) rotate(342.7deg);
+  }
+  69.444% {
+    transform: translate(256.7px, 111.0px) rotate(348.9deg);
+  }
+  72.222% {
+    transform: translate(287.9px, 106.5px) rotate(354.6deg);
+  }
+  75% {
+    transform: translate(320.0px, 105.0px) rotate(360.0deg);
+  }
+  77.778% {
+    transform: translate(352.1px, 106.5px) rotate(365.4deg);
+  }
+  80.556% {
+    transform: translate(383.3px, 111.0px) rotate(371.1deg);
+  }
+  83.333% {
+    transform: translate(412.5px, 118.4px) rotate(377.3deg);
+  }
+  86.111% {
+    transform: translate(438.9px, 128.4px) rotate(384.4deg);
+  }
+  88.889% {
+    transform: translate(461.7px, 140.7px) rotate(392.8deg);
+  }
+  91.667% {
+    transform: translate(480.2px, 155.0px) rotate(403.1deg);
+  }
+  94.444% {
+    transform: translate(493.8px, 170.8px) rotate(416.0deg);
+  }
+  97.222% {
+    transform: translate(502.2px, 187.6px) rotate(431.9deg);
+  }
+  100% {
+    transform: translate(505.0px, 205.0px) rotate(450.0deg);
+  }
+}
+
+@keyframes pd-paddle {
+  0%,
+  100% {
+    transform: rotate(-16deg);
+  }
+  50% {
+    transform: rotate(16deg);
+  }
+}
+
+@keyframes pd-pad {
+  0%,
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  50% {
+    transform: rotate(-5deg) translate(-3px, 2px);
+  }
+}
+
+@keyframes pd-pad-alt {
+  0%,
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  50% {
+    transform: rotate(5deg) translate(4px, 2px);
+  }
+}
+
+@keyframes pd-sway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes pd-light-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-26px, 14px);
+  }
+}
+
+@keyframes pd-light-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(22px, -18px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-visible .art-pond *,
+  .art-pond * {
+    animation: none !important;
+  }
+}
