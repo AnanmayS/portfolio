@@ -32,6 +32,16 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "wildebeest",
+    name: "Wildebeest",
+    href: "https://github.com/AnanmayS/wildebeest",
+    what: "A fault-tolerant camera-trap pipeline",
+    lede:
+      "Sorts camera-trap photos with two vision models across a pool of workers, on a scheduler written from scratch on Postgres and Redis. A crashed worker's photos are back in play in 0.16 s instead of 5.6 s, and across 30 injected faults not one photo was lost or counted twice.",
+    year: "2026",
+    stack: "TypeScript · Python · PostgreSQL · Redis · Docker",
+  },
+  {
     slug: "tape",
     name: "Tape",
     href: "https://github.com/AnanmayS/tape",
@@ -40,16 +50,6 @@ export const projects: Project[] = [
       "Records live exchange feeds to S3 and replays them byte for byte, at 2,790× real time. Every hole the recorder finds is written into the data where replay stops, so a backtest never quietly runs on missing trades.",
     year: "2026",
     stack: "Go · AWS S3 · ECS · Terraform",
-  },
-  {
-    slug: "forgegrid",
-    name: "ForgeGrid",
-    href: "https://github.com/AnanmayS/forgegrid",
-    what: "A playable distributed build system",
-    lede:
-      "Spreads a seven-task game build across workers and starts each task the moment its inputs are ready: 2.5 s on one worker, 1.0 s on three. A worker dying mid-build has its work reassigned, and an unchanged rebuild is served entirely from cache.",
-    year: "2026",
-    stack: "Node.js · Docker",
   },
   {
     slug: "showdownrl",

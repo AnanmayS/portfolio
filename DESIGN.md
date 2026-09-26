@@ -75,7 +75,7 @@ handles, borrowed from a text editor, and the Pokémon sprites in the
 ShowdownRL illustration, which are Pokémon Showdown's own (public/sprites)
 and are shown in their real colours because a grey Charizard is not a
 Charizard. A severed feed or a dead worker is
-drawn dashed, never red. `--danger` exists only for a form error.
+drawn dashed, never red; so is a heartbeat that never came. `--danger` exists only for a form error.
 
 The page follows the system theme until the reader picks one. The choice is
 stamped as `data-appearance` on the root and kept in localStorage.
@@ -112,10 +112,11 @@ stack line in its corner.
 
 Each is an SVG animated with CSS, greyscale, in one synchronised loop that
 plays only while the figure is on screen and rests at its finished frame
-under reduced motion. It shows the mechanism, not a picture of it: Tape
-captures, loses the feed, flags the hole, replays compressed, and matches
-the digest; ForgeGrid schedules seven tasks over three workers against a
-one-worker baseline, loses a worker, and finishes anyway; ShowdownRL plays
+under reduced motion. It shows the mechanism, not a picture of it:
+Wildebeest kills a worker mid-photo and draws both recoveries to scale in
+real time, three missed heartbeats against a Docker event, then refuses a
+late write from a stale lease epoch; Tape captures, loses the feed, flags
+the hole, replays compressed, and matches the digest; ShowdownRL plays
 four turns on a real battlefield, Charizard against Blastoise with a switch
 to Venusaur, the masked policy beside it, and lands on the measured win rate
 over the baseline.

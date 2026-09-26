@@ -1,0 +1,374 @@
+/*
+  Wildebeest — one 11s loop, in three beats.
+
+    0.0 – 6.5s  the lanes draw left to right in real time behind a playhead.
+                At 0.4s the worker is killed: both photos go dashed. The
+                lower lane is re-claimed 0.16s later on the Docker event; the
+                upper one sits through three missed heartbeats and is
+                re-claimed at 6.0s.
+    7.0 – 8.6s  fencing: the replacement's epoch 2 write lands in the result,
+                then a late epoch 1 write from a woken worker is stopped at the
+                wall with 409.
+    8.8 – 9.3s  the fault-matrix line.
+    9.3 – 11s   rest, then repeat.
+
+  Every animation shares the 11s period, so the whole scene is one clock.
+  Unclassed (no .is-visible) and under reduced motion the figure sits at the
+  last frame: both recoveries, the fencing and the fault line on the page.
+*/
+
+.art-wb {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+
+  --wb-dur: 11s;
+  --wb-fs: 11px;
+  --wb-fs-num: 12px;
+}
+
+/* Small screens shrink the whole viewBox, so the type inside it grows back. */
+@media (max-width: 40rem) {
+  .art-wb {
+    --wb-fs: 17px;
+    --wb-fs-num: 18px;
+  }
+}
+
+.art-wb .wb-label,
+.art-wb .wb-ink {
+  font-family: var(--font-mono);
+  font-size: var(--wb-fs);
+  fill: var(--faint);
+}
+
+.art-wb .wb-ink {
+  fill: var(--foreground);
+}
+
+.art-wb .wb-num {
+  font-family: var(--font-mono);
+  font-size: var(--wb-fs-num);
+  fill: var(--foreground);
+}
+
+/* ---- paint ---- */
+
+/* a photo being worked on */
+.art-wb .wb-blk {
+  fill: var(--foreground);
+}
+
+/* the first version, which the current one is read against */
+.art-wb .wb-base {
+  fill: var(--faint);
+}
+
+/* what the killed worker got through: kept, but no longer solid work */
+.art-wb .wb-dead {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.art-wb .wb-dead-base {
+  stroke: var(--faint);
+}
+
+/* the photo leased to a dead worker, waiting */
+.art-wb .wb-wait,
+.art-wb .wb-kill-line,
+.art-wb .wb-refused {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+/* a heartbeat that never came is drawn hollow */
+.art-wb .wb-miss {
+  fill: var(--panel);
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.art-wb .wb-mark,
+.art-wb .wb-arrow,
+.art-wb .wb-store {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.art-wb .wb-rule {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.art-wb .wb-head {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1;
+}
+
+.art-wb .wb-run {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+/* ---- resting (finished) state ---- */
+
+.art-wb .wb-run,
+.art-wb .wb-head {
+  opacity: 0;
+}
+
+/* ---- beat 1: the kill and the two recoveries ---- */
+
+.is-visible .art-wb .wb-sweep {
+  animation:
+    wb-sweep var(--wb-dur) linear infinite,
+    wb-exit var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-sweep {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  59.091%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.is-visible .art-wb .wb-head {
+  animation: wb-head var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-head {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  59.091% {
+    opacity: 1;
+    transform: translateX(480px);
+  }
+  61%,
+  100% {
+    opacity: 0;
+    transform: translateX(480px);
+  }
+}
+
+/* the photo in flight grows until the kill, then goes */
+.is-visible .art-wb .wb-run {
+  animation: wb-run var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-run {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  3.636% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  4%,
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+.is-visible .art-wb .wb-dead,
+.is-visible .art-wb .wb-kill {
+  animation: wb-kill var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-kill {
+  0%,
+  3.636% {
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* the Docker event: re-claimed at 0.56s */
+.is-visible .art-wb .wb-in-a {
+  animation: wb-in-a var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-in-a {
+  0%,
+  5.091% {
+    opacity: 0;
+  }
+  7% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* the first heartbeat goes missing at 2.0s */
+.is-visible .art-wb .wb-in-hb {
+  animation: wb-in-hb var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-in-hb {
+  0%,
+  18.182% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* the heartbeat timeout: re-claimed at 6.0s */
+.is-visible .art-wb .wb-in-b {
+  animation: wb-in-b var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-in-b {
+  0%,
+  54.545% {
+    opacity: 0;
+  }
+  56.5% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---- beat 2: fencing ---- */
+
+.is-visible .art-wb .wb-fa {
+  animation: wb-fa var(--wb-dur) linear infinite;
+}
+.is-visible .art-wb .wb-fb {
+  animation: wb-fb var(--wb-dur) linear infinite;
+}
+.is-visible .art-wb .wb-fc {
+  animation: wb-fc var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-fa {
+  0%,
+  63.636% {
+    opacity: 0;
+  }
+  67.273% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes wb-fb {
+  0%,
+  70.909% {
+    opacity: 0;
+  }
+  74.545% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes wb-fc {
+  0%,
+  74.545% {
+    opacity: 0;
+  }
+  78.182% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---- beat 3: the fault line ---- */
+
+.is-visible .art-wb .wb-fin {
+  animation: wb-fin var(--wb-dur) linear infinite;
+}
+
+@keyframes wb-fin {
+  0%,
+  80% {
+    opacity: 0;
+  }
+  84.545% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* One shared exit: in the last 0.4s everything drawn dissolves, so the loop
+   turns over instead of snapping. The axis and the lane labels never move. */
+@keyframes wb-exit {
+  0% {
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  96.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-visible .art-wb *,
+  .art-wb * {
+    animation: none !important;
+  }
+}

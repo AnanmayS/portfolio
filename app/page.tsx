@@ -8,9 +8,9 @@ import { Reveal } from "./reveal";
 import { ThemeToggle } from "./theme-toggle";
 import { person, projects, roles, type Project } from "./content";
 
-import { ForgeGridArt } from "./art/forgegrid";
 import { ShowdownArt } from "./art/showdown";
 import { TapeArt } from "./art/tape";
+import { WildebeestArt } from "./art/wildebeest";
 
 const basePath = process.env.PAGES_BASE_PATH ?? "";
 const resumeHref = `${basePath}/resume.pdf`;
@@ -18,8 +18,8 @@ const resumeHref = `${basePath}/resume.pdf`;
 /* One looping illustration per project, keyed so content.ts stays free of React.
    Each gets the base path in case it serves an image. */
 const art: Record<Project["slug"], (props: { basePath: string }) => React.ReactElement> = {
+  wildebeest: WildebeestArt,
   tape: TapeArt,
-  forgegrid: ForgeGridArt,
   showdownrl: ShowdownArt,
 };
 
