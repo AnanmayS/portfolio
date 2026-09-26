@@ -32,6 +32,16 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "wildebeest",
+    name: "Wildebeest",
+    href: "https://github.com/AnanmayS/wildebeest",
+    what: "A fault-tolerant camera-trap pipeline",
+    lede:
+      "Sorts camera-trap photos with two vision models across a pool of workers, on a scheduler written from scratch on Postgres and Redis. A crashed worker's photos are back in play in 0.16 s instead of 5.6 s, and across 30 injected faults not one photo was lost or counted twice.",
+    year: "2026",
+    stack: "TypeScript · Python · PostgreSQL · Redis · Docker",
+  },
+  {
     slug: "tape",
     name: "Tape",
     href: "https://github.com/AnanmayS/tape",

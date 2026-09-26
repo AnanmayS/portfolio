@@ -48,7 +48,7 @@ Quiet is built for a reader who is deciding, in under a minute, whether to
 keep reading. It borrows its posture from the best personal sites: a narrow
 column, small type, a few sentences that sound like a person, sections as
 plain rows with a hairline between them, nothing decorated. A pill, a
-paragraph or three, one bar, three roles, three projects.
+paragraph or three, one bar, three roles, four projects.
 
 The page opens as prose rather than a name and a tagline. Body copy is grey;
 the words that carry weight are set in ink with a small glyph beside them,
@@ -75,7 +75,7 @@ handles, borrowed from a text editor, and the Pokémon sprites in the
 ShowdownRL illustration, which are Pokémon Showdown's own (public/sprites)
 and are shown in their real colours because a grey Charizard is not a
 Charizard. A severed feed or a dead worker is
-drawn dashed, never red. `--danger` exists only for a form error.
+drawn dashed, never red; so is a heartbeat that never came. `--danger` exists only for a form error.
 
 The page follows the system theme until the reader picks one. The choice is
 stamped as `data-appearance` on the root and kept in localStorage.
@@ -112,7 +112,10 @@ stack line in its corner.
 
 Each is an SVG animated with CSS, greyscale, in one synchronised loop that
 plays only while the figure is on screen and rests at its finished frame
-under reduced motion. It shows the mechanism, not a picture of it: Tape
+under reduced motion. It shows the mechanism, not a picture of it:
+Wildebeest kills a worker mid-photo and draws both recoveries to scale in
+real time, three missed heartbeats against a Docker event, then refuses a
+late write from a stale lease epoch; Tape
 captures, loses the feed, flags the hole, replays compressed, and matches
 the digest; ForgeGrid schedules seven tasks over three workers against a
 one-worker baseline, loses a worker, and finishes anyway; ShowdownRL plays
@@ -122,7 +125,7 @@ over the baseline.
 
 ## Do's and Don'ts
 
-- Do keep the page to three projects. A fourth needs to beat one of them.
+- Do keep the page to four projects. A fifth needs to beat one of them.
 - Do keep the intro to three short paragraphs. Every ink word earns it.
 - Don't add a second handwritten phrase. One is a wink; two is a theme.
 - Do let a number stay in prose; the illustration is where it gets drawn.
