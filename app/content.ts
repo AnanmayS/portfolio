@@ -52,16 +52,6 @@ export const projects: Project[] = [
     stack: "Go · AWS S3 · ECS · Terraform",
   },
   {
-    slug: "forgegrid",
-    name: "ForgeGrid",
-    href: "https://github.com/AnanmayS/forgegrid",
-    what: "A playable distributed build system",
-    lede:
-      "Spreads a seven-task game build across workers and starts each task the moment its inputs are ready: 2.5 s on one worker, 1.0 s on three. A worker dying mid-build has its work reassigned, and an unchanged rebuild is served entirely from cache.",
-    year: "2026",
-    stack: "Node.js · Docker",
-  },
-  {
     slug: "showdownrl",
     name: "ShowdownRL",
     href: "https://github.com/AnanmayS/ShowdownRL",

@@ -1,6 +1,6 @@
 # Ananmay Som Singh — portfolio
 
-A quiet personal site: four projects, each with a looping illustration of
+A quiet personal site: three projects, each with a looping illustration of
 how it works, a live degree-progress bar, and experience.
 Next.js as a static export, deployed to GitHub Pages.
 
@@ -15,8 +15,7 @@ npm run build      # static export to ./out
 ## Where things live
 
 - `app/content.ts` — everything the page says: projects, roles, links.
-- `app/art/` — one animated SVG per project (`wildebeest`, `tape`, `forgegrid`,
-  `showdown`),
+- `app/art/` — one animated SVG per project (`wildebeest`, `tape`, `showdown`),
   CSS-animated, greyscale, looping only while on screen.
 - `app/degree-progress.tsx` — the bar drawn to scale across the degree with a
   live readout.
