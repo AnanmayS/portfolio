@@ -15,8 +15,11 @@
        last few turns of history.
 
   Secrets (Supabase dashboard → Edge Functions → Secrets):
-    OPENROUTER_API_KEY   required; without it the function answers 503 and
-                         the page falls back to its built-in answers
+    OPENROUTER_API_KEY   the OpenRouter key; if unset, it is read from Vault
+                         (secret "openrouter_api_key", via the service-role-only
+                         public.ask_openrouter_key()); with neither the function
+                         answers 503 and the page falls back to its built-in
+                         answers
     OPENROUTER_MODEL     optional; any OpenRouter model id
     ASK_ENABLED          set to "false" to switch the chat off instantly
     ASK_PER_HOUR, ASK_PER_DAY, ASK_ORIGINS   optional overrides
@@ -27,7 +30,7 @@ import { onTopic, readMessages } from "./guard.ts";
 import { PROFILE } from "./profile.ts";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = Deno.env.get("OPENROUTER_MODEL") ?? "meta-llama/llama-3.3-70b-instruct";
+const MODEL = Deno.env.get("OPENROUTER_MODEL") ?? "deepseek/deepseek-v4-flash";
 const ORIGINS = (Deno.env.get("ASK_ORIGINS") ?? "https://ananmays.github.io,http://localhost:3000")
   .split(",")
   .map((o) => o.trim())
@@ -100,6 +103,17 @@ const db = createClient(Deno.env.get("SUPABASE_URL")!, SERVER_KEY, {
   auth: { persistSession: false },
 });
 
+/* The key, from the function's secrets or else from Vault, kept for the life
+   of this instance so Vault is read once, not on every question. */
+let openRouterKey: string | null = null;
+async function apiKey() {
+  if (openRouterKey) return openRouterKey;
+  const fromEnv = Deno.env.get("OPENROUTER_API_KEY");
+  if (fromEnv) return (openRouterKey = fromEnv);
+  const { data } = await db.rpc("ask_openrouter_key");
+  return (openRouterKey = typeof data === "string" && data ? data : null);
+}
+
 Deno.serve(async (req) => {
   const origin = req.headers.get("origin") ?? "";
 
@@ -107,10 +121,7 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "method" }, 405, origin);
   if (!ORIGINS.includes(origin)) return json({ error: "origin" }, 403, origin);
 
-  const apiKey = Deno.env.get("OPENROUTER_API_KEY");
-  if (Deno.env.get("ASK_ENABLED") === "false" || !apiKey) {
-    return json({ error: "unavailable" }, 503, origin);
-  }
+  if (Deno.env.get("ASK_ENABLED") === "false") return json({ error: "unavailable" }, 503, origin);
 
   let body: unknown;
   try {
@@ -135,12 +146,15 @@ Deno.serve(async (req) => {
   if (allowed === "hour") return json({ answer: REPLY.limited, kind: "limited" }, 429, origin);
   if (allowed === "day") return json({ answer: REPLY.busy, kind: "limited" }, 429, origin);
 
+  const key = await apiKey();
+  if (!key) return json({ error: "unavailable" }, 503, origin);
+
   let reply = "";
   try {
     const response = await fetch(OPENROUTER_URL, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://ananmays.github.io/portfolio/",
         "X-Title": "Ananmay Som Singh portfolio",
