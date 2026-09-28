@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BackHome } from "../../back-home";
+import { BackLink } from "../../back-link";
 import { projects } from "../../content";
 import { Framed } from "../../framed";
 import { OutIcon } from "../../icons";
@@ -37,7 +37,7 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <main className="page">
-      <BackHome />
+      <BackLink href="/work" label="Work" />
 
       <Framed project={project} large />
 

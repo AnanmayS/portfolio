@@ -113,7 +113,7 @@ figure {
 /* ---------- the split ---------- */
 
 /* One column on a phone; from 64rem, two equal columns: you on the left,
-   the work on the right. */
+   what you've done on the right. The demos hang on /work. */
 .split {
   display: flex;
   flex-direction: column;
@@ -360,15 +360,14 @@ figure {
   font-size: 0.8125rem;
 }
 
-/* ---------- work ---------- */
+/* ---------- work, on the front page: one line per project ---------- */
 
-.work {
+.picks {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
-.work-head {
+.picks-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -377,9 +376,71 @@ figure {
   border-bottom: 1px solid var(--border-strong);
 }
 
-.work-meta {
-  color: var(--faint);
-  font-size: 0.8125rem;
+.picks-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--ok);
+  font-size: 0.875rem;
+}
+
+.picks-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A small framed thumbnail of the project's painting, its name, its number. */
+.pick {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.pick-thumb {
+  flex: none;
+  width: 4.5rem;
+  height: 3rem;
+  border: 3px solid var(--panel);
+  border-radius: 2px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.pick-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.pick-name {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  line-height: 1.15;
+  transition: color 200ms ease;
+}
+
+.pick:hover .pick-name {
+  color: var(--ok);
+}
+
+.pick-metric {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.pick-metric b {
+  color: var(--foreground);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- work, on its own page ---------- */
+
+.page-work {
+  width: min(100% - (var(--margin) * 2), 56rem);
 }
 
 .clock {
