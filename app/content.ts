@@ -22,12 +22,14 @@ export type Project = {
   slug: string;
   name: string;
   href: string;
-  /** One sentence, shown on the card beside the illustration. */
+  /** One plain sentence, shown under the demo on the card and the project page. */
   lede: string;
   /** The number that says the project works, and what it measures. */
   metric: { value: string; label: string };
   year: string;
   stack: string;
+  /** The painting the demo hangs in, from public/paintings. */
+  painting: string;
 };
 
 export const projects: Project[] = [
@@ -36,30 +38,33 @@ export const projects: Project[] = [
     name: "Wildebeest",
     href: "https://github.com/AnanmayS/wildebeest",
     lede:
-      "A fault-tolerant camera-trap pipeline: two vision models, a scheduler built from scratch on Postgres and Redis.",
+      "Sorts wildlife camera-trap photos with two AI models across many computers, and keeps going when one of them crashes.",
     metric: { value: "0.16 s", label: "to recover a crashed worker, was 5.6 s" },
     year: "2026",
     stack: "TypeScript · Python · PostgreSQL · Redis · Docker",
+    painting: "serengeti.webp",
   },
   {
     slug: "tape",
     name: "Tape",
     href: "https://github.com/AnanmayS/tape",
     lede:
-      "Records live exchange feeds to S3 and replays them byte for byte, with every gap written into the data.",
+      "A DVR for the market: it records every live trade, marks anything it missed, and replays any moment exactly, so trading ideas can be tested on real history.",
     metric: { value: "2,790×", label: "real-time replay, byte-identical" },
     year: "2026",
     stack: "Go · AWS S3 · ECS · Terraform",
+    painting: "river-fog.webp",
   },
   {
     slug: "showdownrl",
     name: "ShowdownRL",
     href: "https://github.com/AnanmayS/ShowdownRL",
     lede:
-      "A MaskablePPO agent that plays live Pokémon Showdown battles through a real browser.",
+      "An AI that taught itself to battle in Pokémon, then plays real matches on the Pokémon Showdown website by clicking the moves itself.",
     metric: { value: "79%", label: "win rate over 1,000 battles" },
     year: "2026",
     stack: "Python · PyTorch · Gymnasium · Playwright",
+    painting: "clifftop.webp",
   },
 ];
 
@@ -99,3 +104,7 @@ export const roles: Role[] = [
 
 /** The three named in the intro; everything else is on the project stack lines. */
 export const languages = ["Go", "Python", "TypeScript"] as const;
+
+/** "Ask about me": the three questions on the front page, and the rest on /ask. */
+export const askStarters = ["What's Wildebeest?", "What does he do at GSAlpha Labs?", "What's he best at?"] as const;
+export const askMore = ["What's Tape?", "Tell me about ShowdownRL", "Where does he study?"] as const;
