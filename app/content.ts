@@ -72,7 +72,7 @@ export type Role = {
   company: string;
   /** Short enough to share a line with the company. */
   title: string;
-  /** What came of it, in one line. */
+  /** What you built and the number that says it worked, in plain words: a sentence or two. */
   result: string;
   start: string;
   end: string | null;
@@ -82,21 +82,24 @@ export const roles: Role[] = [
   {
     company: "GSAlpha Labs",
     title: "SWE Intern",
-    result: "HomeFlow AI, 30 s contract intake at 96% accuracy",
+    result:
+      "Building HomeFlow AI, which handles paperwork for California real-estate agents. Pulling the details out of a purchase contract went from 35 minutes of typing to under 30 seconds, at 96% accuracy.",
     start: "2026",
     end: null,
   },
   {
     company: "SEDS @ UMD",
-    title: "CubeSat GPS",
-    result: "Regression cut from 4 h to 95 min",
+    title: "Software Engineer",
+    result:
+      "Built the test framework for the GPS receiver on the club's CubeSat satellite. Running the tests in parallel cut a 4-hour check to 95 minutes, so it now runs before every change instead of overnight.",
     start: "2024",
     end: "2026",
   },
   {
     company: "theconviction.ai",
     title: "SWE Intern",
-    result: "Research pipeline for 50+ companies",
+    result:
+      "Replaced 12 hours a week of manual research with a pipeline that gathers filings, earnings calls and news for 50+ companies, feeding a tool 4 analysts used every day.",
     start: "2025",
     end: "2025",
   },

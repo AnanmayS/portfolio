@@ -352,6 +352,8 @@ figure {
 
 .xp-result {
   font-size: 0.9375rem;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .xp-when {
