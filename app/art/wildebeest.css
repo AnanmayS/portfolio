@@ -1,374 +1,87 @@
 /*
-  Wildebeest — one 11s loop, in three beats.
-
-    0.0 – 6.5s  the lanes draw left to right in real time behind a playhead.
-                At 0.4s the worker is killed: both photos go dashed. The
-                lower lane is re-claimed 0.16s later on the Docker event; the
-                upper one sits through three missed heartbeats and is
-                re-claimed at 6.0s.
-    7.0 – 8.6s  fencing: the replacement's epoch 2 write lands in the result,
-                then a late epoch 1 write from a woken worker is stopped at the
-                wall with 409.
-    8.8 – 9.3s  the fault-matrix line.
-    9.3 – 11s   rest, then repeat.
-
-  Every animation shares the 11s period, so the whole scene is one clock.
-  Unclassed (no .is-visible) and under reduced motion the figure sits at the
-  last frame: both recoveries, the fencing and the fault line on the page.
+  Wildebeest: one 9 s loop. The rules outside `.is-visible` draw the
+  finished frame (both photos sorted, w3 crossed out), so with no JS, before
+  the reveal, or under reduced motion, the picture is complete and still.
 */
 
-.art-wb {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
+.art-wb .wb-p1 { transform: translate(560px, -33px); }
+.art-wb .wb-p2 { opacity: 0; }
+.art-wb .wb-p3 { transform: translate(632px, -33px); }
+.art-wb .wb-t1a,
+.art-wb .wb-t2,
+.art-wb .wb-t3a,
+.art-wb .wb-w3ok,
+.art-wb .wb-late { opacity: 0; }
 
-  --wb-dur: 11s;
-  --wb-fs: 11px;
-  --wb-fs-num: 12px;
+.is-visible .art-wb .wb-p,
+.is-visible .art-wb .wb-t1a,
+.is-visible .art-wb .wb-t1b,
+.is-visible .art-wb .wb-t2,
+.is-visible .art-wb .wb-t3a,
+.is-visible .art-wb .wb-t3b,
+.is-visible .art-wb .wb-w3box,
+.is-visible .art-wb .wb-w3ok,
+.is-visible .art-wb .wb-w3x,
+.is-visible .art-wb .wb-rec,
+.is-visible .art-wb .wb-late {
+  animation-duration: 9s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
-/* Small screens shrink the whole viewBox, so the type inside it grows back. */
-@media (max-width: 40rem) {
-  .art-wb {
-    --wb-fs: 17px;
-    --wb-fs-num: 18px;
-  }
+.is-visible .art-wb .wb-p { animation-timing-function: ease-in-out; }
+.is-visible .art-wb .wb-p1 { animation-name: wb-p1; }
+.is-visible .art-wb .wb-p2 { animation-name: wb-p2; }
+.is-visible .art-wb .wb-p3 { animation-name: wb-p3; }
+.is-visible .art-wb .wb-t1a { animation-name: wb-t1a; }
+.is-visible .art-wb .wb-t1b { animation-name: wb-t1b; }
+.is-visible .art-wb .wb-t2 { animation-name: wb-t2; }
+.is-visible .art-wb .wb-t3a { animation-name: wb-t3a; }
+.is-visible .art-wb .wb-t3b { animation-name: wb-t3b; }
+.is-visible .art-wb .wb-w3box { animation-name: wb-w3box; }
+.is-visible .art-wb .wb-w3ok { animation-name: wb-w3ok; }
+.is-visible .art-wb .wb-w3x { animation-name: wb-w3x; }
+.is-visible .art-wb .wb-rec { animation-name: wb-rec; }
+.is-visible .art-wb .wb-late { animation-name: wb-late; }
+
+@keyframes wb-p1 {
+  0% { opacity: 0; transform: translate(0, 0); }
+  2%, 4% { opacity: 1; transform: translate(0, 0); }
+  10%, 18% { transform: translate(202px, -33px); }
+  24%, 32% { transform: translate(422px, -33px); }
+  38%, 94% { opacity: 1; transform: translate(560px, -33px); }
+  98%, 100% { opacity: 0; transform: translate(560px, -33px); }
 }
 
-.art-wb .wb-label,
-.art-wb .wb-ink {
-  font-family: var(--font-mono);
-  font-size: var(--wb-fs);
-  fill: var(--faint);
+@keyframes wb-p2 {
+  0%, 2% { opacity: 0; transform: translate(0, 0); }
+  4%, 6% { opacity: 1; transform: translate(0, 0); }
+  12%, 22% { opacity: 1; transform: translate(202px, 33px); }
+  28%, 100% { opacity: 0; transform: translate(202px, 73px); }
 }
 
-.art-wb .wb-ink {
-  fill: var(--foreground);
+/* The zebra: detected, carried to w3, shaken by the crash, handed to w4. */
+@keyframes wb-p3 {
+  0%, 30% { opacity: 0; transform: translate(0, 0); }
+  32%, 34% { opacity: 1; transform: translate(0, 0); }
+  40%, 48% { transform: translate(202px, -33px); }
+  54% { opacity: 1; transform: translate(422px, -33px); }
+  56% { opacity: 0.45; transform: translate(426px, -33px); }
+  57% { transform: translate(418px, -33px); }
+  58% { transform: translate(424px, -33px); }
+  59% { opacity: 0.45; transform: translate(422px, -33px); }
+  63%, 72% { opacity: 1; transform: translate(422px, 33px); }
+  78%, 94% { opacity: 1; transform: translate(632px, -33px); }
+  98%, 100% { opacity: 0; transform: translate(632px, -33px); }
 }
 
-.art-wb .wb-num {
-  font-family: var(--font-mono);
-  font-size: var(--wb-fs-num);
-  fill: var(--foreground);
-}
-
-/* ---- paint ---- */
-
-/* a photo being worked on */
-.art-wb .wb-blk {
-  fill: var(--foreground);
-}
-
-/* the first version, which the current one is read against */
-.art-wb .wb-base {
-  fill: var(--faint);
-}
-
-/* what the killed worker got through: kept, but no longer solid work */
-.art-wb .wb-dead {
-  fill: none;
-  stroke: var(--muted);
-  stroke-width: 1;
-  stroke-dasharray: 3 3;
-}
-
-.art-wb .wb-dead-base {
-  stroke: var(--faint);
-}
-
-/* the photo leased to a dead worker, waiting */
-.art-wb .wb-wait,
-.art-wb .wb-kill-line,
-.art-wb .wb-refused {
-  fill: none;
-  stroke: var(--faint);
-  stroke-width: 1;
-  stroke-dasharray: 3 3;
-}
-
-/* a heartbeat that never came is drawn hollow */
-.art-wb .wb-miss {
-  fill: var(--panel);
-  stroke: var(--muted);
-  stroke-width: 1;
-}
-
-.art-wb .wb-mark,
-.art-wb .wb-arrow,
-.art-wb .wb-store {
-  fill: none;
-  stroke: var(--muted);
-  stroke-width: 1;
-}
-
-.art-wb .wb-rule {
-  fill: none;
-  stroke: var(--border);
-  stroke-width: 1;
-}
-
-.art-wb .wb-head {
-  fill: none;
-  stroke: var(--foreground);
-  stroke-width: 1;
-}
-
-.art-wb .wb-run {
-  transform-box: fill-box;
-  transform-origin: left center;
-}
-
-/* ---- resting (finished) state ---- */
-
-.art-wb .wb-run,
-.art-wb .wb-head {
-  opacity: 0;
-}
-
-/* ---- beat 1: the kill and the two recoveries ---- */
-
-.is-visible .art-wb .wb-sweep {
-  animation:
-    wb-sweep var(--wb-dur) linear infinite,
-    wb-exit var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-sweep {
-  0% {
-    clip-path: inset(0 100% 0 0);
-  }
-  59.091%,
-  100% {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-.is-visible .art-wb .wb-head {
-  animation: wb-head var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-head {
-  0% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  59.091% {
-    opacity: 1;
-    transform: translateX(480px);
-  }
-  61%,
-  100% {
-    opacity: 0;
-    transform: translateX(480px);
-  }
-}
-
-/* the photo in flight grows until the kill, then goes */
-.is-visible .art-wb .wb-run {
-  animation: wb-run var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-run {
-  0% {
-    opacity: 1;
-    transform: scaleX(0);
-  }
-  3.636% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-  4%,
-  100% {
-    opacity: 0;
-    transform: scaleX(1);
-  }
-}
-
-.is-visible .art-wb .wb-dead,
-.is-visible .art-wb .wb-kill {
-  animation: wb-kill var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-kill {
-  0%,
-  3.636% {
-    opacity: 0;
-  }
-  4% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* the Docker event: re-claimed at 0.56s */
-.is-visible .art-wb .wb-in-a {
-  animation: wb-in-a var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-in-a {
-  0%,
-  5.091% {
-    opacity: 0;
-  }
-  7% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* the first heartbeat goes missing at 2.0s */
-.is-visible .art-wb .wb-in-hb {
-  animation: wb-in-hb var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-in-hb {
-  0%,
-  18.182% {
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* the heartbeat timeout: re-claimed at 6.0s */
-.is-visible .art-wb .wb-in-b {
-  animation: wb-in-b var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-in-b {
-  0%,
-  54.545% {
-    opacity: 0;
-  }
-  56.5% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ---- beat 2: fencing ---- */
-
-.is-visible .art-wb .wb-fa {
-  animation: wb-fa var(--wb-dur) linear infinite;
-}
-.is-visible .art-wb .wb-fb {
-  animation: wb-fb var(--wb-dur) linear infinite;
-}
-.is-visible .art-wb .wb-fc {
-  animation: wb-fc var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-fa {
-  0%,
-  63.636% {
-    opacity: 0;
-  }
-  67.273% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes wb-fb {
-  0%,
-  70.909% {
-    opacity: 0;
-  }
-  74.545% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes wb-fc {
-  0%,
-  74.545% {
-    opacity: 0;
-  }
-  78.182% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ---- beat 3: the fault line ---- */
-
-.is-visible .art-wb .wb-fin {
-  animation: wb-fin var(--wb-dur) linear infinite;
-}
-
-@keyframes wb-fin {
-  0%,
-  80% {
-    opacity: 0;
-  }
-  84.545% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* One shared exit: in the last 0.4s everything drawn dissolves, so the loop
-   turns over instead of snapping. The axis and the lane labels never move. */
-@keyframes wb-exit {
-  0% {
-    opacity: 0;
-  }
-  1% {
-    opacity: 1;
-  }
-  96.5% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .is-visible .art-wb *,
-  .art-wb * {
-    animation: none !important;
-  }
-}
+@keyframes wb-t1a { 0%, 10% { opacity: 0; } 11%, 20% { opacity: 1; } 21%, 100% { opacity: 0; } }
+@keyframes wb-t1b { 0%, 24% { opacity: 0; } 25%, 100% { opacity: 1; } }
+@keyframes wb-t2 { 0%, 12% { opacity: 0; } 13%, 26% { opacity: 1; } 28%, 100% { opacity: 0; } }
+@keyframes wb-t3a { 0%, 40% { opacity: 0; } 41%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+@keyframes wb-t3b { 0%, 64% { opacity: 0; } 65%, 100% { opacity: 1; } }
+@keyframes wb-w3box { 0%, 55% { stroke: transparent; } 56%, 62% { stroke: var(--bad); } 63%, 100% { stroke: transparent; } }
+@keyframes wb-w3ok { 0%, 55% { opacity: 1; } 56%, 96% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes wb-w3x { 0%, 55% { opacity: 0; } 56%, 96% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes wb-rec { 0%, 59% { opacity: 0; } 61%, 78% { opacity: 1; } 80%, 100% { opacity: 0; } }
+@keyframes wb-late { 0%, 79% { opacity: 0; } 81%, 94% { opacity: 1; } 96%, 100% { opacity: 0; } }

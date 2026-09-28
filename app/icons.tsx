@@ -1,7 +1,7 @@
 /*
-  The handful of stroke icons the page uses: the ones that sit inside the
-  intro prose, and the ones on the buttons. All inherit currentColor so the
-  same glyph works on ink, on muted text, and reversed on "Email me".
+  The handful of stroke icons the site uses, on links and buttons. All
+  inherit currentColor so the same glyph works on ink, on muted text, and
+  reversed on a filled button.
 */
 
 type IconProps = { size?: number; className?: string };
@@ -26,51 +26,6 @@ function Icon({
     >
       {children}
     </svg>
-  );
-}
-
-export function CapIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M22 10L12 5 2 10l10 5 10-5z" />
-      <path d="M6 12v5c3 3 9 3 12 0v-5" />
-    </Icon>
-  );
-}
-
-export function LayersIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <rect x="3" y="4" width="18" height="6" rx="1.5" />
-      <rect x="3" y="14" width="18" height="6" rx="1.5" />
-      <path d="M7 7h.01M7 17h.01" />
-    </Icon>
-  );
-}
-
-export function BarsIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M3 20h18" />
-      <path d="M6 16V9M12 16V4M18 16v-6" />
-    </Icon>
-  );
-}
-
-export function CodeIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M8 6l-6 6 6 6M16 6l6 6-6 6" />
-    </Icon>
-  );
-}
-
-export function MailIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="M3 7l9 6 9-6" />
-    </Icon>
   );
 }
 

@@ -25,10 +25,10 @@ Avoid resume-template portfolio pages, corporate career-site layouts, and pages 
 ## Design Principles
 
 1. Make the site feel personal before it feels polished.
-2. Show the three best projects and show how each one works, as a short looping illustration of the mechanism, rather than listing everything ever built.
-3. Keep the page quiet and simple: one screen, small type, plain rows, no accent colour. The pond is the one picture; everything else that moves measures something.
-4. Preserve fast scanning for recruiters: on a laptop the whole page is one screen. Left: the pond, a name and two sentences, résumé and contact on one line, degree progress, three roles. Right: three projects, each with the number that says it works.
-5. Treat the site as a living personal artifact. The degree bar moves on its own; the illustrations play when they come into view.
+2. Show the three best projects and show how each one works, as a short looping demo someone with no technical background can follow at a glance, rather than listing everything ever built.
+3. Hang it like a quiet gallery: a dark wall, impressionist paintings as the only colour-rich surfaces, a book serif for titles, one soft green for what went right. The terrapin (UMD) sits above the name; each project's demo hangs inside its own painting.
+4. Preserve fast scanning for recruiters: two equal columns. Left: the terrapin, a name and two sentences, résumé and contact on one line, degree progress, three roles, and a way into "Ask about me". Right: three projects, each with the number that says it works; each opens its own page.
+5. Treat the site as a living personal artifact. The degree bar moves on its own; the demos play when they come into view.
 
 ## Accessibility & Inclusion
 

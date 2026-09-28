@@ -5,7 +5,7 @@ import { ComposeTrigger } from "./compose";
 import { SendIcon } from "./icons";
 
 /*
-  "Ask about me", under the work. Questions go to the `ask` edge function
+  "Ask about me", on its own page at /ask. Questions go to the `ask` edge function
   (supabase/functions/ask), which answers from Ananmay's profile with a
   cheap model and turns everything else away. If it can't be reached, or
   isn't switched on, the box answers from the short list below instead,
@@ -13,13 +13,13 @@ import { SendIcon } from "./icons";
   with an Email me button.
 
   Answers type out a few words at a time, or appear at once under reduced
-  motion. The thread scrolls inside a fixed height so the page never grows.
+  motion. The thread scrolls inside its own box so the page never grows.
+  A question can arrive with the page (the starters on the front page link
+  here with ?q=), and is asked once on mount.
 */
 const ENDPOINT = "https://njfzybsstljchczpslsf.supabase.co/functions/v1/ask";
 
 type Turn = { from: "you" | "me"; text: string; fallback?: boolean; pending?: boolean };
-
-const STARTERS = ["What's Wildebeest?", "What does he do at GSAlpha Labs?", "What's he best at?"];
 
 const ANSWERS: { keys: string[]; text: string }[] = [
   {
@@ -62,7 +62,15 @@ function offline(question: string): Turn {
   return hit ? { from: "me", text: hit.text } : { from: "me", text: FALLBACK, fallback: true };
 }
 
-export function Ask() {
+export function Ask({
+  starters,
+  initial,
+  heading = true,
+}: {
+  starters: readonly string[];
+  initial?: string;
+  heading?: boolean;
+}) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [shown, setShown] = useState(0); /* words of the last answer on screen */
   const [draft, setDraft] = useState("");
@@ -127,12 +135,22 @@ export function Ask() {
     setTurns([...history, reply]);
   };
 
+  /* A question carried in from the front page, asked once. */
+  const asked = useRef(false);
+  useEffect(() => {
+    if (!initial || asked.current) return;
+    asked.current = true;
+    void ask(initial);
+  }, [initial]);
+
   return (
     <section className="ask" aria-label="Ask about Ananmay">
-      <div className="ask-head">
-        <h2 className="section-title">Ask about me</h2>
-        <span className="ask-note">answers come from my résumé and projects</span>
-      </div>
+      {heading && (
+        <div className="ask-head">
+          <h2 className="section-title">Ask about me</h2>
+          <span className="ask-note">answers come from my résumé and projects</span>
+        </div>
+      )}
 
       <div className="ask-thread" ref={thread} aria-live="polite">
         {turns.length === 0 ? (
@@ -161,7 +179,7 @@ export function Ask() {
       </div>
 
       <div className="ask-starters">
-        {STARTERS.map((q) => (
+        {starters.map((q) => (
           <button key={q} type="button" className="ask-starter" onClick={() => ask(q)} disabled={typing}>
             {q}
           </button>
