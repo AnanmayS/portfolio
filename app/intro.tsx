@@ -1,11 +1,10 @@
 import { languages, person } from "./content";
-import { BarsIcon, CapIcon, CodeIcon, LayersIcon } from "./icons";
-import { RoleWord } from "./role-word";
 
 /*
   A name and two sentences that sound like a person. The words that carry
-  weight are set in ink with a small glyph beside them; the rest stays grey.
-  The projects are not named here; they sit beside it, on the right.
+  weight are set in ink; the rest stays grey. The role is set in the serif's
+  italic, like a title card under a painting. The projects are not named
+  here; they hang beside it, on the right.
 */
 export function Intro() {
   const [a, b, c] = languages;
@@ -15,31 +14,13 @@ export function Intro() {
       <h1 className="intro-name">{person.name}</h1>
 
       <p>
-        I&rsquo;m a computer engineering student at{" "}
-        <b className="hi">
-          {person.school}
-          <CapIcon />
-        </b>{" "}
-        who likes <RoleWord>{person.role}</RoleWord>.
+        I&rsquo;m a computer engineering student at <b>{person.school}</b> who likes{" "}
+        <em className="intro-role">{person.role}</em>.
       </p>
 
       <p>
-        Backend, frontend, the tooling in between. I like{" "}
-        <b className="hi">
-          shipping
-          <LayersIcon />
-        </b>{" "}
-        things that work end to end, and{" "}
-        <b className="hi">
-          measuring
-          <BarsIcon />
-        </b>{" "}
-        that they do. Mostly <b>{a}</b>, <b>{b}</b> and{" "}
-        <b className="hi">
-          {c}
-          <CodeIcon />
-        </b>
-        .
+        Backend, frontend, the tooling in between. I like <b>shipping</b> things that work end to end, and{" "}
+        <b>measuring</b> that they do. Mostly <b>{a}</b>, <b>{b}</b> and <b>{c}</b>.
       </p>
     </section>
   );
