@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { BackHome } from "../back-home";
+import { BackLink } from "../back-link";
 import { asset } from "../paths";
 import { AskFromQuery, AskStatic } from "./ask-from-query";
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function AskPage() {
   return (
     <main className="page page-narrow">
-      <BackHome />
+      <BackLink />
 
       <figure className="hang hang-strip">
         <img className="hang-img" src={asset("/paintings/water-lilies.webp")} alt="" />
