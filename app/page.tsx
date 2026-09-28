@@ -16,9 +16,9 @@ function when(role: Role) {
 
 /*
   The front page, in two quiet columns. Left, you: a painting of a Maryland
-  terrapin, a name and two sentences, the ways out, the degree. Right, what
-  you've done: the roles, the work as one line per project (the demos hang
-  on /work), and a way into "Ask about me".
+  terrapin, a name and two sentences, the ways out, the degree, and a way
+  into "Ask about me". Right, what you've done: the roles, and the work as
+  one line per project (the demos hang on /work).
 */
 export default function Home() {
   return (
@@ -42,6 +42,10 @@ export default function Home() {
 
         <div className="in" style={{ "--i": 3 } as React.CSSProperties}>
           <DegreeProgress buildNow={Date.now()} />
+        </div>
+
+        <div className="in" style={{ "--i": 4 } as React.CSSProperties}>
+          <AskTeaser />
         </div>
       </div>
 
@@ -88,10 +92,6 @@ export default function Home() {
             ))}
           </ul>
         </section>
-
-        <div className="in" style={{ "--i": 4 } as React.CSSProperties}>
-          <AskTeaser />
-        </div>
       </div>
     </main>
   );
