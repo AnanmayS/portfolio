@@ -2,46 +2,44 @@
 @import "./art/tape.css";
 @import "./art/showdown.css";
 @import "./art/wildebeest.css";
-@import "./art/pond.css";
 
 /*
-  "Quiet". A neutral page: warm off-white or near-black ground, one ink, two
-  greys, hairlines, and one soft panel tone for the illustrations. There is
-  no accent colour. Emphasis is carried by the ink and by motion that
-  measures something: the degree bar, and one looping illustration per
-  project. Body copy sits in grey; the words that matter are set in ink.
+  "Gallery". A dark wall, the work hung on it in paintings. One warm ink,
+  greys for everything quieter, hairlines, and a single soft green for
+  what went right (with a muted coral for what went wrong, used only
+  inside the demos). Titles are set in a book serif, like the card beside
+  a painting; everything else is the sans.
 
-  Theme: the system preference by default. An explicit choice is stamped on
-  the root as data-appearance="light" | "dark" and stored in localStorage by
-  theme-toggle.tsx. Every colour is a token here and nowhere else.
+  Every colour is a token here and nowhere else.
 */
 :root {
-  color-scheme: light;
-  --background: #fbfbfb;
-  --foreground: #171717;
-  --muted: #707070;
-  --faint: #9a9a9a;
-  --border: #ebebeb;
-  --panel: #f2f2f2;
-  --panel-line: #d9d9d9;
-  --track: #e6e6e6;
-  --chip: #ececec;
-  --raised: #ffffff;
-  --surface: color-mix(in srgb, var(--foreground) 5%, transparent);
-  --danger: #b3261e;
-  --shadow: rgba(23, 23, 23, 0.18);
-  --float: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
-  --backdrop: rgba(23, 23, 23, 0.35);
-  --handle: #7da7f5;
+  color-scheme: dark;
+  --background: #131312;
+  --foreground: #ecebe6;
+  --soft: #c9c7c0;
+  --muted: #a9a7a0;
+  --faint: #8a8882;
+  --dim: #6e6c67;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --panel: #1c1b1a;
+  --plate: #1b1a19;
+  --chip: #242321;
+  --raised: #1f1e1c;
+  --track: rgba(255, 255, 255, 0.1);
+  --surface: rgba(255, 255, 255, 0.05);
+  --ok: #8fcfb4;
+  --bad: #d98e7a;
+  --danger: #e59c88;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --float: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --backdrop: rgba(0, 0, 0, 0.55);
 
-  --page: 82rem;
-  --side: 26.25rem;
+  --page: 84rem;
   --margin: 1.25rem;
-  --radius: 8px;
-  --radius-panel: 20px;
 
   --font-sans: var(--font-sans-face), system-ui, -apple-system, sans-serif;
-  --font-hand: var(--font-hand-face), "Segoe Script", cursive;
+  --font-serif: var(--font-serif-face), Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
@@ -49,44 +47,6 @@
   :root {
     --margin: 1.5rem;
   }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-appearance="light"]) {
-    color-scheme: dark;
-    --background: #131313;
-    --foreground: #f2f2f2;
-    --muted: #9a9a9a;
-    --faint: #6b6b6b;
-    --border: rgba(255, 255, 255, 0.1);
-    --panel: #1c1c1c;
-    --panel-line: rgba(255, 255, 255, 0.16);
-    --track: #262626;
-    --chip: #242424;
-    --raised: #1f1f1f;
-    --danger: #ff8f85;
-    --shadow: rgba(0, 0, 0, 0.5);
-    --float: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
-    --backdrop: rgba(0, 0, 0, 0.55);
-  }
-}
-
-:root[data-appearance="dark"] {
-  color-scheme: dark;
-  --background: #131313;
-  --foreground: #f2f2f2;
-  --muted: #9a9a9a;
-  --faint: #6b6b6b;
-  --border: rgba(255, 255, 255, 0.1);
-  --panel: #1c1c1c;
-  --panel-line: rgba(255, 255, 255, 0.16);
-  --track: #262626;
-  --chip: #242424;
-  --raised: #1f1f1f;
-  --danger: #ff8f85;
-  --shadow: rgba(0, 0, 0, 0.5);
-  --float: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
-  --backdrop: rgba(0, 0, 0, 0.55);
 }
 
 * {
@@ -113,12 +73,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-@media (pointer: coarse) {
-  body {
-    font-size: 1rem;
-  }
-}
-
 ::selection {
   background: var(--foreground);
   color: var(--background);
@@ -130,7 +84,7 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--foreground);
+  outline: 2px solid var(--ok);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -138,7 +92,8 @@ a {
 h1,
 h2,
 h3,
-p {
+p,
+figure {
   margin: 0;
 }
 
@@ -147,15 +102,23 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
+.section-title {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
 /* ---------- the split ---------- */
 
-/* One column on a phone; from 64rem, you on the left and the work on the
-   right, so the whole page is one screen on a laptop. */
+/* One column on a phone; from 64rem, two equal columns: you on the left,
+   the work on the right. */
 .split {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
-  width: min(100% - (var(--margin) * 2), 35rem);
+  gap: 3.5rem;
+  width: min(100% - (var(--margin) * 2), 38rem);
   margin: 0 auto;
   padding: 2rem 0 4rem;
 }
@@ -163,28 +126,21 @@ p {
 @media (min-width: 64rem) {
   .split {
     display: grid;
-    grid-template-columns: var(--side) minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
-    column-gap: 4.5rem;
+    column-gap: clamp(3rem, 6vw, 5.5rem);
     width: min(100% - 4rem, var(--page));
-    padding: 3rem 0;
+    padding: 3.5rem 0 5rem;
   }
 }
 
 .side {
   display: flex;
   flex-direction: column;
-  gap: 1.125rem;
+  gap: 1.75rem;
 }
 
-/* The pond's edges are feathered to nothing, so it can sit a little into
-   the gaps around it without looking cropped. */
-.side .art-pond {
-  margin: -0.75rem 0 -0.625rem;
-}
-
-/* Staggered entrance, the reference site's blur-and-rise. `--i` is the
-   block's index; later blocks start lower, blurrier, and a little later. */
+/* Staggered entrance: later blocks start lower, blurrier, and a little later. */
 .in {
   --i: 0;
   transform-origin: 50% 25%;
@@ -206,23 +162,47 @@ p {
   }
 }
 
+/* ---------- a painting on the wall ---------- */
+
+.hang {
+  padding: 0.75rem;
+  border-radius: 3px;
+  background: var(--panel);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.hang-img {
+  display: block;
+  width: 100%;
+  height: 18.75rem;
+  object-fit: cover;
+  object-position: 50% 55%;
+}
+
+.hang-strip .hang-img {
+  height: 11.25rem;
+}
+
 /* ---------- intro prose ---------- */
 
 .intro {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.875rem;
   color: var(--muted);
+  font-size: 1.0625rem;
   line-height: 1.6;
   text-wrap: pretty;
 }
 
 .intro-name {
+  margin-bottom: 0.25rem;
   color: var(--foreground);
-  font-size: 1.0625rem;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1.4;
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 4vw, 2.75rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
 
 .intro b {
@@ -230,172 +210,11 @@ p {
   font-weight: 500;
 }
 
-/* A weighted word with its glyph tucked against it. */
-.intro .hi {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  vertical-align: baseline;
-}
-
-.intro .hi svg {
-  position: relative;
-  top: 1px;
-  flex: none;
-}
-
-/* ---------- the handwritten role ---------- */
-
-.role {
-  position: relative;
-  display: inline-block;
-  margin: 0 0.05rem 0 0.15rem;
-  vertical-align: baseline;
-}
-
-.role-word {
-  position: relative;
-  display: inline-block;
-  border: 1px solid transparent;
-  padding: 0 0.4rem;
-  background: transparent;
+.intro-role {
   color: var(--foreground);
-  font: inherit;
-  line-height: 1.25;
-  cursor: text;
-  transition: border-color 120ms ease;
-}
-
-.role-word.role-hand {
-  font-family: var(--font-hand);
-  font-size: 1.3em;
-  font-weight: 500;
-}
-
-.role-word.role-sans {
-  font-family: var(--font-sans);
-}
-
-.role-word.role-mono {
-  font-family: var(--font-mono);
-  font-size: 0.9em;
-}
-
-.role-word.is-bold.role-hand {
-  font-weight: 600;
-}
-
-.role-word.is-bold.role-sans,
-.role-word.is-bold.role-mono {
-  font-weight: 600;
-}
-
-.role-word.is-italic {
+  font-family: var(--font-serif);
+  font-size: 1.15em;
   font-style: italic;
-}
-
-.role-word:hover,
-.role.is-open .role-word {
-  border-color: var(--handle);
-}
-
-.role-word:focus-visible {
-  outline: none;
-  border-color: var(--handle);
-}
-
-.role-handle {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border: 1px solid var(--handle);
-  background: var(--raised);
-  opacity: 0;
-  transition: opacity 120ms ease;
-}
-
-.role-word:hover .role-handle,
-.role.is-open .role-handle {
-  opacity: 1;
-}
-
-.role-handle:nth-of-type(1) { top: -3px; left: -3px; }
-.role-handle:nth-of-type(2) { top: -3px; right: -3px; }
-.role-handle:nth-of-type(3) { bottom: -3px; left: -3px; }
-.role-handle:nth-of-type(4) { bottom: -3px; right: -3px; }
-
-.role-tools {
-  position: absolute;
-  top: calc(100% + 0.45rem);
-  left: 50%;
-  z-index: 5;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 8px;
-  background: var(--raised);
-  box-shadow: var(--float);
-  transform: translateX(-50%);
-  white-space: nowrap;
-  animation: enter 160ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-.role-tools[hidden] {
-  display: none;
-}
-
-.role-tool {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  height: 1.5rem;
-  border: 0;
-  border-radius: 5px;
-  padding: 0 0.45rem;
-  background: transparent;
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: background-color 120ms ease;
-}
-
-.role-tool:hover {
-  background: var(--surface);
-}
-
-.role-tool[aria-pressed="true"] {
-  background: var(--chip);
-}
-
-.role-tool-face.role-hand {
-  font-family: var(--font-hand);
-  font-size: 0.9rem;
-}
-
-.role-tool-face.role-mono {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-}
-
-.role-tool-face svg {
-  color: var(--faint);
-}
-
-.role-tool-b {
-  font-weight: 700;
-}
-
-.role-tool-i {
-  font-style: italic;
-}
-
-.role-tools-rule {
-  width: 1px;
-  height: 0.9rem;
-  background: var(--border);
 }
 
 /* ---------- degree progress: the signature ---------- */
@@ -423,12 +242,12 @@ p {
   gap: 1rem;
   margin-top: 0.6rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
 }
 
 .degree-what {
-  color: var(--foreground);
+  color: var(--soft);
 }
 
 .degree-dot,
@@ -450,71 +269,54 @@ p {
   }
 }
 
+
 /* ---------- contact ---------- */
 
 .contact {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.375rem;
+  align-items: center;
+  gap: 0 1.25rem;
 }
 
 .contact-item {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  height: 1.875rem;
+  min-height: 2.75rem;
   border: 0;
-  border-radius: 999px;
-  padding: 0 0.7rem;
-  background: var(--chip);
-  color: var(--foreground);
+  padding: 0;
+  background: none;
+  color: var(--soft);
   font: inherit;
-  font-size: 0.78125rem;
+  font-size: 0.9375rem;
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 120ms ease, opacity 120ms ease;
-}
-
-.contact-item.mono {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  transition: color 120ms ease;
 }
 
 .contact-item:hover {
-  background: var(--track);
+  color: var(--ok);
 }
 
-/* The one filled button: it starts a conversation. */
-.contact-mail,
-.contact-mail:hover {
-  background: var(--foreground);
-  color: var(--background);
+.contact-strong {
+  color: var(--foreground);
 }
 
-.contact-mail:hover {
-  opacity: 0.85;
-}
-
-@media (pointer: coarse) {
-  .contact-item {
-    height: 2.5rem;
-    padding: 0 0.9rem;
-  }
+.contact-ask {
+  color: var(--ok);
 }
 
 /* ---------- experience ---------- */
 
-.section-title {
-  color: var(--faint);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
 .xp {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+}
+
+.xp .section-title {
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid var(--border-strong);
 }
 
 .xp-list {
@@ -526,19 +328,21 @@ p {
 .xp-row {
   display: flex;
   flex-direction: column;
-  padding: 0.5625rem 0;
-  border-top: 1px solid var(--border);
-  font-size: 0.875rem;
+  gap: 0.25rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 1rem;
 }
 
 .xp-line {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: 0.75rem;
 }
 
 .xp-company {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .xp-title,
@@ -547,13 +351,13 @@ p {
 }
 
 .xp-result {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
 }
 
 .xp-when {
   flex: none;
   color: var(--faint);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 
 /* ---------- work ---------- */
@@ -561,7 +365,7 @@ p {
 .work {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .work-head {
@@ -569,28 +373,13 @@ p {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid var(--border-strong);
 }
 
 .work-meta {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
   color: var(--faint);
-  font-size: 0.75rem;
-}
-
-.work-meta button {
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  cursor: pointer;
-  transition: color 120ms ease;
-}
-
-.work-meta button:hover {
-  color: var(--foreground);
+  font-size: 0.8125rem;
 }
 
 .clock {
@@ -598,175 +387,284 @@ p {
   min-width: 4.5em;
 }
 
-/* Each project is one compact row: its illustration always playing, small,
-   on the left; on the right its name, the number that says it works, one
-   sentence, and the stack. The whole row links to the code. */
 .projects {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
 }
 
+/* Each project: its demo hung in a painting, then the card beside it. The
+   whole thing opens the project's page. */
 .project {
   display: flex;
-  align-items: stretch;
-  border-radius: 0.875rem;
-  background: var(--panel);
-  overflow: hidden;
-  transition: background-color 160ms ease;
-}
-
-.project:hover {
-  background: var(--chip);
-}
-
-/* Hairlines inside the art are nudged darker so they still read on it. */
-.project-art {
-  --border: var(--panel-line);
-  display: flex;
-  flex: 0 0 min(27.5rem, 55%);
-  align-items: center;
-  padding: 0.625rem 0.875rem;
-  background: color-mix(in srgb, var(--foreground) 3%, var(--panel));
-}
-
-.project-art .art {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* The art enlarges its type on narrow screens for a full-width figure; in a
-   row it keeps its drawn size. */
-.project-art .tape-label,
-.project-art .tape-num {
-  font-size: 11px;
-}
-
-.project-art .art-wb {
-  --wb-fs: 11px;
-  --wb-fs-num: 12px;
+  flex-direction: column;
+  gap: 1.125rem;
+  padding: 1.5rem 0 1.75rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .project-body {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.875rem 1.125rem;
+  gap: 0.5rem;
 }
 
 .project-line {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.25rem 0.75rem;
 }
 
 .project-name {
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  line-height: 1.1;
+  transition: color 200ms ease;
+}
+
+.project:hover .project-name {
+  color: var(--ok);
 }
 
 .project-year {
-  margin-left: auto;
   color: var(--faint);
-  font-size: 0.75rem;
-}
-
-.project-out {
-  align-self: center;
-  color: var(--faint);
-  transition: color 160ms ease, transform 160ms ease;
-}
-
-.project:hover .project-out {
-  color: var(--foreground);
-  transform: translate(1px, -1px);
+  font-size: 0.8125rem;
 }
 
 .project-metric {
+  margin-left: auto;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 
 .project-metric b {
   color: var(--foreground);
-  font-weight: 500;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .project-lede {
-  color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.5;
+  color: var(--soft);
+  font-size: 0.9375rem;
+  line-height: 1.55;
   text-wrap: pretty;
 }
 
 .project-stack {
-  margin-top: auto;
-  padding-top: 0.25rem;
   color: var(--faint);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
 }
 
-/* Too narrow for art and words side by side: art on top. */
+/* ---------- the frame: a demo hung in its painting ---------- */
+
+.frame {
+  position: relative;
+  isolation: isolate;
+  padding: 1.25rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.frame-mat {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 800ms ease;
+}
+
+.project:hover .frame-mat {
+  transform: scale(1.04);
+}
+
+.frame-plate {
+  padding: 1rem 1.125rem 0.75rem;
+  border-radius: 6px;
+  background: var(--plate);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.frame-large {
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.frame-large .frame-plate {
+  padding: 1.5rem 1.75rem 1.125rem;
+}
+
+/* On a phone the demo needs every pixel: a thinner painted border, a
+   tighter plate, and the metric on its own line. */
 @media (max-width: 40rem) {
-  .project {
-    flex-direction: column;
+  .frame,
+  .frame-large {
+    padding: 0.625rem;
   }
 
-  .project-art {
-    flex-basis: auto;
+  .frame-plate,
+  .frame-large .frame-plate {
+    padding: 0.5rem 0.5rem 0.375rem;
+  }
+
+  .project-metric {
+    flex-basis: 100%;
+    margin-left: 0;
   }
 }
+
+/* ---------- inside the demos ---------- */
+
+/* Drawn in a 720-wide viewBox and scaled to the plate; clipped so nothing
+   that slides (a wipe, a photo) ever spills onto the painting. */
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.art text { font-family: var(--font-sans); }
+.art .mono { font-family: var(--font-mono); }
+.art-label { fill: var(--faint); font-size: 12px; }
+.art-small { fill: var(--faint); font-size: 11px; }
+.art-tiny { fill: var(--faint); font-size: 10px; }
+.art-soft { fill: var(--soft); }
+.art-muted { fill: var(--muted); }
+.art-strong { fill: var(--foreground); }
+.art-bold { font-weight: 600; }
+.art-ok { fill: var(--ok); }
+.art-bad { fill: var(--bad); }
+.art .art-fact { fill: var(--foreground); font-family: var(--font-serif); font-size: 24px; }
+.art-tag { font-size: 11px; }
+.art-tag-ok { fill: var(--ok); }
+.art-tag-ink { fill: var(--foreground); font-weight: 600; }
+.art-tag-bad { fill: var(--bad); }
+.art-tray { stroke: var(--border-strong); stroke-dasharray: 3 3; }
+.art-box { stroke: rgba(255, 255, 255, 0.2); fill: rgba(255, 255, 255, 0.03); }
+.art-hair { stroke: var(--border); }
+.art-hair-strong { stroke: var(--faint); }
+.art-rule { stroke: rgba(255, 255, 255, 0.1); }
+.art-arrow { stroke: var(--dim); }
+.art-line { stroke: var(--foreground); stroke-linejoin: round; }
+.art-track { fill: rgba(255, 255, 255, 0.07); }
+.art-bar-before { fill: var(--dim); }
+.art-bar-after { fill: var(--ok); }
+.art-bar-ink { fill: var(--foreground); }
 
 /* ---------- ask about me ---------- */
 
-/* A quiet box under the work: a short thread that scrolls inside a fixed
-   height, three starter questions, and one input. */
-.ask {
+.ask-teaser {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
-  margin-top: 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 0.875rem;
-  padding: 0.875rem 1rem 1rem;
+  gap: 0.875rem;
+  padding: 1.25rem 1.375rem;
+  border-radius: 6px;
+  background: var(--plate);
+  box-shadow: inset 0 0 0 1px var(--border);
 }
 
 .ask-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.25rem 0.75rem;
 }
 
 .ask-note {
   color: var(--faint);
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
+}
+
+.ask-me {
+  color: var(--soft);
+  font-size: 1rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.ask-starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ask-starter {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0 0.875rem;
+  background: transparent;
+  color: var(--soft);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.ask-starter:hover:not(:disabled) {
+  border-color: var(--faint);
+  color: var(--foreground);
+}
+
+.ask-starter:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ask-open {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  color: var(--ok);
+  font-size: 0.9375rem;
+}
+
+/* The chat on /ask. */
+.ask {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .ask-thread {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  height: 7.5rem;
+  gap: 0.875rem;
+  min-height: 16rem;
+  max-height: 55vh;
   overflow-y: auto;
-  font-size: 0.875rem;
-  line-height: 1.55;
+  padding: 1.25rem;
+  border-radius: 8px;
+  background: var(--plate);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-size: 1rem;
+  line-height: 1.6;
   scrollbar-width: thin;
 }
 
-.ask-me {
-  color: var(--muted);
-  text-wrap: pretty;
+.ask-thread .ask-me,
+.ask-you {
+  max-width: 85%;
+  border-radius: 12px;
+  padding: 0.625rem 0.875rem;
+}
+
+.ask-thread .ask-me {
+  align-self: flex-start;
+  background: var(--chip);
 }
 
 .ask-you {
   align-self: flex-end;
-  max-width: 80%;
-  border-radius: 0.75rem 0.75rem 0.25rem 0.75rem;
-  padding: 0.3rem 0.7rem;
-  background: var(--chip);
-  color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
 }
 
 /* Three dots breathing while the answer is on its way. */
@@ -791,58 +689,21 @@ p {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ask-wait {
-    animation: none;
-  }
-}
-
 .ask-mail {
   border: 0;
   border-radius: 999px;
-  padding: 0.05rem 0.55rem;
-  background: var(--foreground);
+  padding: 0.1rem 0.6rem;
+  background: var(--ok);
   color: var(--background);
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   cursor: pointer;
-}
-
-.ask-starters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-}
-
-.ask-starter {
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: color 120ms ease, border-color 120ms ease;
-}
-
-.ask-starter:hover:not(:disabled) {
-  border-color: var(--faint);
-  color: var(--foreground);
-}
-
-.ask-starter:disabled {
-  opacity: 0.5;
-  cursor: default;
 }
 
 .ask-form {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  border-radius: 999px;
-  padding: 0.25rem 0.25rem 0.25rem 0.9rem;
-  background: var(--panel);
+  gap: 0.625rem;
 }
 
 .ask-label {
@@ -856,31 +717,33 @@ p {
 
 .ask-input {
   flex: 1;
-  min-height: 2rem;
-  border: 0;
-  outline: none;
-  background: transparent;
+  height: 3rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 0 1rem;
+  background: var(--plate);
   color: var(--foreground);
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
 .ask-input::placeholder {
   color: var(--faint);
 }
 
-.ask-form:focus-within {
-  box-shadow: 0 0 0 1.5px var(--foreground);
+.ask-input:focus {
+  outline: none;
+  border-color: var(--faint);
 }
 
 .ask-send {
   display: grid;
   place-items: center;
   flex: none;
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--foreground);
   color: var(--background);
   cursor: pointer;
@@ -892,11 +755,169 @@ p {
   cursor: default;
 }
 
-@media (pointer: coarse) {
-  .ask-send {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
+/* ---------- inner pages: a project, the chat ---------- */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: min(100% - (var(--margin) * 2), 68.75rem);
+  margin: 0 auto;
+  padding: clamp(1.75rem, 5vh, 3.5rem) 0 4rem;
+}
+
+.page-narrow {
+  width: min(100% - (var(--margin) * 2), 51.25rem);
+}
+
+.back {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  transition: color 120ms ease;
+}
+
+.back:hover {
+  color: var(--foreground);
+}
+
+.back-icon {
+  transform: scaleX(-1);
+}
+
+.page-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.75rem, 6vw, 4.25rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.page-sub {
+  color: var(--faint);
+  font-size: 0.9375rem;
+}
+
+.exhibit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 2rem 4.5rem;
+  margin-top: 1rem;
+}
+
+.exhibit-main {
+  display: flex;
+  flex: 1 1 30rem;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exhibit-year {
+  color: var(--faint);
+  font-size: 0.8125rem;
+}
+
+.exhibit-lede {
+  color: var(--soft);
+  font-size: 1.3125rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.exhibit-facts {
+  display: flex;
+  flex: 0 1 18.75rem;
+  flex-direction: column;
+}
+
+.exhibit-fact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border-strong);
+}
+
+.exhibit-num {
+  font-family: var(--font-serif);
+  font-size: 2.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.exhibit-label {
+  color: var(--muted);
+}
+
+.exhibit-key {
+  color: var(--faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.exhibit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 3rem;
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  font-size: 1rem;
+  transition: color 120ms ease;
+}
+
+.exhibit-link:hover {
+  color: var(--ok);
+}
+
+.walk {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.walk-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.5rem 0;
+}
+
+.walk-next {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.walk-key {
+  color: var(--faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.walk-name {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  transition: color 200ms ease;
+}
+
+.walk-item:hover .walk-name {
+  color: var(--ok);
 }
 
 /* ---------- the email card ---------- */

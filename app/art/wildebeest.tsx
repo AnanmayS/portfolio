@@ -1,254 +1,186 @@
 /*
-  Wildebeest: one photo's lease, lost to a crash, recovered two ways.
+  Wildebeest, told so anyone can follow it at a glance.
 
-  Both lanes are the same moment: a worker holding a photo is SIGKILLed 0.4 s
-  in. The top lane is the first version, which only noticed a dead worker by
-  its silence: three missed 2 s heartbeats, so the photo sits leased to a
-  corpse until the 6 s timeout and is re-claimed 5.6 s after the kill. The
-  lane below is the current one, which listens for Docker's `die` event and has
-  the photo back in someone's hands 0.16 s after the kill. Both gaps are to
-  scale on one axis, and the sweep runs in real time, so the reader waits
-  exactly as long as the photo did.
+  Three camera-trap photos go through the two AI models, two workers per
+  model, so two photos are handled at once. MegaDetector asks "anything
+  there?" and throws the empty one out; SpeciesNet names the animal. Midway,
+  worker 3 crashes holding the zebra: worker 4 picks the photo up 0.16 s
+  later, and when w3 wakes up late its old answer is refused (the fencing
+  token), so nothing is counted twice. Underneath, the first version against
+  now on the three numbers that changed.
 
-  Underneath, the reason a crash can't double-count: every lease carries an
-  epoch. The replacement writes with epoch 2; a frozen worker that wakes late
-  and still holds epoch 1 is refused at the write.
+  One 9 s loop, driven from app/art/wildebeest.css. The un-animated state is
+  the finished frame: both photos sorted, w3 crossed out.
 
-  Numbers: benchmarks/ceiling/results.md (recovery p50 5,562 ms before, 163 ms
-  after) and benchmarks/faults/results.md (30 injected faults, 0 violations).
-
-  Everything on the lanes is to scale on one axis: x = 86 + PPS * seconds.
+  Numbers: the Wildebeest README results table (recovery 5.6 s → 0.16 s,
+  ~240 → ~4,500 tasks handed out a second, 156 ms → 15 ms wait) and its
+  fault matrix (30 injected crashes, 0 photos lost or counted twice).
 */
 
-type Block = { x: number; w: number };
+type Photo = {
+  stamp: string;
+  subject: React.ReactNode;
+  tags: { cls: string; text: string; tone: "ok" | "ink" | "bad" }[];
+};
 
-const X0 = 86; // 0 s
-const AXIS = 6.5; // seconds the axis spans
-const PPS = 480 / AXIS; // pixels per second, so the axis ends at x = 566
-const H = 12; // bar height
-const GAP = 2;
+const INK = "#2a2622";
 
-const round = (v: number) => Math.round(v * 100) / 100;
-const at = (t: number) => round(X0 + PPS * t);
-const block = (t: number, d: number): Block => ({
-  x: at(t),
-  w: round(Math.max(8, PPS * d - GAP)),
-});
+const PHOTOS: Record<"p1" | "p2" | "p3", Photo> = {
+  p1: {
+    stamp: "06:14",
+    subject: (
+      <>
+        <path d="M22 23Q30 18 42 22L44 31Q33 33 23 31Z" fill={INK} />
+        <path d="M23 24L15 29L14 34L18 34L23 30Z" fill={INK} />
+        <path d="M16 29q-3-3 0-5M17 28q2-4 4-3" stroke={INK} strokeWidth="1.2" />
+        <path d="M25 31V39M29 31V39M39 31V39M42 31V39" stroke={INK} strokeWidth="2" />
+        <path d="M44 24q3 3 3 8" stroke={INK} strokeWidth="1.2" />
+      </>
+    ),
+    tags: [
+      { cls: "wb-t1a", text: "animal ✓", tone: "ok" },
+      { cls: "wb-t1b", text: "wildebeest", tone: "ink" },
+    ],
+  },
+  p2: {
+    stamp: "02:47",
+    subject: <path d="M10 31l2-5 1 5M30 33l2-6 2 6M50 30l1-4 2 4" stroke="#6f6040" strokeWidth="1.2" />,
+    tags: [{ cls: "wb-t2", text: "empty, thrown out", tone: "bad" }],
+  },
+  p3: {
+    stamp: "17:05",
+    subject: (
+      <>
+        <path d="M20 22Q32 18 44 22L43 31Q32 33 21 31Z" fill="#e6e1d6" />
+        <path d="M25 21V31M29 20V32M33 20V32M37 20V32M41 21V31" stroke={INK} strokeWidth="1.4" />
+        <path d="M43 23L50 17L53 19L47 27Z" fill="#e6e1d6" />
+        <path d="M43 22L49 16" stroke={INK} strokeWidth="1.4" />
+        <path d="M23 31V39M26 31V39M38 31V39M41 31V39" stroke={INK} strokeWidth="2" />
+        <path d="M20 23q-3 3-2 8" stroke={INK} strokeWidth="1.2" />
+      </>
+    ),
+    tags: [
+      { cls: "wb-t3a", text: "animal ✓", tone: "ok" },
+      { cls: "wb-t3b", text: "zebra", tone: "ink" },
+    ],
+  },
+};
 
-const KILL = 0.4; // the worker is killed
-const HEARTBEAT = 2; // seconds between heartbeats; three missed is dead
-const BEFORE = KILL + 5.6; // re-claimed after the heartbeat timeout
-const AFTER = KILL + 0.16; // re-claimed on the Docker die event
-const WORK = 0.5; // the photo, drawn running again on its new worker
+/* A 64×48 camera-trap photo: sky, grass, the subject, the trap's clock,
+   and its label underneath, which travels with it. */
+function PhotoCard({ id }: { id: keyof typeof PHOTOS }) {
+  const { stamp, subject, tags } = PHOTOS[id];
+  return (
+    <g transform="translate(12 77)">
+      <g className={`wb-p wb-${id}`}>
+        <path d="M4 0H60a4 4 0 0 1 4 4V28H0V4a4 4 0 0 1 4-4Z" fill="#7f8f8c" />
+        <path d="M0 28H64V44a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4Z" fill="#9a8757" />
+        {subject}
+        <text className="mono" x="4" y="9" fill="#f4f3ee" fillOpacity="0.75" fontSize="6">
+          {stamp}
+        </text>
+        <rect x="0.5" y="0.5" width="63" height="47" rx="4" stroke="rgba(255,255,255,0.3)" />
+        {tags.map((tag) => (
+          <text key={tag.cls} className={`art-tag art-tag-${tag.tone} ${tag.cls}`} x="32" y="61" textAnchor="middle">
+            {tag.text}
+          </text>
+        ))}
+      </g>
+    </g>
+  );
+}
 
-const LANE_A = 24; // before
-const LANE_B = 64; // after
-const MID = H / 2;
-
-/* The missed-heartbeat circle at 6 s sits where the re-claim starts, so the
-   re-claimed bar starts just past its edge. */
-const HB_R = 3;
-const RAN = block(0, KILL);
-const BEFORE_BLK = block(BEFORE + (HB_R + 1) / PPS, WORK);
-const AFTER_BLK = block(AFTER, WORK);
+/* First version against now: a grey bar and a green one, each with its value. */
+const COMPARE = [
+  { x: 0, label: "time to recover from a crash", before: [140, "5.6 s before"], after: [4, "0.16 s now"] },
+  { x: 245, label: "tasks handed out per second", before: [7.5, "~240 before"], after: [140, "~4,500 now"] },
+  { x: 490, label: "wait for a task", before: [140, "156 ms before"], after: [13.5, "15 ms now"] },
+] as const;
 
 export function WildebeestArt() {
   return (
     <svg
       className="art art-wb"
-      viewBox="0 0 720 208"
+      viewBox="0 0 720 302"
       role="img"
-      aria-label="A worker holding a photo is killed 0.4 seconds in. In the first version the photo waits for three missed heartbeats and is re-claimed 5.6 seconds later; in the current version a Docker die event hands it to another worker 0.16 seconds later. Below, the replacement writes its result with lease epoch 2 and is accepted, while a frozen worker that wakes late with epoch 1 is refused with 409 stale lease. Over 30 injected faults, no photo was lost or counted twice."
+      aria-label="Camera-trap photos are shared out across several workers. MegaDetector throws out empty photos and SpeciesNet names the animal, a wildebeest and then a zebra, two photos at a time. Midway, worker 3 crashes while holding the zebra photo; worker 4 picks it up 0.16 seconds later, and a late answer from worker 3 is refused. Compared with the first version: crash recovery went from 5.6 seconds to 0.16, tasks handed out per second from about 240 to about 4,500, and wait for a task from 156 milliseconds to 15. Over 1,000 real photos, 0 failures; over 30 injected crashes, no photo lost or counted twice."
       fill="none"
     >
-      {/* ---- lane labels ---- */}
-      <text className="wb-label" x="64" y={LANE_A + 10} textAnchor="end">
-        before
+      {/* ---- the four stages ---- */}
+      <text className="art-label" x="44" y="22" textAnchor="middle">
+        camera trap
       </text>
-      <text className="wb-label" x="64" y={LANE_B + 10} textAnchor="end">
-        after
+      <text className="art-label" x="230" y="22" textAnchor="middle">
+        <tspan className="art-strong">MegaDetector</tspan> · anything there?
+      </text>
+      <text className="art-label" x="450" y="22" textAnchor="middle">
+        <tspan className="art-strong">SpeciesNet</tspan> · what animal?
+      </text>
+      <text className="art-label" x="640" y="22" textAnchor="middle">
+        sorted
       </text>
 
-      {/* ---- the kill, through both lanes ---- */}
-      <g className="wb-kill">
-        <text className="wb-label" x={at(KILL)} y="14" textAnchor="middle">
-          kill
-        </text>
-        <line
-          className="wb-kill-line"
-          x1={at(KILL)}
-          y1="20"
-          x2={at(KILL)}
-          y2={LANE_B + H + 4}
-        />
-      </g>
-
-      {/* ---- both lanes, drawn left to right in real time ---- */}
-      <g className="wb-sweep">
-        {/* pins the group's box to the whole axis, so the sweep's inset is in
-            axis fractions */}
-        <rect x={X0} y={LANE_A} width={480} height={LANE_B + H - LANE_A} />
-
-        {/* before: silence, three missed heartbeats, then re-claimed */}
-        <rect
-          className="wb-dead wb-dead-base"
-          x={RAN.x}
-          y={LANE_A}
-          width={RAN.w}
-          height={H}
-          rx="2"
-        />
-        <line
-          className="wb-wait"
-          x1={at(KILL)}
-          y1={LANE_A + MID}
-          x2={at(BEFORE)}
-          y2={LANE_A + MID}
-        />
-        {[1, 2, 3].map((n) => (
-          <circle
-            key={n}
-            className="wb-miss"
-            cx={at(n * HEARTBEAT)}
-            cy={LANE_A + MID}
-            r={HB_R}
-          />
-        ))}
-        <rect
-          className="wb-blk wb-base"
-          x={BEFORE_BLK.x}
-          y={LANE_A}
-          width={BEFORE_BLK.w}
-          height={H}
-          rx="2"
-        />
-
-        {/* after: a sliver of a gap, then re-claimed */}
-        <rect
-          className="wb-dead"
-          x={RAN.x}
-          y={LANE_B}
-          width={RAN.w}
-          height={H}
-          rx="2"
-        />
-        <line
-          className="wb-wait"
-          x1={at(KILL)}
-          y1={LANE_B + MID}
-          x2={at(AFTER)}
-          y2={LANE_B + MID}
-        />
-        <rect
-          className="wb-blk"
-          x={AFTER_BLK.x}
-          y={LANE_B}
-          width={AFTER_BLK.w}
-          height={H}
-          rx="2"
-        />
-      </g>
-
-      {/* the photo running on the worker that dies: solid until the kill */}
-      <rect
-        className="wb-blk wb-base wb-run"
-        x={RAN.x}
-        y={LANE_A}
-        width={RAN.w}
-        height={H}
-        rx="2"
-      />
-      <rect
-        className="wb-blk wb-run"
-        x={RAN.x}
-        y={LANE_B}
-        width={RAN.w}
-        height={H}
-        rx="2"
+      <rect className="art-tray" x="6" y="70" width="76" height="62" rx="6" />
+      <rect className="art-box" x="160" y="34" width="140" height="148" rx="8" />
+      <rect className="art-box" x="380" y="34" width="140" height="148" rx="8" />
+      <line className="art-hair" x1="164" y1="108" x2="296" y2="108" />
+      <line className="art-hair" x1="384" y1="108" x2="516" y2="108" />
+      <rect className="wb-w3box" x="384" y="38" width="132" height="68" rx="6" stroke="none" />
+      <rect className="art-tray" x="564" y="34" width="152" height="86" rx="6" />
+      <path
+        className="art-arrow"
+        d="M88 101H152M147 97l5 4-5 4M306 101H372M367 97l5 4-5 4M526 76H556M551 72l5 4-5 4"
       />
 
-      {/* the playhead, one real second per second */}
-      <line
-        className="wb-head"
-        x1={X0}
-        y1="20"
-        x2={X0}
-        y2={LANE_B + H + 4}
-      />
-
-      {/* ---- how each version noticed ---- */}
-      <text className="wb-label wb-in-hb" x={at(HEARTBEAT) - HB_R} y="52">
-        missed heartbeats
+      {/* ---- the workers ---- */}
+      <text className="art-small" x="172" y="72">
+        w1
       </text>
-      <text className="wb-label wb-in-a" x={at(AFTER) + 8} y="92">
-        docker die event
+      <text className="art-small" x="172" y="138">
+        w2
+      </text>
+      <text className="art-small wb-w3ok" x="392" y="72">
+        w3
+      </text>
+      <text className="art-small art-bad wb-w3x" x="392" y="72">
+        w3 ✕
+      </text>
+      <text className="art-small" x="392" y="138">
+        w4
       </text>
 
-      {/* ---- re-claim marks ---- */}
-      <line className="wb-mark wb-in-a" x1={at(AFTER)} y1="60" x2={at(AFTER)} y2="108" />
-      <line className="wb-mark wb-in-b" x1={at(BEFORE)} y1="20" x2={at(BEFORE)} y2="108" />
+      {/* ---- the photos, zebra first so the wildebeest rides on top ---- */}
+      <PhotoCard id="p3" />
+      <PhotoCard id="p2" />
+      <PhotoCard id="p1" />
 
-      {/* ---- axis ---- */}
-      <line className="wb-rule" x1={X0} y1="104" x2={at(AXIS)} y2="104" />
-      {[0, 2, 4, 6].map((t) => (
-        <line key={t} className="wb-rule" x1={at(t)} y1="104" x2={at(t)} y2="109" />
+      <text className="art-label art-ok wb-rec" x="450" y="200" textAnchor="middle">
+        w3 crashed · w4 picked the photo up in 0.16 s
+      </text>
+      <text className="art-label art-bad wb-late" x="450" y="200" textAnchor="middle">
+        w3 woke up late · its old answer was refused
+      </text>
+
+      {/* ---- first version against now ---- */}
+      <line className="art-rule" x1="0" y1="214" x2="720" y2="214" />
+      {COMPARE.map(({ x, label, before, after }) => (
+        <g key={label}>
+          <text className="art-label art-soft" x={x} y="234">
+            {label}
+          </text>
+          <rect className="art-bar-before" x={x} y="243" width={before[0]} height="8" rx="2" />
+          <text className="art-small" x={x + before[0] + 6} y="251">
+            {before[1]}
+          </text>
+          <rect className="art-bar-after" x={x} y="258" width={after[0]} height="8" rx="2" />
+          <text className="art-small art-ok art-bold" x={x + after[0] + 6} y="266">
+            {after[1]}
+          </text>
+        </g>
       ))}
-      <text className="wb-label" x={X0} y="124">
-        0 s
-      </text>
-      <text className="wb-label" x={at(2)} y="124" textAnchor="middle">
-        2
-      </text>
-      <text className="wb-label" x={at(4)} y="124" textAnchor="middle">
-        4
-      </text>
-      <text className="wb-label" x={at(6)} y="124" textAnchor="middle">
-        6 s
-      </text>
-
-      {/* ---- readout: kill to re-claimed ---- */}
-      <text className="wb-label wb-in-b" x="580" y={LANE_A + 10}>
-        5.6 s
-      </text>
-      <text className="wb-num wb-in-a" x="580" y={LANE_B + 10}>
-        0.16 s
-      </text>
-      <text className="wb-label wb-in-a" x="580" y="92">
-        to re-claim
-      </text>
-
-      {/* ---- fencing: the late writer is refused at the write ---- */}
-      <g className="wb-fa">
-        <text className="wb-ink" x="86" y="152">
-          new lease · epoch 2
-        </text>
-        <path className="wb-arrow" d="M300 148H340M335 144L340 148L335 152" />
-        <rect className="wb-store" x="346" y="136" width="76" height="42" rx="4" />
-        <text className="wb-label" x="384" y="161" textAnchor="middle">
-          result
-        </text>
-        <text className="wb-ink" x="434" y="152">
-          written once
-        </text>
-      </g>
-
-      <g className="wb-fb">
-        <text className="wb-label" x="86" y="174">
-          late write · epoch 1
-        </text>
-        <path className="wb-arrow wb-refused" d="M300 170H334" />
-      </g>
-
-      <g className="wb-fc">
-        <path className="wb-arrow" d="M340 165V175" />
-        <text className="wb-label" x="434" y="174">
-          409 stale lease
-        </text>
-      </g>
-
-      {/* ---- the whole fault matrix, in one line ---- */}
-      <text className="wb-label wb-fin" x="86" y="202">
-        30 injected faults · 0 photos lost or counted twice
+      <text className="art-small" x="0" y="294">
+        scheduler written from scratch on Postgres + Redis · 1,000 real photos, 0 failures · 0 photos lost over 30
+        crashes
       </text>
     </svg>
   );
