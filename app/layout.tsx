@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Compose } from "./compose";
 import { basePath } from "./paths";
+import { Preloader, preloadScript } from "./preloader";
 import "./globals.css";
 
 /* The faces live in app/fonts (Latin, variable, all SIL OFL) rather than
@@ -59,8 +60,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
+    /* The preload script stamps the root before hydration; React need not mind. */
+    <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: preloadScript }} />
+      </head>
       <body>
+        <Preloader />
         {children}
         <Compose />
       </body>

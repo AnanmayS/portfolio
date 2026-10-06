@@ -1252,6 +1252,123 @@ figure {
   }
 }
 
+/* ---------- preloader ---------- */
+
+/* Hidden unless the head script stamped this as the first page of a visit.
+   The page enters underneath on the usual stagger, just later. */
+.preloader {
+  display: none;
+}
+
+:root[data-preload] .preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--margin);
+  background: var(--background);
+  animation: preloader-out 450ms cubic-bezier(0.4, 0, 0.2, 1) 1150ms forwards;
+}
+
+:root[data-preload] .in {
+  animation-delay: calc(1250ms + var(--i) * 60ms);
+}
+
+:root[data-preload] .degree-fill {
+  animation-delay: 1510ms;
+}
+
+.preloader-card {
+  display: grid;
+  gap: 0.85rem;
+  width: min(100%, 26rem);
+  animation:
+    preloader-in 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms both,
+    preloader-lift 450ms cubic-bezier(0.4, 0, 0.2, 1) 1150ms forwards;
+}
+
+.preloader-name {
+  color: var(--foreground);
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.preloader-track {
+  display: block;
+  height: 1px;
+  overflow: hidden;
+  background: var(--track);
+}
+
+.preloader-fill {
+  display: block;
+  height: 100%;
+  background: var(--ok);
+  transform-origin: left center;
+  animation: degree-fill 900ms cubic-bezier(0.65, 0, 0.35, 1) 200ms both;
+}
+
+.preloader-meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--faint);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* The counter is CSS, so it ticks before any JavaScript has loaded. */
+@property --preload-n {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.preloader-count {
+  counter-reset: preload var(--preload-n);
+  animation: preloader-count 900ms cubic-bezier(0.65, 0, 0.35, 1) 200ms both;
+}
+
+.preloader-count::after {
+  content: counter(preload, decimal-leading-zero);
+}
+
+@keyframes preloader-count {
+  from {
+    --preload-n: 0;
+  }
+
+  to {
+    --preload-n: 100;
+  }
+}
+
+@keyframes preloader-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(6px);
+  }
+}
+
+@keyframes preloader-lift {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes preloader-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
 /* ---------- motion ---------- */
 
 @keyframes degree-fill {
