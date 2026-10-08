@@ -24,7 +24,7 @@ typography:
     usage: "Everything that is a sentence, a name, or a row"
   serif:
     fontFamily: "Newsreader"
-    usage: "Page titles on the inner pages (/work, /ask) only"
+    usage: "Page titles on the inner pages (/work and each project) only"
   mono:
     fontFamily: "Geist Mono"
     weight: 400
@@ -45,8 +45,8 @@ The front page borrows the posture of an agent dashboard: a hero image with
 a short line of controls over it, then a grid of small bordered cards that
 read like status panels. The hero is an impressionist painting of Venice at
 dusk, dimmed and faded into the page ground, with the name set large over
-the glow and two buttons under it. Below, two columns: About, Experience and
-Find me on the left; Projects and Ask about me on the right. The last card
+the glow and one button under it. Below, two columns: About, Experience and
+Find me on the left; Projects on the right. The last card
 in each column stretches so both columns end on the same line.
 
 Everything on the cards is a row: a name, a mono tag at the right, one grey
@@ -54,7 +54,7 @@ line of text. Status is a 7px dot, green for current, grey for past. There
 is no accent colour beyond those dots and the sun-orange eyebrow over the
 name, which is pulled from the painting.
 
-The inner pages (/work, each project, /ask) keep their gallery layout and
+The inner pages (/work, each project) keep their gallery layout and
 serif titles, on the same dark ground.
 
 ## Colour
@@ -82,7 +82,10 @@ late write from a stale lease epoch; Tape captures, loses the feed, flags
 the hole, replays compressed, and matches the digest; ShowdownRL plays
 four turns on a real battlefield, Charizard against Blastoise with a switch
 to Venusaur, the masked policy beside it, and lands on the measured win rate
-over the baseline.
+over the baseline; Pit Wall replays the real 2025 Hungarian Grand Prix lap by
+lap to the stop that cost Piastri the win, asks what if he had stayed out,
+fans 10,000 simulated finishes out from that lap and fills the bars with
+where they ended.
 
 The pond is the exception that proves the rule: a picture, not a mechanism.
 Sunlight is two layers of turbulence drifting against each other, the

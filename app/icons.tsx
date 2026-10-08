@@ -54,14 +54,6 @@ export function OutIcon(props: IconProps) {
   );
 }
 
-export function ChevronIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M6 9l6 6 6-6" />
-    </Icon>
-  );
-}
-
 export function PersonIcon(props: IconProps) {
   return (
     <Icon {...props}>
@@ -96,15 +88,6 @@ export function ForkIcon(props: IconProps) {
       <circle cx="6" cy="18" r="3" />
       <circle cx="18" cy="6" r="3" />
       <path d="M6 9v6M18 9a9 9 0 0 1-9 9" />
-    </Icon>
-  );
-}
-
-export function SparkIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
-      <path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" />
     </Icon>
   );
 }

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { BackLink } from "../../back-link";
 import { projects } from "../../content";
 import { Framed } from "../../framed";
-import { OutIcon } from "../../icons";
+import { LockIcon, OutIcon } from "../../icons";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 /*
   A project on its own: the demo hung large in its painting, what it is in
-  one sentence, the number that says it works, the stack, and the code.
-  Previous and next walk the collection.
+  one sentence, the number that says it works, the stack, and the code (or
+  that the code is private). Previous and next walk the collection.
 */
 export default async function ProjectPage({ params }: Params) {
   const { slug } = await params;
@@ -56,10 +56,17 @@ export default async function ProjectPage({ params }: Params) {
             <span className="exhibit-key">Stack</span>
             <span>{project.stack}</span>
           </div>
-          <a className="exhibit-link" href={project.href} target="_blank" rel="noreferrer">
-            View on GitHub
-            <OutIcon size={11} />
-          </a>
+          {project.href ? (
+            <a className="exhibit-link" href={project.href} target="_blank" rel="noreferrer">
+              View on GitHub
+              <OutIcon size={11} />
+            </a>
+          ) : (
+            <span className="exhibit-link exhibit-private">
+              <LockIcon size={11} />
+              Private repository
+            </span>
+          )}
         </aside>
       </div>
 

@@ -7,7 +7,7 @@ import { Framed } from "../framed";
 
 export const metadata: Metadata = {
   title: "Work — Ananmay Som Singh",
-  description: "Wildebeest, Tape and ShowdownRL: what each one does, shown as a short looping demo.",
+  description: "Pit Wall, Wildebeest, Tape and ShowdownRL: what each one does, shown as a short looping demo.",
 };
 
 /*
@@ -23,7 +23,7 @@ export default function WorkPage() {
       <header className="page-head">
         <h1 className="page-title">Work</h1>
         <p className="page-sub">
-          Three things I&rsquo;ve built, and how each one works. {person.where} · <Clock />
+          Four things I&rsquo;ve built, and how each one works. {person.where} · <Clock />
         </p>
       </header>
 

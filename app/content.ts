@@ -40,7 +40,8 @@ export const home = {
 export type Project = {
   slug: string;
   name: string;
-  href: string;
+  /** The repository; omitted when the code is private. */
+  href?: string;
   /** One plain sentence, shown under the demo on the card and the project page. */
   lede: string;
   /** The number that says the project works, and what it measures. */
@@ -51,8 +52,18 @@ export type Project = {
   painting: string;
 };
 
-/** The three projects with demos, on /work and each on its own page. */
+/** The four projects with demos, on /work and each on its own page. */
 export const projects: Project[] = [
+  {
+    slug: "pitwall",
+    name: "Pit Wall",
+    lede:
+      "Replays a real Formula 1 race to any lap, changes one decision, and simulates the rest 10,000 times to show how it would have gone.",
+    metric: { value: "10,000", label: "finishes simulated in about a second" },
+    year: "2026",
+    stack: "Python · NumPy · ClickHouse · DynamoDB · FastAPI · Next.js",
+    painting: "water-lilies.webp",
+  },
   {
     slug: "wildebeest",
     name: "Wildebeest",
@@ -104,8 +115,10 @@ export type Pick = {
 export const picks: Pick[] = [
   {
     name: "pitwall",
-    blurb: "[One line on what pitwall does.]",
-    stack: "[stack]",
+    blurb:
+      "F1 telemetry coach and what-if race simulator over 32M rows of lap data; replays a race 10,000 times in about a second and serves cached scenarios in 9 ms.",
+    stack: "python · clickhouse · dynamodb",
+    slug: "pitwall",
   },
   {
     name: "tape",
@@ -173,7 +186,3 @@ export const roles: Role[] = [
 
 /** The three named in the intro; everything else is on the project stack lines. */
 export const languages = ["Go", "Python", "TypeScript"] as const;
-
-/** "Ask about me": the three questions on the front page, and the rest on /ask. */
-export const askStarters = ["what is tape?", "open to internships?", "go or python?"] as const;
-export const askMore = ["What's Wildebeest?", "What does he do at GSAlpha Labs?", "Where does he study?"] as const;

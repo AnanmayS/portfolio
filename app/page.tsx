@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { Ask } from "./ask";
 import { Clock } from "./clock";
 import { ComposeTrigger } from "./compose";
-import { Countdown } from "./countdown";
-import { askStarters, home, person, picks, roles } from "./content";
+import { home, person, picks, roles } from "./content";
 import {
   ArrowIcon,
   BriefcaseIcon,
@@ -13,15 +11,14 @@ import {
   LockIcon,
   OutIcon,
   PersonIcon,
-  SparkIcon,
 } from "./icons";
 import { asset } from "./paths";
 
 /*
   The front page. A painting at the top with the name over it, then two
   columns of cards on a dark ground: About, Experience and Find me on the
-  left; Projects and Ask about me on the right. The columns stretch to the
-  same height, so the last card in each ends on the same line.
+  left; Projects on the right. The columns stretch to the same height, so
+  the last card in each ends on the same line.
 */
 export default function Home() {
   return (
@@ -60,7 +57,6 @@ export default function Home() {
           <p className="hero-tagline">{home.tagline}</p>
           <p className="hero-sub">{home.subline}</p>
           <div className="hero-actions">
-            <Countdown buildNow={Date.now()} />
             <ComposeTrigger className="btn btn-primary" title={`Email ${person.email}`}>
               Get in touch
               <ArrowIcon size={13} />
@@ -153,7 +149,7 @@ export default function Home() {
         </div>
 
         <div className="col">
-          <section className="card in" id="projects" style={{ "--i": 2 } as React.CSSProperties}>
+          <section className="card card-fill in" id="projects" style={{ "--i": 2 } as React.CSSProperties}>
             <h2 className="card-title">
               <ForkIcon size={13} />
               Projects <span className="card-count">{picks.length}</span>
@@ -185,14 +181,6 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </section>
-
-          <section className="card card-fill card-ask in" id="ask" style={{ "--i": 3 } as React.CSSProperties}>
-            <h2 className="card-title">
-              <SparkIcon size={13} />
-              Ask about me
-            </h2>
-            <Ask starters={askStarters} heading={false} />
           </section>
         </div>
       </div>
