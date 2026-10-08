@@ -1,0 +1,503 @@
+/*
+  The front page: a painting at the top, then cards on a dark ground. Small
+  type, hairline borders, mono for anything that reads as a label. Every
+  colour is a token from globals.css.
+*/
+
+.home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---------- the hero ---------- */
+
+.hero {
+  position: relative;
+  height: 32.5rem;
+  overflow: hidden;
+  background: #1a1c3a;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+}
+
+.hero-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 11, 14, 0.28);
+}
+
+.hero-fade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 16.25rem;
+  background: linear-gradient(180deg, rgba(10, 11, 14, 0) 0%, rgba(10, 11, 14, 0.82) 65%, var(--background) 100%);
+}
+
+.topbar {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.375rem 0.625rem;
+  background: rgba(16, 18, 24, 0.7);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.pill-tag {
+  color: var(--muted);
+  font-size: 0.625rem;
+}
+
+.topnav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.topnav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  border-radius: 6px;
+  padding: 0.375rem 0.625rem;
+  color: var(--soft);
+  font-size: 0.8125rem;
+  transition: color 120ms ease;
+}
+
+.topnav a:hover {
+  color: #fff;
+}
+
+.topnav .iconbtn {
+  width: 2rem;
+  justify-content: center;
+  margin-left: 0.375rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0;
+  background: rgba(16, 18, 24, 0.7);
+}
+
+.hero-text {
+  position: absolute;
+  inset: auto 1rem 2.5rem;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  margin-bottom: 0.75rem;
+  color: var(--sun);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-name {
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #f7f7fa;
+}
+
+.hero-tagline {
+  margin-top: 1rem;
+  color: var(--soft);
+  font-size: 1.0625rem;
+}
+
+.hero-sub {
+  margin-top: 0.375rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.625rem;
+  margin-top: 1.375rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.5rem 0.875rem;
+  background: rgba(16, 18, 24, 0.7);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.btn:hover {
+  background: rgba(30, 33, 42, 0.8);
+}
+
+.btn-primary {
+  border-color: transparent;
+  background: #f3f4f8;
+  color: var(--background);
+}
+
+.btn-primary:hover {
+  background: #fff;
+}
+
+.hero-credit {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.75rem;
+  color: var(--faint);
+  font-size: 0.625rem;
+}
+
+@media (max-width: 40rem) {
+  .hero {
+    height: 36rem;
+  }
+
+  .hero-credit {
+    display: none;
+  }
+}
+
+/* ---------- the cards ---------- */
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: min(100% - 2rem, 60rem);
+  margin: 2.25rem auto 0;
+}
+
+.col {
+  display: flex;
+  flex: 1 1 23.75rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  background: var(--panel);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* The last card in each column stretches, so both columns end on one line. */
+.card-fill {
+  flex: 1 1 auto;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--soft);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.card-count {
+  color: var(--muted);
+}
+
+.about {
+  color: var(--soft);
+  font-size: 0.875rem;
+}
+
+.dot {
+  display: inline-block;
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+
+.dot-ok {
+  background: var(--green);
+}
+
+.dot-dim {
+  background: var(--faint);
+}
+
+.dot-warn {
+  background: var(--amber);
+}
+
+/* A row: a name line, then one grey line of text. */
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+}
+
+.row-line {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.row-name {
+  flex: 1;
+  min-width: 0;
+  color: #f3f4f8;
+  font-weight: 500;
+}
+
+a.row-name:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.row-when,
+.row-stack {
+  color: var(--faint);
+  font-size: 0.625rem;
+  white-space: nowrap;
+}
+
+.row-repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+a.row-repo:hover {
+  color: var(--foreground);
+}
+
+.row-text {
+  color: var(--muted);
+}
+
+.row-indent {
+  padding-left: calc(7px + 0.625rem);
+}
+
+/* The ways out: one line each, like service rows. */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 1.5rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.link-key {
+  flex: none;
+  width: 4.5rem;
+  color: var(--faint);
+  font-size: 0.6875rem;
+}
+
+.link-val {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: #f3f4f8;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link:hover .link-val {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link-end {
+  color: var(--faint);
+  font-size: 0.6875rem;
+}
+
+/* ---------- ask about me, inside its card ---------- */
+
+.card-ask .ask {
+  flex: 1 1 auto;
+  gap: 0.75rem;
+}
+
+.card-ask .ask-thread {
+  flex: 1 1 auto;
+  gap: 0.625rem;
+  min-height: 0;
+  max-height: 22rem;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.card-ask .ask-thread .ask-me,
+.card-ask .ask-you {
+  max-width: 100%;
+  border-radius: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+
+.card-ask .ask-thread .ask-me {
+  position: relative;
+  padding-left: 1.75rem;
+  background: transparent;
+  color: var(--soft);
+}
+
+/* The small avatar before each answer. */
+.card-ask .ask-thread .ask-me::before {
+  content: "a";
+  position: absolute;
+  top: 0.125rem;
+  left: 0;
+  display: grid;
+  width: 1.125rem;
+  height: 1.125rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--sun);
+  color: var(--background);
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+
+.card-ask .ask-you {
+  align-self: flex-end;
+  max-width: 85%;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px 10px 2px 10px;
+  padding: 0.5rem 0.6875rem;
+  background: var(--chip);
+  color: var(--foreground);
+}
+
+.card-ask .ask-starters {
+  gap: 0.375rem;
+}
+
+.card-ask .ask-starter {
+  min-height: 1.625rem;
+  border-color: var(--border-strong);
+  padding: 0 0.625rem;
+  background: var(--chip);
+  color: var(--soft);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.card-ask .ask-form {
+  gap: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  background: var(--plate);
+}
+
+.card-ask .ask-input {
+  height: 2.5rem;
+  border: 0;
+  border-radius: 0;
+  padding: 0 0.5rem;
+  background: transparent;
+  font-size: 0.8125rem;
+}
+
+.card-ask .ask-send {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--foreground);
+}
+
+.card-ask .ask-mail {
+  background: var(--sun);
+}
+
+/* ---------- the foot ---------- */
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: min(100% - 2rem, 60rem);
+  margin: 1.75rem auto 0;
+  padding-bottom: 4.5rem;
+  color: var(--faint);
+  font-size: 0.625rem;
+}

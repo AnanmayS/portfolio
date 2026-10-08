@@ -1,118 +1,75 @@
 ---
-version: 3
-name: Quiet
-description: A neutral, prose-first personal page on one screen. No accent colour, one ink, two greys, one soft panel tone, hairlines; one picture in colour; motion only where it measures something.
+version: 4
+name: Dashboard
+description: A dark, dashboard-style personal page. One painting at the top with the name over it, then two columns of bordered cards on a near-black ground; small type, hairlines, mono labels, coloured dots for status.
 colors:
-  light:
-    background: "#FBFBFB"
-    foreground: "#171717"
-    muted: "#707070"
-    faint: "#9A9A9A"
-    border: "#EBEBEB"
-    panel: "#F2F2F2"
-    chip: "#ECECEC"
   dark:
-    background: "#131313"
-    foreground: "#F2F2F2"
-    muted: "#9A9A9A"
-    faint: "#6B6B6B"
-    border: "rgba(255,255,255,0.10)"
-    panel: "#1C1C1C"
-    chip: "#242424"
+    background: "#0a0b0e"
+    foreground: "#e6e8ee"
+    soft: "#c8ccd6"
+    muted: "#8b919e"
+    faint: "#6f7684"
+    border: "#1f232b"
+    panel: "#111318"
+    plate: "#0e1014"
+    chip: "#181b22"
+    green: "#22c55e"
+    amber: "#f59e0b"
+    blue: "#3b82f6"
+    sun: "#f0a868"
 typography:
   sans:
-    fontFamily: "Public Sans"
+    fontFamily: "Geist"
     weights: [400, 500, 600]
     usage: "Everything that is a sentence, a name, or a row"
-  hand:
-    fontFamily: "Caveat"
-    weights: [500, 600]
-    usage: "The one handwritten phrase in the intro, and nothing else"
+  serif:
+    fontFamily: "Newsreader"
+    usage: "Page titles on the inner pages (/work, /ask) only"
   mono:
     fontFamily: "Geist Mono"
     weight: 400
-    usage: "Dates, readouts, stacks, chips, labels inside illustrations"
+    usage: "Dates, stack tags, link keys, chips, the credit line, the footer"
 layout:
-  page: 82rem
-  side: 26.25rem
-  split-from: 64rem
-  base-size: 15px
+  grid: 60rem
+  column-min: 23.75rem
+  gap: 0.75rem
+  base-size: 13px
 motion:
   enter: 640ms blur-and-rise, staggered 60ms per block
-  degree-fill: 1100ms once
-  art: one 6–12 s loop per project, only while on screen
-  pond: a 24 s lap, the same rules
+  art: one 6–12 s loop per project demo on /work, only while on screen
 ---
 
 ## Overview
 
-Quiet is built for a reader who is deciding, in under a minute, whether to
-keep reading, so on a laptop there is nothing to scroll: the whole page is
-one screen. It borrows its posture from the best personal sites: small type,
-a few sentences that sound like a person, plain rows with a hairline between
-them, nothing decorated. A pond, a name and two sentences, one line of
-links, one bar, three roles on the left; three projects on the right.
+The front page borrows the posture of an agent dashboard: a hero image with
+a short line of controls over it, then a grid of small bordered cards that
+read like status panels. The hero is an impressionist painting of Venice at
+dusk, dimmed and faded into the page ground, with the name set large over
+the glow and two buttons under it. Below, two columns: About, Experience and
+Find me on the left; Projects and Ask about me on the right. The last card
+in each column stretches so both columns end on the same line.
 
-The pond comes first: a diamondback terrapin, the University of Maryland's
-mascot, paddling a slow lap through sunlit water, its edges feathered into
-the page. It is the one picture, and the one thing in colour. Under it the
-name, then prose: body copy is grey, the words that carry weight are set in
-ink with a small glyph beside them, and the role is the one handwritten
-phrase, which behaves like a selected text box when clicked.
+Everything on the cards is a row: a name, a mono tag at the right, one grey
+line of text. Status is a 7px dot, green for current, grey for past. There
+is no accent colour beyond those dots and the sun-orange eyebrow over the
+name, which is pulled from the painting.
 
-The bar is the degree progress, drawn to scale across the whole degree with
-a live readout. Each project card carries one looping illustration that
-tells that project's story in about eight seconds. Those things and the
-terrapin move; nothing else does except the entrance.
+The inner pages (/work, each project, /ask) keep their gallery layout and
+serif titles, on the same dark ground.
 
 ## Colour
 
-Greyscale in both themes. There is no accent. Emphasis is the foreground;
-the "before" or baseline state in a comparison is `--faint` or `--border`;
-fills are the foreground at five percent (`--surface`). Illustrations sit on
-`--panel`, a soft grey a step below the ground, with `--border` nudged
-darker inside it so hairlines still read. Chips (an email, a handle) use
-`--chip`. The only non-grey is the selection blue on the handwritten phrase's
-handles, borrowed from a text editor, and the Pokémon sprites in the
-ShowdownRL illustration, which are Pokémon Showdown's own (public/sprites)
-and are shown in their real colours because a grey Charizard is not a
-Charizard. The pond is in colour because it is a picture, not a diagram:
-green water, a terrapin, lily pads; its palette stays inside it. A severed
-feed or a dead worker is drawn dashed, never red; so is a heartbeat that
-never came. `--danger` exists only for a form error.
-
-The page follows the system theme until the reader picks one. The choice is
-stamped as `data-appearance` on the root and kept in localStorage.
+Near-black ground, cards one step lighter, hairline borders a step above
+that. Text in four greys: foreground for names, soft for body, muted for
+descriptions, faint for labels. Green, amber and blue are reserved for
+dots and small status marks; the sun orange appears once, over the name,
+and on the small avatar in the chat.
 
 ## Type
 
-Public Sans at 15px, weight 400, with 500 for names and the ink words in the
-intro. Geist Mono for anything that is read as a number or a label. Caveat,
-once, for the role. The name is the page's one heading, at 1.0625rem; the
-only larger type is each project's number.
-
-## Structure
-
-From 64rem the page splits. The left column, 26.25rem, holds the person:
-the pond, the name and two sentences, one line of links, the degree bar,
-and Experience. The right holds Work, with the College Park clock and the
-theme toggle in its header. Below 64rem it is one column in the same order,
-Work last.
-
-The links are one line of small grey pills: Résumé, with an outward arrow
-because it opens a PDF; Email me, the one filled pill, because it is the
-one that starts a conversation; the GitHub handle; LinkedIn. Email me opens
-the email card: a compose window with the recipient already filled in, a
-subject, a message, and Send. The reader never types an address.
-
-The degree bar has no percentage under it; the readout is the countdown to
-commencement, ticking once a second like the clock above the work.
-
-A role is a row: company and short title, a right-aligned tabular date, and
-one grey line saying what came of it. A project is a card on the panel
-tone: the illustration on the left, and on the right its name and year, one
-sentence, the number that says it works, and the mono stack line. When the
-column is too narrow for both, the illustration moves on top.
+Geist at 13px on the cards, 14px for the About paragraph. Geist Mono at
+10–11px for anything that reads as a label. The name is the one large
+thing on the page, at 64px.
 
 ## Illustrations
 
@@ -134,11 +91,8 @@ and it pauses and rests exactly as the diagrams do.
 
 ## Do's and Don'ts
 
-- Do keep the page to three projects. A fourth needs to beat one of them.
-- Do keep the intro to two short sentences under the name. Every ink word earns it.
-- Do keep the page to one screen on a laptop. Anything new has to fit or replace something.
-- Don't add a second handwritten phrase. One is a wink; two is a theme.
-- Do give each project one number, the one that says it works; the illustration is where it gets drawn.
-- Don't add a colour. If something needs emphasis, it is the foreground. The pond is the one picture; don't add a second.
-- Don't animate anything that does not measure or move in the model.
-- Don't add a section that is a list of claims.
+- Do keep each card's text to one or two lines per row. The page is scanned, not read.
+- Do keep the two columns ending on the same line; the stretch rule handles it when text changes.
+- Don't add a status badge to a project. A row links to the code; that is the status.
+- Don't add a second painting to the front page.
+- Don't put phone numbers or anything not already public on the page.
