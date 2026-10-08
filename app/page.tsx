@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Ask } from "./ask";
 import { ComposeTrigger } from "./compose";
+import { Countdown } from "./countdown";
 import { askStarters, home, person, picks, roles } from "./content";
 import {
   ArrowIcon,
@@ -53,13 +54,11 @@ export default function Home() {
           <p className="hero-tagline">{home.tagline}</p>
           <p className="hero-sub">{home.subline}</p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#projects">
-              View projects
-              <ArrowIcon size={13} />
-            </a>
-            <a className="btn" href="#contact">
+            <Countdown buildNow={Date.now()} />
+            <ComposeTrigger className="btn btn-primary" title={`Email ${person.email}`}>
               Get in touch
-            </a>
+              <ArrowIcon size={13} />
+            </ComposeTrigger>
           </div>
         </div>
 
