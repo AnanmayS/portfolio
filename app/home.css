@@ -68,9 +68,13 @@
   -webkit-backdrop-filter: blur(8px);
 }
 
-.pill-tag {
+.pill-clock {
   color: var(--muted);
   font-size: 0.625rem;
+}
+
+.pill-clock .clock {
+  color: var(--soft);
 }
 
 .topnav {
@@ -83,6 +87,7 @@
 .topnav a {
   display: inline-flex;
   align-items: center;
+  gap: 0.3125rem;
   min-height: 2rem;
   border-radius: 6px;
   padding: 0.375rem 0.625rem;

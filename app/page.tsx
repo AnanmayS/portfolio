@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Ask } from "./ask";
+import { Clock } from "./clock";
 import { ComposeTrigger } from "./compose";
 import { Countdown } from "./countdown";
 import { askStarters, home, person, picks, roles } from "./content";
@@ -10,6 +11,7 @@ import {
   ForkIcon,
   GitHubIcon,
   LockIcon,
+  OutIcon,
   PersonIcon,
   SparkIcon,
 } from "./icons";
@@ -30,18 +32,22 @@ export default function Home() {
         <div className="hero-fade" aria-hidden="true" />
 
         <div className="topbar in" style={{ "--i": 0 } as React.CSSProperties}>
-          <a className="pill" href="#top">
+          <span className="pill">
             <span className="dot dot-ok" aria-hidden="true" />
             {person.first.toLowerCase()}
-            <span className="mono pill-tag">
-              {person.school.toLowerCase()} {person.classOf}
+            <span className="pill-clock mono">
+              <Clock /> {person.where.toLowerCase()}
             </span>
-          </a>
-          <nav className="topnav" aria-label="Primary">
-            <a href="#about">about</a>
-            <a href="#projects">projects</a>
-            <a href="#ask">ask</a>
-            <a href="#contact">contact</a>
+          </span>
+          <nav className="topnav" aria-label="Site">
+            <Link href="/work">
+              work
+              <ArrowIcon size={11} />
+            </Link>
+            <a href={asset("/resume.pdf")} target="_blank" rel="noreferrer">
+              résumé
+              <OutIcon size={11} />
+            </a>
             <a className="iconbtn" href={person.github} target="_blank" rel="noreferrer" aria-label="GitHub">
               <GitHubIcon size={15} />
             </a>
