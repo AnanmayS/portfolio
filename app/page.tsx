@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Clock } from "./clock";
 import { ComposeTrigger } from "./compose";
-import { home, person, picks, roles } from "./content";
+import { home, person, picks, projects, roles } from "./content";
 import {
   ArrowIcon,
   BriefcaseIcon,
@@ -20,6 +20,9 @@ import { asset } from "./paths";
   left; Projects on the right. The columns stretch to the same height, so
   the last card in each ends on the same line.
 */
+/* The shelf follows the rows' order. */
+const shelf = picks.flatMap((pick) => projects.filter((project) => project.slug === pick.slug));
+
 export default function Home() {
   return (
     <main className="home">
@@ -178,6 +181,21 @@ export default function Home() {
                     )}
                   </div>
                   <p className="row-text">{pick.blurb}</p>
+                </li>
+              ))}
+            </ul>
+
+            {/* Each project in its painting, with the number that says it works. Fills
+                what is left of the column, so the two columns still end together. */}
+            <ul className="shelf">
+              {shelf.map((project) => (
+                <li key={project.slug}>
+                  <Link className="shelf-tile" href={`/work/${project.slug}`}>
+                    <img className="shelf-img" src={asset(`/paintings/${project.painting}`)} alt="" loading="lazy" />
+                    <span className="shelf-name">{project.name}</span>
+                    <span className="shelf-value">{project.metric.value}</span>
+                    <span className="shelf-label">{project.metric.label}</span>
+                  </Link>
                 </li>
               ))}
             </ul>

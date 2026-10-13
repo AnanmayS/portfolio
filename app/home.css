@@ -339,6 +339,91 @@ a.row-repo:hover {
   padding-left: calc(7px + 0.625rem);
 }
 
+/* The projects' paintings: a 2 x 2 shelf under the rows that takes the rest of the card. */
+.shelf {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(7.5rem, 1fr);
+  gap: 0.5rem;
+  margin: 1.125rem 0 0.125rem;
+  padding: 0;
+  list-style: none;
+}
+
+.shelf li {
+  display: flex;
+  min-width: 0;
+}
+
+.shelf-tile {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.625rem 0.75rem;
+  color: var(--foreground);
+  isolation: isolate;
+}
+
+.shelf-img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+/* Darken the bottom so the number reads over any painting. */
+.shelf-tile::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(8, 9, 12, 0.92) 20%, rgba(8, 9, 12, 0.55) 60%, rgba(8, 9, 12, 0.15));
+  content: "";
+}
+
+.shelf-name {
+  color: var(--soft);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.shelf-value {
+  margin-top: 0.125rem;
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  line-height: 1.1;
+}
+
+.shelf-label {
+  color: var(--soft);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.shelf-tile:hover {
+  border-color: var(--border-strong);
+}
+
+.shelf-tile:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shelf-tile:hover .shelf-img {
+    transform: scale(1.04);
+  }
+}
+
 /* The ways out: one line each, like service rows. */
 .links {
   display: flex;
