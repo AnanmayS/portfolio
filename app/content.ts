@@ -169,7 +169,8 @@ export const roles: Role[] = [
   {
     company: "theconviction.ai",
     title: "Software engineering intern",
-    result: "Replaced 12 hrs/week of manual analyst data collection with a FastAPI/PostgreSQL pipeline.",
+    result:
+      "Built a retail trader dashboard: a daily feed of filings and news, LLM 8-K summaries, and source-linked company timelines, on a FastAPI/PostgreSQL pipeline that saved 12 hrs/week.",
     when: "may – aug 2025",
     start: "2025",
     end: "2025",
