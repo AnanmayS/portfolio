@@ -392,11 +392,26 @@
   font-size: 0.8125rem;
 }
 
+/* Under the projects: the work history, with the shelf beside it. */
+
+.below {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 21rem;
+  gap: 2.5rem 4rem;
+  align-items: start;
+  padding-top: 2.5rem;
+}
+
+@media (max-width: 64rem) {
+  .below {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Where I've worked: plain rows on the paper. */
 
 .xp {
   max-width: 52rem;
-  padding-top: 2.5rem;
 }
 
 .xp h2 {
@@ -443,6 +458,96 @@
   .xp-row {
     grid-template-columns: 1fr;
   }
+}
+
+/* ---------- the shelf ---------- */
+
+/* Books as spines in the page's inks, standing on a hairline shelf. */
+.shelf h2 {
+  margin-bottom: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.875rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.shelf-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  margin: 0;
+  padding: 0.75rem 0.75rem 0;
+  list-style: none;
+}
+
+.book {
+  position: relative;
+  flex: none;
+  display: flex;
+  justify-content: center;
+  border-radius: 2px 2px 1px 1px;
+  box-shadow: inset -2px 0 0 rgba(0, 0, 0, 0.12), inset 2px 0 0 rgba(255, 255, 255, 0.08);
+  transition: transform 200ms var(--ease);
+}
+
+.book:hover {
+  transform: translateY(-4px);
+}
+
+.book-ink { background: var(--foreground); color: var(--background); }
+.book-plate { background: var(--plate); color: var(--background); }
+.book-soft { background: var(--soft); color: var(--background); }
+.book-muted { background: var(--muted); color: var(--background); }
+.book-paper { background: var(--raised); color: var(--foreground); box-shadow: inset 0 0 0 1px var(--border-strong); }
+
+.book-spine {
+  display: block;
+  padding-top: 0.75rem;
+  overflow: hidden;
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  writing-mode: vertical-rl;
+  max-height: 100%;
+}
+
+/* The book being read leans at the end of the row, a ribbon hanging out of it. */
+.book-reading {
+  margin-left: 0.5rem;
+  transform: rotate(-8deg) translateY(-2px);
+  transform-origin: 100% 100%;
+}
+
+.book-reading:hover {
+  transform: rotate(-8deg) translateY(-6px);
+}
+
+.book-reading::after {
+  content: "";
+  position: absolute;
+  top: -0.75rem;
+  right: 6px;
+  width: 3px;
+  height: 1.5rem;
+  background: var(--bad);
+}
+
+.shelf-plank {
+  height: 3px;
+  border-radius: 1px;
+  background: var(--border-strong);
+  box-shadow: 0 10px 14px -10px rgba(30, 53, 112, 0.45);
+}
+
+.shelf-now {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 /* ---------- the countdown ---------- */

@@ -59,8 +59,13 @@ The cards follow, on 90% paper with a blur, a hairline border and an inner
 rule like a mount, pulling up over the water and continuing on the paper:
 the five projects, each a name, one quick sentence, its one number set large
 in the serif, and a short stack. The work history follows as plain rows on
-the paper, one sentence per role; only the projects get the mount. Nothing
-on the page is said twice, so there is no card of links (the hero has them).
+the paper, one sentence per role; only the projects get the mount. Beside
+it, a shelf: the books read, drawn as spines in the page's inks with their
+titles set down them in the serif, standing on a hairline shelf, width from
+the page count. The book being read leans at the end of the row with a
+ribbon out of its top and is named under the shelf. No cover images: the
+shelf is drawn, like everything else here. Nothing on the page is said
+twice, so there is no card of links (the hero has them).
 
 In the blank sky at the right of the name, a split-flap clock counts down
 to commencement: paper cards with ink digits in the serif, a hairline hinge

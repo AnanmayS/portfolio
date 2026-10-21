@@ -102,6 +102,30 @@ export const projects: Project[] = [
   },
 ];
 
+export type Book = {
+  title: string;
+  /** What the spine says when the title is too long for it. */
+  spine?: string;
+  author: string;
+  status: "reading" | "read";
+  /** Sets the spine's width. */
+  pages: number;
+  /** Sets the spine's height: a small paperback, a normal one, or a big hardback. */
+  format?: "s" | "m" | "l";
+  /** Which of the page's inks the spine is bound in; cycles when omitted. */
+  tone?: "ink" | "plate" | "soft" | "paper" | "muted";
+};
+
+/* The shelf on the front page, in the order the books stand. */
+export const books: Book[] = [
+  { title: "Red Rising", author: "Pierce Brown", status: "read", pages: 382, tone: "ink" },
+  { title: "Golden Son", author: "Pierce Brown", status: "read", pages: 442, tone: "ink" },
+  { title: "Morning Star", author: "Pierce Brown", status: "read", pages: 518, tone: "ink", format: "l" },
+  { title: "Scythe", author: "Neal Shusterman", status: "read", pages: 435, tone: "plate" },
+  { title: "The Name of the Wind", author: "Patrick Rothfuss", status: "read", pages: 662, tone: "soft", format: "l" },
+  { title: "Lord of the Mysteries", author: "Cuttlefish That Loves Diving", status: "reading", pages: 1400, tone: "paper", format: "l" },
+];
+
 export type Role = {
   company: string;
   /** Short enough to share a line with the company. */

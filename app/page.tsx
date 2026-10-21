@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { ComposeTrigger } from "./compose";
 import { Countdown } from "./countdown";
-import { home, person, projects, roles } from "./content";
+import { books, home, person, projects, roles } from "./content";
 import { asset } from "./paths";
 import { Plate } from "./plate";
+import { Shelf } from "./shelf";
 
 /*
   The front page. The engraved plate opens it with the name, one line, two
   sentences and three links in its sky, and a flip clock counting down to
   graduation at the right. Then the five projects as mounted plates, each
-  with its one number, and the work history as plain rows.
+  with its one number, then the work history as plain rows with a shelf of
+  books beside it.
 */
 
 /* The three narrow plates, then the two wide ones. */
@@ -85,19 +87,23 @@ export default function Home() {
           ))}
         </div>
 
-        <section className="xp" id="experience" aria-labelledby="h-xp">
-          <h2 id="h-xp">Where I&rsquo;ve worked</h2>
-          {roles.map((role) => (
-            <div key={role.company} className="xp-row">
-              <div>
-                <div className="xp-co">{role.company}</div>
-                <div className="xp-title">{role.title}</div>
-                <div className="xp-when">{role.when}</div>
+        <div className="below">
+          <section className="xp" id="experience" aria-labelledby="h-xp">
+            <h2 id="h-xp">Where I&rsquo;ve worked</h2>
+            {roles.map((role) => (
+              <div key={role.company} className="xp-row">
+                <div>
+                  <div className="xp-co">{role.company}</div>
+                  <div className="xp-title">{role.title}</div>
+                  <div className="xp-when">{role.when}</div>
+                </div>
+                <div className="xp-result">{role.result}</div>
               </div>
-              <div className="xp-result">{role.result}</div>
-            </div>
-          ))}
-        </section>
+            ))}
+          </section>
+
+          <Shelf books={books} />
+        </div>
       </div>
 
       <footer className="foot wrap">
