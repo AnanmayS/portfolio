@@ -2,6 +2,7 @@ import type { Project } from "./content";
 import { asset, basePath } from "./paths";
 import { Reveal } from "./reveal";
 
+import { ArenaArt } from "./art/arena";
 import { PitwallArt } from "./art/pitwall";
 import { ShowdownArt } from "./art/showdown";
 import { TapeArt } from "./art/tape";
@@ -9,6 +10,7 @@ import { WildebeestArt } from "./art/wildebeest";
 
 /* One looping demo per project, keyed so content.ts stays free of React. */
 const art: Record<Project["slug"], (props: { basePath: string }) => React.ReactElement> = {
+  "beat-the-bots": ArenaArt,
   pitwall: PitwallArt,
   wildebeest: WildebeestArt,
   tape: TapeArt,

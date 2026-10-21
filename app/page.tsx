@@ -169,6 +169,11 @@ export default function Home() {
                       <span className="row-name">{pick.name}</span>
                     )}
                     <span className="mono row-stack">{pick.stack}</span>
+                    {pick.live && (
+                      <a className="mono row-repo" href={pick.live} target="_blank" rel="noreferrer">
+                        play <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
                     {pick.href ? (
                       <a className="mono row-repo" href={pick.href} target="_blank" rel="noreferrer">
                         github <span aria-hidden="true">↗</span>

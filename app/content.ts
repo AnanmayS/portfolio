@@ -42,6 +42,8 @@ export type Project = {
   name: string;
   /** The repository; omitted when the code is private. */
   href?: string;
+  /** Where it runs in the browser, when it does. */
+  live?: string;
   /** One plain sentence, shown under the demo on the card and the project page. */
   lede: string;
   /** The number that says the project works, and what it measures. */
@@ -52,8 +54,21 @@ export type Project = {
   painting: string;
 };
 
-/** The four projects with demos, on /work and each on its own page. */
+/** The five projects with demos, on /work and each on its own page. */
 export const projects: Project[] = [
+  {
+    slug: "beat-the-bots",
+    name: "Beat the Bots",
+    href: "https://github.com/AnanmayS/trading_arena",
+    live: "https://ananmays.github.io/trading_arena/",
+    lede:
+      "A trading game in the browser: $25,000 and five minutes to out-trade 32 bots on a real exchange engine, written in C++ and running entirely in the tab.",
+    metric: { value: "21M", label: "orders a second through the matching engine" },
+    year: "2026",
+    stack: "C++20 · WebAssembly · TypeScript · React · Vite",
+    /** Pissarro, The Boulevard Montmartre on a Winter Morning (1897); The Met, public domain. */
+    painting: "boulevard.webp",
+  },
   {
     slug: "pitwall",
     name: "Pit Wall",
@@ -107,12 +122,23 @@ export type Pick = {
   stack: string;
   /** The repository; omitted when the code is private. */
   href?: string;
+  /** Where it runs in the browser, when it does. */
+  live?: string;
   /** The project page on this site, when it has one. */
   slug?: string;
 };
 
 /** The project rows on the front page, in order. */
 export const picks: Pick[] = [
+  {
+    name: "beat the bots",
+    blurb:
+      "Browser futures game against 32 bots on a C++20 exchange compiled to WebAssembly; 21M orders/s, integer-exact zero-sum accounting, native and WASM byte-identical.",
+    stack: "c++ · wasm · typescript",
+    href: "https://github.com/AnanmayS/trading_arena",
+    live: "https://ananmays.github.io/trading_arena/",
+    slug: "beat-the-bots",
+  },
   {
     name: "pitwall",
     blurb:

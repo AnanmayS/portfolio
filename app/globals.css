@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./art/arena.css";
 @import "./art/pitwall.css";
 @import "./art/tape.css";
 @import "./art/showdown.css";
@@ -449,6 +450,11 @@ figure {
 
 .exhibit-link:hover {
   color: var(--ok);
+}
+
+/* Two links in a row (play it, then the code) share one hairline. */
+.exhibit-link + .exhibit-link {
+  border-top: 0;
 }
 
 /* The code is private: the same row, in the muted grey, with nothing to hover. */

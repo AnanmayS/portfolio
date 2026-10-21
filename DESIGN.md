@@ -85,7 +85,11 @@ to Venusaur, the masked policy beside it, and lands on the measured win rate
 over the baseline; Pit Wall replays the real 2025 Hungarian Grand Prix lap by
 lap to the stop that cost Piastri the win, asks what if he had stayed out,
 fans 10,000 simulated finishes out from that lap and fills the bars with
-where they ended.
+where they ended; Beat the Bots plays one stretch of a round against the
+32 bots, you buying from a market maker, a headline landing, the makers
+pulling their quotes, the price gapping up as the bots digest the news,
+and you selling to a momentum bot for +$148, the order book and your
+account changing as it goes.
 
 The pond is the exception that proves the rule: a picture, not a mechanism.
 Sunlight is two layers of turbulence drifting against each other, the

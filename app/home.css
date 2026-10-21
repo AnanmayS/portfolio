@@ -339,7 +339,9 @@ a.row-repo:hover {
   padding-left: calc(7px + 0.625rem);
 }
 
-/* The projects' paintings: a 2 x 2 shelf under the rows that takes the rest of the card. */
+/* The projects' paintings: a two-column shelf under the rows that takes the
+   rest of the card. With an odd count the first tile, the newest, takes a
+   whole row. */
 .shelf {
   display: grid;
   flex: 1 1 auto;
@@ -354,6 +356,10 @@ a.row-repo:hover {
 .shelf li {
   display: flex;
   min-width: 0;
+}
+
+.shelf li:first-child:nth-last-child(odd) {
+  grid-column: 1 / -1;
 }
 
 .shelf-tile {

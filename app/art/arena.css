@@ -1,0 +1,176 @@
+/*
+  Beat the Bots: one 10 s loop. You buy, a headline lands, the market
+  makers pull their quotes, the price gaps, you sell. The rules outside
+  `.is-visible` draw the finished frame: the book re-quoted after the
+  news, every line of the story shown, the account flat at +$148.
+*/
+
+.art-arena .ar-pill { fill: color-mix(in srgb, var(--ok) 14%, transparent); }
+.art-arena .ar-live { fill: var(--ok); }
+.art-arena .ar-clock { fill: var(--foreground); font-size: 11px; font-weight: 600; }
+.art-arena .ar-head { letter-spacing: 1.5px; }
+.art-arena .ar-price { fill: var(--soft); font-size: 11px; }
+.art-arena .ar-size { fill: var(--muted); }
+.art-arena .ar-ask { fill: color-mix(in srgb, var(--bad) 45%, transparent); }
+.art-arena .ar-bid { fill: color-mix(in srgb, var(--ok) 45%, transparent); }
+.art-arena .ar-row { fill: rgba(255, 255, 255, 0.06); }
+.art-arena .ar-tag { fill: var(--foreground); font-size: 10px; font-weight: 600; }
+.art-arena .ar-news-tag { fill: var(--foreground); }
+.art-arena .ar-news-text { fill: var(--background); font-size: 8px; font-weight: 700; letter-spacing: 1px; }
+.art-arena .ar-fv { stroke: var(--faint); stroke-dasharray: 3 3; }
+.art-arena .ar-news-line { stroke: var(--bad); stroke-dasharray: 2 3; }
+.art-arena .ar-mark-buy { fill: var(--ok); }
+.art-arena .ar-mark-sell { fill: var(--foreground); }
+.art-arena .ar-cover { fill: var(--plate); display: none; }
+.art-arena .ar-playhead { stroke: var(--ok); stroke-width: 1.5; display: none; }
+.art-arena .ar-pnl { font-size: 22px; font-weight: 600; }
+.art-arena .ar-book-a-you-bar { transform-box: fill-box; transform-origin: 0 50%; }
+.art-arena .ar-book-b-you-bar { transform-box: fill-box; transform-origin: 100% 50%; transform: scaleX(0.85); }
+
+/* The finished frame. */
+.art-arena .ar-book-a,
+.art-arena .ar-clock-1,
+.art-arena .ar-clock-2,
+.art-arena .ar-row,
+.art-arena .ar-tag-buy,
+.art-arena .ar-tag-sell,
+.art-arena .ar-book-b-size-before,
+.art-arena .ar-pnl-0,
+.art-arena .ar-pnl-1,
+.art-arena .ar-pnl-2,
+.art-arena .ar-pos-long,
+.art-arena .ar-avg-none,
+.art-arena .ar-fee-0,
+.art-arena .ar-fee-1 { opacity: 0; }
+
+.is-visible .art-arena .ar-cover,
+.is-visible .art-arena .ar-playhead { display: inline; }
+
+.is-visible .art-arena .ar-clock-1,
+.is-visible .art-arena .ar-clock-2,
+.is-visible .art-arena .ar-clock-3,
+.is-visible .art-arena .ar-row,
+.is-visible .art-arena .ar-tag-buy,
+.is-visible .art-arena .ar-tag-sell,
+.is-visible .art-arena .ar-book-a,
+.is-visible .art-arena .ar-book-b,
+.is-visible .art-arena .ar-book-a-ask,
+.is-visible .art-arena .ar-book-a-size-before,
+.is-visible .art-arena .ar-book-a-size-after,
+.is-visible .art-arena .ar-book-a-you-bar,
+.is-visible .art-arena .ar-book-b-size-before,
+.is-visible .art-arena .ar-book-b-size-after,
+.is-visible .art-arena .ar-book-b-you-bar,
+.is-visible .art-arena .ar-l1,
+.is-visible .art-arena .ar-l2,
+.is-visible .art-arena .ar-l3,
+.is-visible .art-arena .ar-l4,
+.is-visible .art-arena .ar-l5,
+.is-visible .art-arena .ar-l6,
+.is-visible .art-arena .ar-l7,
+.is-visible .art-arena .ar-pnl-0,
+.is-visible .art-arena .ar-pnl-1,
+.is-visible .art-arena .ar-pnl-2,
+.is-visible .art-arena .ar-pnl-3,
+.is-visible .art-arena .ar-pos-flat,
+.is-visible .art-arena .ar-pos-long,
+.is-visible .art-arena .ar-avg-none,
+.is-visible .art-arena .ar-avg-val,
+.is-visible .art-arena .ar-fee-0,
+.is-visible .art-arena .ar-fee-1,
+.is-visible .art-arena .ar-fee-2,
+.is-visible .art-arena .ar-cover,
+.is-visible .art-arena .ar-playhead {
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+/* The clock and the mood: calm, then the headline, then hot. */
+.is-visible .art-arena .ar-clock-1 { animation-name: ar-until-36; }
+.is-visible .art-arena .ar-clock-2 { animation-name: ar-between-36-52; }
+.is-visible .art-arena .ar-clock-3 { animation-name: ar-from-52; }
+
+/* Your two trades, on the book. */
+.is-visible .art-arena .ar-row { animation-name: ar-row; }
+.is-visible .art-arena .ar-tag-buy { animation-name: ar-tag-buy; }
+.is-visible .art-arena .ar-tag-sell { animation-name: ar-tag-sell; }
+.is-visible .art-arena .ar-book-a { animation-name: ar-until-48; }
+.is-visible .art-arena .ar-book-b { animation-name: ar-from-48; }
+.is-visible .art-arena .ar-book-a-ask { animation-name: ar-until-41; }
+.is-visible .art-arena .ar-book-a-size-before { animation-name: ar-until-15; }
+.is-visible .art-arena .ar-book-a-size-after { animation-name: ar-from-15; }
+.is-visible .art-arena .ar-book-a-you-bar { animation-name: ar-bar-a; }
+.is-visible .art-arena .ar-book-b-size-before { animation-name: ar-until-65; }
+.is-visible .art-arena .ar-book-b-size-after { animation-name: ar-from-65; }
+.is-visible .art-arena .ar-book-b-you-bar { animation-name: ar-bar-b; }
+
+/* The story, a line at a time. */
+.is-visible .art-arena .ar-l1 { animation-name: ar-from-12; }
+.is-visible .art-arena .ar-l2 { animation-name: ar-from-17; }
+.is-visible .art-arena .ar-l3 { animation-name: ar-from-36; }
+.is-visible .art-arena .ar-l4 { animation-name: ar-from-41; }
+.is-visible .art-arena .ar-l5 { animation-name: ar-from-50; }
+.is-visible .art-arena .ar-l6 { animation-name: ar-from-62; }
+.is-visible .art-arena .ar-l7 { animation-name: ar-from-67; }
+
+/* The account. */
+.is-visible .art-arena .ar-pnl-0 { animation-name: ar-until-17; }
+.is-visible .art-arena .ar-pnl-1 { animation-name: ar-between-17-50; }
+.is-visible .art-arena .ar-pnl-2 { animation-name: ar-between-50-67; }
+.is-visible .art-arena .ar-pnl-3 { animation-name: ar-from-67; }
+.is-visible .art-arena .ar-pos-flat { animation-name: ar-pos-flat; }
+.is-visible .art-arena .ar-pos-long { animation-name: ar-between-17-67; }
+.is-visible .art-arena .ar-avg-none { animation-name: ar-until-17; }
+.is-visible .art-arena .ar-avg-val { animation-name: ar-from-17; }
+.is-visible .art-arena .ar-fee-0 { animation-name: ar-until-17; }
+.is-visible .art-arena .ar-fee-1 { animation-name: ar-between-17-67; }
+.is-visible .art-arena .ar-fee-2 { animation-name: ar-from-67; }
+
+/* The chart draws as the round plays. */
+.is-visible .art-arena .ar-cover { animation-name: ar-cover; }
+.is-visible .art-arena .ar-playhead { animation-name: ar-playhead; }
+
+@keyframes ar-from-12 { 0%, 12% { opacity: 0; } 14%, 100% { opacity: 1; } }
+@keyframes ar-from-15 { 0%, 15% { opacity: 0; } 16%, 100% { opacity: 1; } }
+@keyframes ar-from-17 { 0%, 17% { opacity: 0; } 19%, 100% { opacity: 1; } }
+@keyframes ar-from-36 { 0%, 36% { opacity: 0; } 38%, 100% { opacity: 1; } }
+@keyframes ar-from-41 { 0%, 41% { opacity: 0; } 43%, 100% { opacity: 1; } }
+@keyframes ar-from-48 { 0%, 48% { opacity: 0; } 52%, 100% { opacity: 1; } }
+@keyframes ar-from-50 { 0%, 50% { opacity: 0; } 52%, 100% { opacity: 1; } }
+@keyframes ar-from-52 { 0%, 52% { opacity: 0; } 53%, 100% { opacity: 1; } }
+@keyframes ar-from-62 { 0%, 62% { opacity: 0; } 64%, 100% { opacity: 1; } }
+@keyframes ar-from-65 { 0%, 65% { opacity: 0; } 66%, 100% { opacity: 1; } }
+@keyframes ar-from-67 { 0%, 67% { opacity: 0; } 69%, 100% { opacity: 1; } }
+
+@keyframes ar-until-15 { 0%, 15% { opacity: 1; } 16%, 100% { opacity: 0; } }
+@keyframes ar-until-17 { 0%, 17% { opacity: 1; } 18%, 100% { opacity: 0; } }
+@keyframes ar-until-36 { 0%, 36% { opacity: 1; } 37%, 100% { opacity: 0; } }
+@keyframes ar-until-41 { 0%, 41% { opacity: 1; } 45%, 100% { opacity: 0; } }
+@keyframes ar-until-48 { 0%, 48% { opacity: 1; } 52%, 100% { opacity: 0; } }
+@keyframes ar-until-65 { 0%, 65% { opacity: 1; } 66%, 100% { opacity: 0; } }
+
+@keyframes ar-between-17-50 { 0%, 17% { opacity: 0; } 18%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+@keyframes ar-between-17-67 { 0%, 17% { opacity: 0; } 18%, 67% { opacity: 1; } 68%, 100% { opacity: 0; } }
+@keyframes ar-between-36-52 { 0%, 36% { opacity: 0; } 37%, 52% { opacity: 1; } 53%, 100% { opacity: 0; } }
+@keyframes ar-between-50-67 { 0%, 50% { opacity: 0; } 51%, 67% { opacity: 1; } 68%, 100% { opacity: 0; } }
+
+@keyframes ar-pos-flat { 0%, 17% { opacity: 1; } 18%, 67% { opacity: 0; } 68%, 100% { opacity: 1; } }
+@keyframes ar-row { 0%, 11% { opacity: 0; } 12%, 30% { opacity: 1; } 32%, 61% { opacity: 0; } 62%, 80% { opacity: 1; } 82%, 100% { opacity: 0; } }
+@keyframes ar-tag-buy { 0%, 11% { opacity: 0; } 12%, 30% { opacity: 1; } 32%, 100% { opacity: 0; } }
+@keyframes ar-tag-sell { 0%, 61% { opacity: 0; } 62%, 80% { opacity: 1; } 82%, 100% { opacity: 0; } }
+@keyframes ar-bar-a { 0%, 15% { transform: scaleX(1); } 16%, 100% { transform: scaleX(0.94); } }
+@keyframes ar-bar-b { 0%, 65% { transform: scaleX(1); } 66%, 100% { transform: scaleX(0.85); } }
+
+@keyframes ar-cover { 0% { transform: translateX(0); } 72%, 100% { transform: translateX(232px); } }
+@keyframes ar-playhead {
+  0% { transform: translateX(0); opacity: 1; }
+  71% { opacity: 1; }
+  72%, 100% { transform: translateX(232px); opacity: 0; }
+}
+
+/* Reduced motion: the loop doesn't run, so the wipe must not stay over the chart. */
+@media (prefers-reduced-motion: reduce) {
+  .is-visible .art-arena .ar-cover,
+  .is-visible .art-arena .ar-playhead { display: none; }
+}
