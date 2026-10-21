@@ -26,8 +26,8 @@ Avoid resume-template portfolio pages, corporate career-site layouts, and pages 
 
 1. Make the site feel personal before it feels polished.
 2. Show the five best projects and show how each one works, as a short looping demo someone with no technical background can follow at a glance, rather than listing everything ever built.
-3. Hang it like a quiet gallery: a dark wall, impressionist paintings as the only colour-rich surfaces, a book serif for titles, one soft green for what went right. A painting of Venice at dusk opens the front page with the name over it; each project's demo hangs inside its own painting.
-4. Preserve fast scanning for recruiters: below the painting, the front page is two columns of cards. Left: About, Experience (each role in a plain sentence or two with the number that says it worked) and Find me on. Right: the five projects, one line each. The demos hang on /work, and each project opens its own page.
+3. Print it like a book of plates: cream paper, one blue ink, a fine grain, a book serif for titles and numbers. An engraved plate of the Chesapeake opens the front page with the name set in its sky; each project is a mounted plate, and its demo plays on a panel of solid ink inside it.
+4. Preserve fast scanning for recruiters: below the plate, the front page is a deck of cards. About and Now; the five projects, each with one sentence, its stack and the number that says it works; Experience (each role in a plain sentence or two with its number); Elsewhere. The demos play on /work, and each project opens its own page.
 5. Treat the site as a living personal artifact. The clock ticks on its own; the demos play when they come into view.
 
 ## Accessibility & Inclusion

@@ -23,18 +23,17 @@ export const person = {
   linkedinShort: "in/ananmaysingh",
 } as const;
 
-/** The front page, top to bottom: the hero and the About card. */
+/** The front page, top to bottom: the plate and the About card. */
 export const home = {
-  eyebrow: "hey, i'm",
   tagline: "I build backend systems and full-stack apps.",
-  subline: "computer engineering @ umd '28 · college park, md",
+  /** The small line over the name. */
+  subline: "Computer engineering · University of Maryland · class of 2028",
   about:
     "Computer engineering student at the University of Maryland. I like building the parts of software people don't see: data pipelines, distributed systems, and the infrastructure that keeps them up.",
-  /** The painting behind the hero, from public/paintings, and its credit line. */
-  painting: "venice-dusk.webp",
-  paintingAlt:
-    "An impressionist painting in the manner of Monet: Venice at dusk, the domed church of San Giorgio Maggiore silhouetted against an orange and violet sky reflected in the lagoon.",
-  paintingCredit: "after Claude Monet · San Giorgio Maggiore at Dusk",
+  /** The engraved plate behind the name, from public/plates. Sepia on disk; the page tints it to the ink. */
+  plate: "bay.webp",
+  plateAlt:
+    "An engraving of the Chesapeake Bay at dawn: a screw-pile lighthouse on stilts at left, a skipjack under sail, a far shore with a small town, a steeple and a water tower, marsh grass and a tall pine at right.",
 } as const;
 
 export type Project = {
@@ -50,11 +49,9 @@ export type Project = {
   metric: { value: string; label: string };
   year: string;
   stack: string;
-  /** The painting the demo hangs in, from public/paintings. */
-  painting: string;
 };
 
-/** The five projects with demos, on /work and each on its own page. */
+/** The five projects, on the front page and /work, each on its own page. */
 export const projects: Project[] = [
   {
     slug: "beat-the-bots",
@@ -66,8 +63,6 @@ export const projects: Project[] = [
     metric: { value: "21M", label: "orders a second through the matching engine" },
     year: "2026",
     stack: "C++20 · WebAssembly · TypeScript · React · Vite",
-    /** Pissarro, The Boulevard Montmartre on a Winter Morning (1897); The Met, public domain. */
-    painting: "boulevard.webp",
   },
   {
     slug: "pitwall",
@@ -77,7 +72,6 @@ export const projects: Project[] = [
     metric: { value: "10,000", label: "finishes simulated in about a second" },
     year: "2026",
     stack: "Python · NumPy · ClickHouse · DynamoDB · FastAPI · Next.js",
-    painting: "water-lilies.webp",
   },
   {
     slug: "wildebeest",
@@ -88,7 +82,6 @@ export const projects: Project[] = [
     metric: { value: "0.16 s", label: "to recover a crashed worker, was 5.6 s" },
     year: "2026",
     stack: "TypeScript · Python · PostgreSQL · Redis · Docker",
-    painting: "serengeti.webp",
   },
   {
     slug: "tape",
@@ -99,7 +92,6 @@ export const projects: Project[] = [
     metric: { value: "2,790×", label: "real-time replay, byte-identical" },
     year: "2026",
     stack: "Go · AWS S3 · ECS · Terraform",
-    painting: "river-fog.webp",
   },
   {
     slug: "showdownrl",
@@ -110,63 +102,6 @@ export const projects: Project[] = [
     metric: { value: "79%", label: "win rate over 1,000 battles" },
     year: "2026",
     stack: "Python · PyTorch · Gymnasium · Playwright",
-    painting: "clifftop.webp",
-  },
-];
-
-export type Pick = {
-  name: string;
-  /** One line on what it is. */
-  blurb: string;
-  /** The mono stack tag at the right of the row. */
-  stack: string;
-  /** The repository; omitted when the code is private. */
-  href?: string;
-  /** Where it runs in the browser, when it does. */
-  live?: string;
-  /** The project page on this site, when it has one. */
-  slug?: string;
-};
-
-/** The project rows on the front page, in order. */
-export const picks: Pick[] = [
-  {
-    name: "beat the bots",
-    blurb:
-      "Browser futures game against 32 bots on a C++20 exchange compiled to WebAssembly; 21M orders/s, integer-exact zero-sum accounting, native and WASM byte-identical.",
-    stack: "c++ · wasm · typescript",
-    href: "https://github.com/AnanmayS/trading_arena",
-    live: "https://ananmays.github.io/trading_arena/",
-    slug: "beat-the-bots",
-  },
-  {
-    name: "pitwall",
-    blurb:
-      "F1 telemetry coach and what-if race simulator over 32M rows of lap data; replays a race 10,000 times in about a second and serves cached scenarios in 9 ms.",
-    stack: "python · clickhouse · dynamodb",
-    slug: "pitwall",
-  },
-  {
-    name: "tape",
-    blurb: "Records live exchange feeds to S3 and replays them byte-for-byte; 49.8k msgs/sec in load tests.",
-    stack: "go · aws · terraform",
-    href: "https://github.com/AnanmayS/tape",
-    slug: "tape",
-  },
-  {
-    name: "wildebeest",
-    blurb:
-      "Fault-tolerant pipeline that runs wildlife-detection models on camera-trap photos; 0 photos lost across 30 injected failures.",
-    stack: "typescript · postgres · redis",
-    href: "https://github.com/AnanmayS/wildebeest",
-    slug: "wildebeest",
-  },
-  {
-    name: "showdownrl",
-    blurb: "PPO agent for Pokémon Showdown that won 79% of 1,000 battles against a scripted opponent.",
-    stack: "python · pytorch · ppo",
-    href: "https://github.com/AnanmayS/ShowdownRL",
-    slug: "showdownrl",
   },
 ];
 

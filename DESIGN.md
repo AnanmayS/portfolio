@@ -1,105 +1,94 @@
 ---
-version: 4
-name: Dashboard
-description: A dark, dashboard-style personal page. One painting at the top with the name over it, then two columns of bordered cards on a near-black ground; small type, hairlines, mono labels, coloured dots for status.
+version: 5
+name: Plates
+description: Cream laid paper, one blue ink, a fine grain. An engraved plate of the Chesapeake opens the front page with the name in its sky; the content follows as mounted plates, cards with a double rule. The demos play on plates of solid ink.
 colors:
-  dark:
-    background: "#0a0b0e"
-    foreground: "#e6e8ee"
-    soft: "#c8ccd6"
-    muted: "#8b919e"
-    faint: "#6f7684"
-    border: "#1f232b"
-    panel: "#111318"
-    plate: "#0e1014"
-    chip: "#181b22"
-    green: "#22c55e"
-    amber: "#f59e0b"
-    blue: "#3b82f6"
-    sun: "#f0a868"
+  light:
+    paper: "#f1ece0"
+    paper-deep: "#e8e2d1"
+    card: "rgba(243,239,229,.9)"
+    ink: "#1e3570"
+    soft: "#3a4a86"
+    muted: "#66719a"
+    faint: "#949cb8"
+    rule: "rgba(30,53,112,.16)"
+    rule-strong: "rgba(30,53,112,.34)"
+    plate: "#16274f"
+    ok: "#2f7d5b"
+    bad: "#b5533c"
 typography:
-  sans:
-    fontFamily: "Geist"
-    weights: [400, 500, 600]
-    usage: "Everything that is a sentence, a name, or a row"
   serif:
     fontFamily: "Newsreader"
-    usage: "Page titles on the inner pages (/work and each project) only"
+    weight: 400
+    usage: "The name, the italic tagline, section and project titles, every metric"
+  sans:
+    fontFamily: "Geist"
+    weights: [400, 500]
+    usage: "Everything that is a sentence or a row"
   mono:
     fontFamily: "Geist Mono"
     weight: 400
-    usage: "Dates, stack tags, link keys, chips, the credit line, the footer"
+    usage: "Labels in small caps, dates, stacks, the clock, the colophon"
 layout:
-  grid: 60rem
-  column-min: 23.75rem
-  gap: 0.75rem
-  base-size: 13px
+  wrap: 66rem
+  grid: 12 columns, 0.875rem gap
+  plate: "max(min(86vh, 48.75rem), the image's own height at this width)"
+  base-size: 15px
 motion:
-  enter: 640ms blur-and-rise, staggered 60ms per block
-  art: one 6–12 s loop per project demo on /work, only while on screen
+  load: the name and its lines rise 14px, staggered 70ms, transform only
+  reveal: cards below the fold rise 22px as they arrive, 70ms apart in a batch
+  parallax: the plate drifts at 0.22 of scroll
+  metric: counts up to itself when its card arrives, 1.1s ease-out
+  hover: a linked card lifts 3px and its arrow slides right
+  art: one 6–12 s loop per project demo, only while on screen
 ---
 
 ## Overview
 
-The front page borrows the posture of an agent dashboard: a hero image with
-a short line of controls over it, then a grid of small bordered cards that
-read like status panels. The hero is an impressionist painting of Venice at
-dusk, dimmed and faded into the page ground, with the name set large over
-the glow and one button under it. Below, two columns: About, Experience and
-Find me on the left; Projects on the right. The last card
-in each column stretches so both columns end on the same line.
+The site is set on cream laid paper in one blue ink, with a fine grain over
+everything. The front page opens on a full-bleed steel engraving of the
+Chesapeake Bay (a screw-pile lighthouse, a skipjack, a far shore with a
+steeple and a water tower, a pine at the right) with the name set in the
+plate's blank sky and a soft breath of paper behind it. The print is sepia on
+disk; an SVG duotone filter tints it to the page's ink and paper in the
+browser, so the plate can never drift from the type.
 
-Everything on the cards is a row: a name, a mono tag at the right, one grey
-line of text. Status is a 7px dot, green for current, grey for past. There
-is no accent colour beyond those dots and the sun-orange eyebrow over the
-name, which is pulled from the painting.
+The content follows as a deck of mounted plates: cards on 90% paper with a
+blur, a hairline border and an inner rule like a mount, that pull up over the
+water and continue on the paper. About and Now first; then the five projects,
+numbered Plate I to V like the plates in a book, each with the number that
+says it works set large in the serif; then Experience and Elsewhere.
 
-The inner pages (/work, each project) keep their gallery layout and
-serif titles, on the same dark ground.
+On /work each project is a plate too, its demo on a panel of solid ink inside
+the card. Inside that panel the tokens flip to light-on-dark, so the demos
+keep the drawing they were made with.
 
 ## Colour
 
-Near-black ground, cards one step lighter, hairline borders a step above
-that. Text in four greys: foreground for names, soft for body, muted for
-descriptions, faint for labels. Green, amber and blue are reserved for
-dots and small status marks; the sun orange appears once, over the name,
-and on the small avatar in the chat.
+Paper, one ink, and four steps of the ink for softer text. Hairlines are the
+ink at 16% and 34%. The only other colours are the green and the coral inside
+the demos, for what went right and wrong, and they never appear on the paper.
 
 ## Type
 
-Geist at 13px on the cards, 14px for the About paragraph. Geist Mono at
-10–11px for anything that reads as a label. The name is the one large
-thing on the page, at 64px.
+Newsreader for anything that is a title or a number: the name at up to 96px,
+the italic tagline, the plate names, the metrics. Geist for sentences and
+rows at 14–16px. Geist Mono at 10.5–11.5px for labels (small caps,
+letter-spaced), dates, stacks and the clock.
 
-## Illustrations
+## Motion
 
-Each is an SVG animated with CSS, greyscale, in one synchronised loop that
-plays only while the figure is on screen and rests at its finished frame
-under reduced motion. It shows the mechanism, not a picture of it:
-Wildebeest kills a worker mid-photo and draws both recoveries to scale in
-real time, three missed heartbeats against a Docker event, then refuses a
-late write from a stale lease epoch; Tape captures, loses the feed, flags
-the hole, replays compressed, and matches the digest; ShowdownRL plays
-four turns on a real battlefield, Charizard against Blastoise with a switch
-to Venusaur, the masked policy beside it, and lands on the measured win rate
-over the baseline; Pit Wall replays the real 2025 Hungarian Grand Prix lap by
-lap to the stop that cost Piastri the win, asks what if he had stayed out,
-fans 10,000 simulated finishes out from that lap and fills the bars with
-where they ended; Beat the Bots plays one stretch of a round against the
-32 bots, you buying from a market maker, a headline landing, the makers
-pulling their quotes, the price gapping up as the bots digest the news,
-and you selling to a momentum bot for +$148, the order book and your
-account changing as it goes.
-
-The pond is the exception that proves the rule: a picture, not a mechanism.
-Sunlight is two layers of turbulence drifting against each other, the
-terrapin's lap is a sampled ellipse with its heading taken from the tangent,
-and it pauses and rests exactly as the diagrams do.
+Nothing waits invisible. The hero rises on load with transform only, so a
+paused frame still reads. Cards already on screen at hydration are left as
+the server rendered them; only the ones below the fold get the rise, and
+the classes come off again once they have arrived. The plate's parallax, the
+count-up and the pulse on the Now dot all stop under reduced motion.
 
 ## Do's and Don'ts
 
-- Do keep each card's text to one or two lines per row. The page is scanned, not read.
-- Do keep the two columns ending on the same line; the stretch rule handles it when text changes.
-- Don't add a status badge to a project. A row links to the code; that is the status.
-- Don't add a second painting to the front page.
+- Do keep the ink single. A second colour on the paper breaks the print.
+- Do keep the grain at 10% and in CSS, never baked into the plate.
+- Do generate any new plate in greyscale and let the filter tint it.
+- Don't put text over the busy part of the plate; the fog marks the sky that is safe.
+- Don't add a status badge to a project. Its card links to the page; that is the status.
 - Don't put phone numbers or anything not already public on the page.

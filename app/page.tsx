@@ -1,216 +1,208 @@
 import Link from "next/link";
 import { Clock } from "./clock";
 import { ComposeTrigger } from "./compose";
-import { home, person, picks, projects, roles } from "./content";
-import {
-  ArrowIcon,
-  BriefcaseIcon,
-  CompassIcon,
-  ForkIcon,
-  GitHubIcon,
-  LockIcon,
-  OutIcon,
-  PersonIcon,
-} from "./icons";
+import { Count } from "./count";
+import { Deck } from "./deck";
+import { home, languages, person, projects, roles } from "./content";
+import { OutIcon } from "./icons";
 import { asset } from "./paths";
+import { Plate } from "./plate";
 
 /*
-  The front page. A painting at the top with the name over it, then two
-  columns of cards on a dark ground: About, Experience and Find me on the
-  left; Projects on the right. The columns stretch to the same height, so
-  the last card in each ends on the same line.
+  The front page. The engraved plate opens it with the name set in its sky;
+  then the deck of mounted plates: About and Now, the five projects (each
+  numbered like a plate in a book, with the number that says it works),
+  Experience, and Elsewhere.
 */
-/* The shelf follows the rows' order. */
-const shelf = picks.flatMap((pick) => projects.filter((project) => project.slug === pick.slug));
+const numerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+const words = ["one", "two", "three", "four", "five", "six", "seven", "eight"];
+
+/* The three narrow plates, then the two wide ones. */
+const span = (i: number) => (i < 3 ? "c4" : "c6");
+
+const [first, ...last] = person.name.split(" ");
 
 export default function Home() {
+  const current = roles[0];
+
   return (
     <main className="home">
-      <section className="hero" id="top">
-        <img className="hero-img" src={asset(`/paintings/${home.painting}`)} alt={home.paintingAlt} />
-        <div className="hero-dim" aria-hidden="true" />
-        <div className="hero-fade" aria-hidden="true" />
+      <header className="plate" id="top">
+        <Plate src={asset(`/plates/${home.plate}`)} alt={home.plateAlt} />
+        <div className="plate-fog" aria-hidden="true" />
 
-        <div className="topbar in" style={{ "--i": 0 } as React.CSSProperties}>
-          <span className="pill">
-            <span className="dot dot-ok" aria-hidden="true" />
-            {person.first.toLowerCase()}
-            <span className="pill-clock mono">
-              <Clock /> {person.where.toLowerCase()}
-            </span>
-          </span>
-          <nav className="topnav" aria-label="Site">
-            <Link href="/work">
-              work
-              <ArrowIcon size={11} />
+        <div className="wrap">
+          <div className="mast">
+            <Link className="mark" href="/" aria-label={`${person.name}, home`}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.1" aria-hidden="true">
+                <circle cx="12" cy="12" r="10.5" />
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4M4.6 4.6l2.8 2.8M16.6 16.6l2.8 2.8M4.6 19.4l2.8-2.8M16.6 7.4l2.8-2.8" />
+                <path d="M12 8l1.2 2.8L16 12l-2.8 1.2L12 16l-1.2-2.8L8 12l2.8-1.2z" fill="currentColor" stroke="none" />
+              </svg>
+              <span>{person.name}</span>
             </Link>
-            <a href={asset("/resume.pdf")} target="_blank" rel="noreferrer">
-              résumé
-              <OutIcon size={11} />
-            </a>
-            <a className="iconbtn" href={person.github} target="_blank" rel="noreferrer" aria-label="GitHub">
-              <GitHubIcon size={15} />
-            </a>
-          </nav>
-        </div>
+            <nav className="mast-nav" aria-label="Site">
+              <Link className="u" href="/work">
+                Work
+              </Link>
+              <a className="u" href={asset("/resume.pdf")} target="_blank" rel="noreferrer">
+                Résumé
+              </a>
+              <span className="mast-where mono">
+                {person.whereLong} · <Clock />
+              </span>
+            </nav>
+          </div>
 
-        <div className="hero-text in" style={{ "--i": 1 } as React.CSSProperties}>
-          <p className="mono hero-eyebrow">{home.eyebrow}</p>
-          <h1 className="hero-name">{person.name}</h1>
-          <p className="hero-tagline">{home.tagline}</p>
-          <p className="hero-sub">{home.subline}</p>
-          <div className="hero-actions">
-            <ComposeTrigger className="btn btn-primary" title={`Email ${person.email}`}>
-              Get in touch
-              <ArrowIcon size={13} />
-            </ComposeTrigger>
+          <div className="hero">
+            <p className="label hero-eyebrow rise">{home.subline}</p>
+            <h1 className="hero-name rise">
+              {first} <em>{last.join(" ")}</em>
+            </h1>
+            <p className="hero-lede rise">{home.tagline}</p>
+            <div className="hero-links rise">
+              <a className="u" href={person.github} target="_blank" rel="noreferrer">
+                GitHub <span className="k">↗</span>
+              </a>
+              <a className="u" href={person.linkedin} target="_blank" rel="noreferrer">
+                LinkedIn <span className="k">↗</span>
+              </a>
+              <ComposeTrigger className="u" title={`Email ${person.email}`}>
+                {person.email} <span className="k">write</span>
+              </ComposeTrigger>
+            </div>
           </div>
         </div>
+      </header>
 
-        <p className="mono hero-credit">{home.paintingCredit}</p>
-      </section>
-
-      <div className="grid">
-        <div className="col">
-          <section className="card in" id="about" style={{ "--i": 2 } as React.CSSProperties}>
-            <h2 className="card-title">
-              <PersonIcon size={13} />
-              About
-            </h2>
-            <p className="about">{home.about}</p>
+      <Deck className="deck wrap">
+        <div className="grid">
+          <section className="card c7" id="about" aria-labelledby="h-about">
+            <div className="card-lab label">
+              <span id="h-about">About</span>
+              <span>{person.whereLong}</span>
+            </div>
+            <p className="about-text">{home.about}</p>
+            <div className="langs mono">
+              {languages.map((lang) => (
+                <span key={lang}>{lang}</span>
+              ))}
+            </div>
           </section>
 
-          <section className="card in" id="experience" style={{ "--i": 3 } as React.CSSProperties}>
-            <h2 className="card-title">
-              <BriefcaseIcon size={13} />
-              Experience
-            </h2>
-            <ul className="rows">
-              {roles.map((role, i) => (
-                <li key={role.company} className="row">
-                  <div className="row-line">
-                    <span className={`dot ${i === 0 ? "dot-ok" : "dot-dim"}`} aria-hidden="true" />
-                    <span className="row-name">{role.company}</span>
-                    <span className="mono row-when">{role.when}</span>
-                  </div>
-                  <p className="row-text row-indent">
-                    {role.title}. {role.result}
-                  </p>
-                </li>
-              ))}
+          <section className="card c5" id="now" aria-labelledby="h-now">
+            <div className="card-lab label">
+              <span id="h-now">Now</span>
+              <span>{person.timeZone}</span>
+            </div>
+            <div className="now-time mono">
+              <Clock />
+            </div>
+            <p className="now-place mono">local time in {person.whereLong}</p>
+            <ul className="now-list">
+              <li>
+                <span className="dot dot-pulse" aria-hidden="true" />
+                <span>
+                  {current.title} at {current.company}
+                </span>
+              </li>
+              <li>
+                <span className="dot dot-dim" aria-hidden="true" />
+                <span>
+                  {person.school} · class of {person.classOf}
+                </span>
+              </li>
             </ul>
           </section>
 
-          <section className="card card-fill in" id="contact" style={{ "--i": 4 } as React.CSSProperties}>
-            <h2 className="card-title">
-              <CompassIcon size={13} />
-              Find me
-            </h2>
-            <ul className="links">
+          <div className="strip" id="projects">
+            <h2>Projects</h2>
+            <span className="strip-note mono">
+              {words[projects.length - 1] ?? projects.length} plates · each with the number that says it works
+            </span>
+          </div>
+
+          {projects.map((project, i) => (
+            <Link key={project.slug} className={`card ${span(i)}`} href={`/work/${project.slug}`}>
+              <div className="card-lab label">
+                <span>Plate {numerals[i]}</span>
+                <span>{project.year}</span>
+              </div>
+              <h3 className="proj-name">{project.name}</h3>
+              <p className="proj-lede">{project.lede}</p>
+              <div className="metric">
+                <Count className="metric-value" value={project.metric.value} />
+                <span className="metric-label mono">{project.metric.label}</span>
+              </div>
+              <div className="proj-stack mono">
+                <span>{project.stack}</span>
+                <span className="proj-go" aria-hidden="true">
+                  open →
+                </span>
+              </div>
+            </Link>
+          ))}
+
+          <section className="card c7" id="experience" aria-labelledby="h-xp">
+            <div className="card-lab label">
+              <span id="h-xp">Experience</span>
+              <span>
+                {roles[roles.length - 1].start} – now
+              </span>
+            </div>
+            {roles.map((role) => (
+              <div key={role.company} className="xp-row">
+                <div>
+                  <div className="xp-co">{role.company}</div>
+                  <div className="xp-title">{role.title}</div>
+                  <div className="xp-when mono">{role.when}</div>
+                </div>
+                <div className="xp-result">{role.result}</div>
+              </div>
+            ))}
+          </section>
+
+          <section className="card c5" id="contact" aria-labelledby="h-find">
+            <div className="card-lab label">
+              <span id="h-find">Elsewhere</span>
+              <span>{person.handle}</span>
+            </div>
+            <ul className="find-list">
               <li>
-                <a className="link" href={person.linkedin} target="_blank" rel="noreferrer">
-                  <span className="dot dot-ok" aria-hidden="true" />
-                  <span className="mono link-key">linkedin</span>
-                  <span className="link-val">{person.linkedinShort}</span>
-                  <span className="link-end" aria-hidden="true">
-                    ↗
-                  </span>
+                <a className="u" href={person.github} target="_blank" rel="noreferrer">
+                  GitHub
                 </a>
+                <span className="k mono">github.com/{person.handle.slice(1)}</span>
               </li>
               <li>
-                <a className="link" href={person.github} target="_blank" rel="noreferrer">
-                  <span className="dot dot-ok" aria-hidden="true" />
-                  <span className="mono link-key">github</span>
-                  <span className="link-val">{person.handle.slice(1)}</span>
-                  <span className="link-end" aria-hidden="true">
-                    ↗
-                  </span>
+                <a className="u" href={person.linkedin} target="_blank" rel="noreferrer">
+                  LinkedIn
                 </a>
+                <span className="k mono">{person.linkedinShort}</span>
               </li>
               <li>
-                <ComposeTrigger className="link" title={`Email ${person.email}`}>
-                  <span className="dot dot-ok" aria-hidden="true" />
-                  <span className="mono link-key">email</span>
-                  <span className="link-val">{person.email}</span>
-                  <span className="link-end" aria-hidden="true">
-                    write
-                  </span>
+                <ComposeTrigger title={`Email ${person.email}`}>
+                  <span className="u">Email</span>
+                  <span className="k mono">{person.email}</span>
                 </ComposeTrigger>
               </li>
               <li>
-                <a className="link" href={asset("/resume.pdf")} target="_blank" rel="noreferrer">
-                  <span className="dot dot-ok" aria-hidden="true" />
-                  <span className="mono link-key">resume</span>
-                  <span className="link-val">resume.pdf</span>
-                  <span className="link-end" aria-hidden="true">
-                    ↓
-                  </span>
+                <a className="u" href={asset("/resume.pdf")} target="_blank" rel="noreferrer">
+                  Résumé
                 </a>
+                <span className="k mono">
+                  pdf <OutIcon size={10} />
+                </span>
               </li>
             </ul>
           </section>
         </div>
+      </Deck>
 
-        <div className="col">
-          <section className="card card-fill in" id="projects" style={{ "--i": 2 } as React.CSSProperties}>
-            <h2 className="card-title">
-              <ForkIcon size={13} />
-              Projects <span className="card-count">{picks.length}</span>
-            </h2>
-            <ul className="rows">
-              {picks.map((pick) => (
-                <li key={pick.name} className="row">
-                  <div className="row-line">
-                    {pick.slug ? (
-                      <Link className="row-name" href={`/work/${pick.slug}`}>
-                        {pick.name}
-                      </Link>
-                    ) : (
-                      <span className="row-name">{pick.name}</span>
-                    )}
-                    <span className="mono row-stack">{pick.stack}</span>
-                    {pick.live && (
-                      <a className="mono row-repo" href={pick.live} target="_blank" rel="noreferrer">
-                        play <span aria-hidden="true">↗</span>
-                      </a>
-                    )}
-                    {pick.href ? (
-                      <a className="mono row-repo" href={pick.href} target="_blank" rel="noreferrer">
-                        github <span aria-hidden="true">↗</span>
-                      </a>
-                    ) : (
-                      <span className="mono row-repo">
-                        <LockIcon size={11} />
-                        private
-                      </span>
-                    )}
-                  </div>
-                  <p className="row-text">{pick.blurb}</p>
-                </li>
-              ))}
-            </ul>
-
-            {/* Each project in its painting, with the number that says it works. Fills
-                what is left of the column, so the two columns still end together. */}
-            <ul className="shelf">
-              {shelf.map((project) => (
-                <li key={project.slug}>
-                  <Link className="shelf-tile" href={`/work/${project.slug}`}>
-                    <img className="shelf-img" src={asset(`/paintings/${project.painting}`)} alt="" loading="lazy" />
-                    <span className="shelf-name">{project.name}</span>
-                    <span className="shelf-value">{project.metric.value}</span>
-                    <span className="shelf-label">{project.metric.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-      </div>
-
-      <footer className="foot mono">
-        <span>© 2026 {person.fullName.toLowerCase()}</span>
-        <span>{person.whereLong.toLowerCase()}</span>
+      <footer className="foot wrap mono">
+        <span>© 2026 {person.fullName}</span>
+        <span>set in Newsreader and Geist · plate tinted in the browser</span>
       </footer>
     </main>
   );
