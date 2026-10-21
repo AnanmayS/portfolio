@@ -23,8 +23,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 /*
   A project on its own: the demo hung large in its painting, what it is in
-  one sentence, the number that says it works, the stack, and the code (or
-  that the code is private). Previous and next walk the collection.
+  one sentence, the number that says it works, the stack, where to play it
+  when it runs in the browser, and the code (or that the code is private).
+  Previous and next walk the collection.
 */
 export default async function ProjectPage({ params }: Params) {
   const { slug } = await params;
@@ -43,7 +44,7 @@ export default async function ProjectPage({ params }: Params) {
 
       <div className="exhibit">
         <div className="exhibit-main">
-          <span className="exhibit-year mono">{project.year}</span>
+          <span className="exhibit-year">{project.year}</span>
           <h1 className="page-title">{project.name}</h1>
           <p className="exhibit-lede">{project.lede}</p>
         </div>
@@ -56,6 +57,12 @@ export default async function ProjectPage({ params }: Params) {
             <span className="exhibit-key">Stack</span>
             <span>{project.stack}</span>
           </div>
+          {project.live && (
+            <a className="exhibit-link" href={project.live} target="_blank" rel="noreferrer">
+              Play it in your browser
+              <OutIcon size={11} />
+            </a>
+          )}
           {project.href ? (
             <a className="exhibit-link" href={project.href} target="_blank" rel="noreferrer">
               View on GitHub

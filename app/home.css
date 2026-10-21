@@ -1,7 +1,8 @@
 /*
-  The front page: a painting at the top, then cards on a dark ground. Small
-  type, hairline borders, mono for anything that reads as a label. Every
-  colour is a token from globals.css.
+  The front page. A full-bleed engraved plate opens it, with the name and a
+  few lines set in the plate's blank sky; then the cards pull up over the
+  water: the five projects and the work history. A flip clock in the sky
+  counts down to graduation. Every colour is a token from globals.css.
 */
 
 .home {
@@ -10,481 +11,734 @@
   min-height: 100vh;
 }
 
-/* ---------- the hero ---------- */
+.wrap {
+  width: min(100% - (var(--margin) * 2), 66rem);
+  margin: 0 auto;
+}
 
-.hero {
+/* ---------- the plate ---------- */
+
+.plate {
   position: relative;
-  height: 32.5rem;
+  height: max(min(86vh, 48.75rem), calc(100vw * 821 / 1916));
+  min-height: 35rem;
+  isolation: isolate;
   overflow: hidden;
-  background: #1a1c3a;
 }
 
-.hero-img {
+.plate-art {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* The engraving: sepia on disk, tinted to the page's ink by the filter in
+   plate.tsx, faded into the paper along its bottom edge. */
+.plate-img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 38%;
+  max-width: none;
+  height: auto;
+  filter: url(#ink);
+  will-change: transform;
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
 }
 
-.hero-dim {
+/* A breath of paper behind the name, so the sky's lines never cross the type. */
+.plate-fog {
   position: absolute;
   inset: 0;
-  background: rgba(10, 11, 14, 0.28);
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(60% 58% at 14% 30%, rgba(241, 236, 224, 0.85), rgba(241, 236, 224, 0) 72%);
 }
 
-.hero-fade {
-  position: absolute;
-  inset: auto 0 0;
-  height: 16.25rem;
-  background: linear-gradient(180deg, rgba(10, 11, 14, 0) 0%, rgba(10, 11, 14, 0.82) 65%, var(--background) 100%);
+.plate .wrap {
+  position: relative;
+  z-index: 2;
 }
 
-.topbar {
-  position: absolute;
-  inset: 0 0 auto;
+.mast {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.875rem 1.25rem;
+  gap: 1rem;
+  padding-top: 1.375rem;
 }
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 0.375rem 0.625rem;
-  background: rgba(16, 18, 24, 0.7);
-  color: var(--foreground);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.pill-clock {
-  color: var(--muted);
-  font-size: 0.625rem;
-}
-
-.pill-clock .clock {
-  color: var(--soft);
-}
-
-.topnav {
+.mark {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.625rem;
+  font-weight: 500;
 }
 
-.topnav a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3125rem;
-  min-height: 2rem;
-  border-radius: 6px;
-  padding: 0.375rem 0.625rem;
+.mark svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.mast-nav {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+}
+
+.mast-nav a {
   color: var(--soft);
-  font-size: 0.8125rem;
-  transition: color 120ms ease;
-}
-
-.topnav a:hover {
-  color: #fff;
-}
-
-.topnav .iconbtn {
-  width: 2rem;
-  justify-content: center;
-  margin-left: 0.375rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 0;
-  background: rgba(16, 18, 24, 0.7);
-}
-
-.hero-text {
-  position: absolute;
-  inset: auto 1rem 2rem;
-  text-align: center;
-}
-
-.hero-eyebrow {
-  margin-bottom: 0.75rem;
-  color: var(--sun);
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.hero-name {
-  font-size: clamp(2.5rem, 7vw, 4rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: #f7f7fa;
-}
-
-.hero-tagline {
-  margin-top: 1rem;
-  color: var(--soft);
-  font-size: 1.0625rem;
-}
-
-.hero-sub {
-  margin-top: 0.375rem;
-  color: var(--muted);
   font-size: 0.875rem;
 }
 
-.hero-actions {
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 42rem) auto;
+  align-items: start;
+  justify-content: space-between;
+  gap: 2rem 3rem;
+  padding-top: clamp(2.5rem, 8vh, 5rem);
+}
+
+.hero-text {
+  max-width: 42rem;
+}
+
+/* The clock sits in the blank sky at the right, level with the line over
+   the name, small enough that its four groups share one line and end above
+   the pine. */
+.hero-clock {
+  justify-self: end;
+  padding-top: 0.125rem;
+}
+
+.hero-clock .flipclock {
+  align-items: flex-end;
+}
+
+.hero-clock .flip-groups {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.hero-clock .flap {
+  --flap-w: 2rem;
+  --flap-h: 2.75rem;
+  font-size: 2rem;
+}
+
+@media (max-width: 64rem) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .hero-clock {
+    justify-self: start;
+    padding-top: 0;
+  }
+
+  .hero-clock .flipclock {
+    align-items: flex-start;
+  }
+
+  .hero-clock .flip-groups {
+    justify-content: flex-start;
+  }
+}
+
+.hero-name {
+  margin-bottom: 1.125rem;
+  font-family: var(--font-serif);
+  font-size: clamp(3.375rem, 7.5vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: -0.024em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+.hero-lede {
+  margin-bottom: 1.125rem;
+  color: var(--soft);
+  font-family: var(--font-serif);
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  font-style: italic;
+  line-height: 1.28;
+}
+
+.hero-about {
+  max-width: 34rem;
+  margin-bottom: 1.5rem;
+  color: var(--soft);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.hero-links {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem 1.5rem;
-  margin-top: 1.25rem;
+  align-items: baseline;
+  gap: 0.5rem 1.375rem;
 }
 
-
-.btn {
+.hero-links a,
+.hero-links button {
   display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 0.5rem 0.875rem;
-  background: rgba(16, 18, 24, 0.7);
+  align-items: baseline;
+  gap: 0.3125rem;
+  border: 0;
+  padding: 0;
+  background: none;
   color: var(--foreground);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: background-color 120ms ease, color 120ms ease;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
 }
 
-.btn:hover {
-  background: rgba(30, 33, 42, 0.8);
+.hero-links .u {
+  border-bottom: 1px solid var(--border-strong);
 }
 
-.btn-primary {
-  border-color: transparent;
-  background: #f3f4f8;
-  color: var(--background);
-}
-
-.btn-primary:hover {
-  background: #fff;
-}
-
-.hero-credit {
-  position: absolute;
-  right: 1rem;
-  bottom: 0.75rem;
+.k {
   color: var(--faint);
-  font-size: 0.625rem;
 }
 
-@media (max-width: 40rem) {
-  .hero {
-    height: 36rem;
+/* The name and its lines settle on load; nothing waits invisible. */
+.rise {
+  animation: rise 800ms var(--ease) both;
+}
+
+.rise:nth-child(2) { animation-delay: 70ms; }
+.rise:nth-child(3) { animation-delay: 140ms; }
+.rise:nth-child(4) { animation-delay: 210ms; }
+.hero-clock.rise { animation-delay: 220ms; }
+
+@keyframes rise {
+  from {
+    transform: translateY(14px);
   }
 
-  .hero-credit {
-    display: none;
+  to {
+    transform: none;
   }
 }
 
-/* ---------- the cards ---------- */
+/* ---------- the deck of mounted plates ---------- */
+
+.deck {
+  position: relative;
+  z-index: 2;
+  margin-top: -6.875rem;
+  padding-bottom: 3rem;
+}
 
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  gap: 0.75rem;
-  width: min(100% - 2rem, 60rem);
-  margin: 2.25rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.875rem;
 }
 
-.col {
-  display: flex;
-  flex: 1 1 23.75rem;
-  flex-direction: column;
-  gap: 0.75rem;
-  min-width: 0;
+/* Only these cards sit over the plate, so only they blur what is behind them. */
+.grid > .card {
+  grid-column: span 12;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.card {
+.grid > .c4 { grid-column: span 4; }
+.grid > .c5 { grid-column: span 5; }
+.grid > .c6 { grid-column: span 6; }
+.grid > .c7 { grid-column: span 7; }
+
+@media (max-width: 55rem) {
+  .grid > .c4,
+  .grid > .c6 {
+    grid-column: span 6;
+  }
+
+  .grid > .c5,
+  .grid > .c7 {
+    grid-column: span 12;
+  }
+}
+
+/* Below desktop width the hero stacks, so the plate moves under it instead
+   of behind it: a full-width band the cards pull up over. */
+@media (max-width: 64rem) {
+  .plate {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+  }
+
+  .plate-art {
+    position: relative;
+    order: 2;
+    margin-top: 1.25rem;
+  }
+
+  .plate-img {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  }
+
+  .plate-fog {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 2.75rem;
+  }
+
+  /* The cards still pull up over the band, but only over its last strip of water. */
+  .deck {
+    margin-top: -3.5rem;
+  }
+}
+
+/* Phones: the band is cropped to the shore, and the cards stack. */
+@media (max-width: 37.5rem) {
+  .grid > .c4,
+  .grid > .c5,
+  .grid > .c6,
+  .grid > .c7 {
+    grid-column: span 12;
+  }
+
+  .plate-art {
+    height: 20.625rem;
+  }
+
+  .plate-img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: 150%;
+  }
+}
+
+/* About */
+
+.about-text {
+  max-width: 60ch;
+  color: var(--soft);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* A project card */
+
+.proj-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.625rem;
+}
+
+.proj-name {
+  font-family: var(--font-serif);
+  font-size: 1.625rem;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+
+.proj-year {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.proj-lede {
+  color: var(--soft);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.metric {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.875rem 1rem;
-  background: var(--panel);
+  gap: 0.125rem;
+  margin: 1.125rem 0 1rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--border);
+}
+
+.metric-value {
+  font-family: var(--font-serif);
+  font-size: 2.375rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.proj-stack {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+/* Under the projects: the work history, with the shelf beside it. */
+
+.below {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 21rem;
+  gap: 2.5rem 4rem;
+  align-items: start;
+  padding-top: 2.5rem;
+}
+
+@media (max-width: 64rem) {
+  .below {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Where I've worked: plain rows on the paper. */
+
+.xp {
+  max-width: 52rem;
+}
+
+/* The two section titles under the projects. */
+.xp h2,
+.shelf h2 {
+  margin-bottom: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.875rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.xp-row {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 0.25rem 1.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.xp-co {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.xp-title {
+  margin-top: 0.125rem;
+  color: var(--muted);
+  font-size: 0.78125rem;
+}
+
+.xp-when {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.78125rem;
+}
+
+.xp-result {
+  color: var(--soft);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 37.5rem) {
+  .xp-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- the shelf ---------- */
+
+/* Books as spines in the page's inks, standing on a hairline shelf. */
+.shelf-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  margin: 0;
+  padding: 0.75rem 0.75rem 0;
+  list-style: none;
+}
+
+.book {
+  position: relative;
+  flex: none;
+  border-radius: 2px 2px 1px 1px;
+  box-shadow: inset -2px 0 0 rgba(0, 0, 0, 0.12), inset 2px 0 0 rgba(255, 255, 255, 0.08);
+  transition: transform 200ms var(--ease);
+}
+
+/* The whole spine is the button. */
+.book-btn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.book:hover {
+  transform: translateY(-4px);
+}
+
+/* Pulled out: the book stands proud of the row. */
+.book.is-out,
+.book.is-out:hover {
+  transform: translateY(-12px);
+}
+
+.book-ink { background: var(--foreground); color: var(--background); }
+.book-plate { background: var(--plate); color: var(--background); }
+.book-soft { background: var(--soft); color: var(--background); }
+.book-muted { background: var(--muted); color: var(--background); }
+.book-paper { background: var(--raised); color: var(--foreground); box-shadow: inset 0 0 0 1px var(--border-strong); }
+
+.book-spine {
+  display: block;
+  padding-top: 0.75rem;
+  overflow: hidden;
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  writing-mode: vertical-rl;
+  max-height: 100%;
+}
+
+/* The book being read leans at the end of the row, a ribbon hanging out of it. */
+.book-reading {
+  margin-left: 0.5rem;
+  transform: rotate(-8deg) translateY(-2px);
+  transform-origin: 100% 100%;
+}
+
+.book-reading:hover {
+  transform: rotate(-8deg) translateY(-6px);
+}
+
+.book-reading.is-out,
+.book-reading.is-out:hover {
+  transform: rotate(-8deg) translateY(-14px);
+}
+
+.book-reading::after {
+  content: "";
+  position: absolute;
+  top: -0.75rem;
+  right: 6px;
+  width: 3px;
+  height: 1.5rem;
+  background: var(--bad);
+}
+
+.shelf-plank {
+  height: 3px;
+  border-radius: 1px;
+  background: var(--border-strong);
+  box-shadow: 0 10px 14px -10px rgba(30, 53, 112, 0.45);
+}
+
+.shelf-now {
+  min-height: 2.5rem;
+  margin-top: 1rem;
+  color: var(--muted);
   font-size: 0.8125rem;
   line-height: 1.5;
 }
 
-/* The last card in each column stretches, so both columns end on one line. */
-.card-fill {
-  flex: 1 1 auto;
+.shelf-now b {
+  color: var(--foreground);
+  font-weight: 500;
 }
 
-.card-title {
+/* ---------- the countdown ---------- */
+
+/* A split-flap clock: one ink card per digit with a paper digit on it, a
+   hinge across the middle, the days, hours, minutes and seconds until
+   commencement. */
+.flipclock {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.flip-head {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.flip-groups {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.flip-group {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  color: var(--soft);
+}
+
+.flip-digits {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.flip-label {
+  color: var(--muted);
   font-size: 0.75rem;
-  font-weight: 500;
 }
 
-.card-count {
-  color: var(--muted);
-}
-
-.about {
-  color: var(--soft);
-  font-size: 0.875rem;
-}
-
-.dot {
-  display: inline-block;
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-}
-
-.dot-ok {
-  background: var(--green);
-}
-
-.dot-dim {
-  background: var(--faint);
-}
-
-.dot-warn {
-  background: var(--amber);
-}
-
-/* A row: a name line, then one grey line of text. */
-.rows {
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1875rem;
-}
-
-.row-line {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-}
-
-.row-name {
-  flex: 1;
-  min-width: 0;
-  color: #f3f4f8;
-  font-weight: 500;
-}
-
-a.row-name:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.row-when,
-.row-stack {
-  color: var(--faint);
-  font-size: 0.625rem;
-  white-space: nowrap;
-}
-
-.row-repo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3125rem;
-  color: var(--muted);
-  font-size: 0.6875rem;
-  white-space: nowrap;
-}
-
-a.row-repo:hover {
-  color: var(--foreground);
-}
-
-.row-text {
-  color: var(--muted);
-}
-
-.row-indent {
-  padding-left: calc(7px + 0.625rem);
-}
-
-/* The projects' paintings: a 2 x 2 shelf under the rows that takes the rest of the card. */
-.shelf {
-  display: grid;
-  flex: 1 1 auto;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-rows: minmax(7.5rem, 1fr);
-  gap: 0.5rem;
-  margin: 1.125rem 0 0.125rem;
-  padding: 0;
-  list-style: none;
-}
-
-.shelf li {
-  display: flex;
-  min-width: 0;
-}
-
-.shelf-tile {
+.flap {
+  --flap-w: 2.5rem;
+  --flap-h: 3.5rem;
   position: relative;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: flex-end;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.625rem 0.75rem;
+  display: inline-block;
+  width: var(--flap-w);
+  height: var(--flap-h);
+  perspective: 320px;
   color: var(--foreground);
-  isolation: isolate;
-}
-
-.shelf-img {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 400ms ease;
-}
-
-/* Darken the bottom so the number reads over any painting. */
-.shelf-tile::after {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(to top, rgba(8, 9, 12, 0.92) 20%, rgba(8, 9, 12, 0.55) 60%, rgba(8, 9, 12, 0.15));
-  content: "";
-}
-
-.shelf-name {
-  color: var(--soft);
-  font-size: 0.6875rem;
-  font-weight: 500;
-}
-
-.shelf-value {
-  margin-top: 0.125rem;
   font-family: var(--font-serif);
-  font-size: 1.375rem;
-  line-height: 1.1;
+  font-size: 2.625rem;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--flap-h);
+  text-align: center;
 }
 
-.shelf-label {
-  color: var(--soft);
-  font-size: 0.6875rem;
-  line-height: 1.35;
-  text-wrap: pretty;
+.flap-half,
+.flap-leaf {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: var(--raised);
 }
 
-.shelf-tile:hover {
-  border-color: var(--border-strong);
+.flap-top,
+.flap-leaf-top {
+  top: 0;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
 }
 
-.shelf-tile:focus-visible {
-  outline: 2px solid var(--foreground);
-  outline-offset: 2px;
+.flap-bottom,
+.flap-leaf-bottom {
+  bottom: 0;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  background: var(--paper-deep);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .shelf-tile:hover .shelf-img {
-    transform: scale(1.04);
+/* Each half holds the whole glyph and shows its own half of it. */
+.flap-half > span,
+.flap-leaf > span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--flap-h);
+}
+
+.flap-top > span,
+.flap-leaf-top > span {
+  top: 0;
+}
+
+.flap-bottom > span,
+.flap-leaf-bottom > span {
+  bottom: 0;
+}
+
+/* The hinge. */
+.flap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 3;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+.flap-leaf {
+  z-index: 2;
+  backface-visibility: hidden;
+}
+
+.flap-leaf-top {
+  transform-origin: 50% 100%;
+  animation: flap-down 280ms ease-in both;
+}
+
+.flap-leaf-bottom {
+  transform-origin: 50% 0;
+  transform: rotateX(90deg);
+  animation: flap-up 280ms 280ms ease-out both;
+}
+
+@keyframes flap-down {
+  to {
+    transform: rotateX(-90deg);
   }
 }
 
-/* The ways out: one line each, like service rows. */
-.links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+@keyframes flap-up {
+  to {
+    transform: rotateX(0);
+  }
 }
 
-.link {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  min-height: 1.5rem;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: var(--foreground);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+@media (max-width: 37.5rem) {
+  .hero-clock .flap {
+    --flap-w: 1.875rem;
+  }
+
+  /* Small phones: the four groups may fall onto two lines. */
+  .hero-clock .flip-groups {
+    flex-wrap: wrap;
+    gap: 0.625rem 0.875rem;
+  }
 }
 
-.link-key {
-  flex: none;
-  width: 4.5rem;
-  color: var(--faint);
-  font-size: 0.6875rem;
-}
-
-.link-val {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  color: #f3f4f8;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.link:hover .link-val {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.link-end {
-  color: var(--faint);
-  font-size: 0.6875rem;
-}
-
-/* ---------- the foot ---------- */
+/* ---------- the colophon ---------- */
 
 .foot {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem;
-  width: min(100% - 2rem, 60rem);
-  margin: 1.75rem auto 0;
-  padding-bottom: 4.5rem;
-  color: var(--faint);
-  font-size: 0.625rem;
+  padding: 1.125rem 0 1.625rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8125rem;
 }
