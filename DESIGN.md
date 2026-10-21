@@ -63,8 +63,10 @@ the paper, one sentence per role; only the projects get the mount. Beside
 it, a shelf: the books read, drawn as spines in the page's inks with their
 titles set down them in the serif, standing on a hairline shelf, width from
 the page count. The book being read leans at the end of the row with a
-ribbon out of its top and is named under the shelf. No cover images: the
-shelf is drawn, like everything else here. Nothing on the page is said
+ribbon out of its top and is named under the shelf. Tap a book and it
+stands proud of the row while the line under the shelf names it, with a
+note if it has one; tap again, another book, or Escape, and it goes back.
+No cover images: the shelf is drawn, like everything else here. Nothing on the page is said
 twice, so there is no card of links (the hero has them).
 
 In the blank sky at the right of the name, a split-flap clock counts down

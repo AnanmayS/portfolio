@@ -114,6 +114,8 @@ export type Book = {
   format?: "s" | "m" | "l";
   /** Which of the page's inks the spine is bound in; cycles when omitted. */
   tone?: "ink" | "plate" | "soft" | "paper" | "muted";
+  /** One line shown under the shelf when the book is pulled out. */
+  note?: string;
 };
 
 /* The shelf on the front page, in the order the books stand. */
