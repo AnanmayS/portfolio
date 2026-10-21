@@ -22,8 +22,8 @@
   --card: rgba(243, 239, 229, 0.9);
   --foreground: #1e3570;
   --soft: #3a4a86;
-  --muted: #66719a;
-  --faint: #949cb8;
+  --muted: #586388;
+  --faint: #5d6890;
   --dim: #aab1c7;
   --border: rgba(30, 53, 112, 0.16);
   --border-strong: rgba(30, 53, 112, 0.34);
@@ -38,7 +38,6 @@
   --danger: #b5533c;
   --shadow: rgba(30, 53, 112, 0.35);
   --float: 0 1px 0 rgba(30, 53, 112, 0.04), 0 26px 40px -30px rgba(30, 53, 112, 0.4);
-  --lift: 0 1px 0 rgba(30, 53, 112, 0.04), 0 30px 44px -28px rgba(30, 53, 112, 0.5);
   --backdrop: rgba(30, 53, 112, 0.3);
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
@@ -122,15 +121,6 @@ figure {
   font-variant-numeric: tabular-nums;
 }
 
-/* A label: small mono caps, letter-spaced. */
-.label {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.65625rem; /* 10.5px */
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
 /* An underlined link whose underline draws in from the left on hover. */
 .u {
   border-bottom: 1px solid var(--border-strong);
@@ -173,11 +163,7 @@ figure {
   box-shadow: var(--float);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition:
-    transform 300ms var(--ease),
-    border-color 300ms ease,
-    box-shadow 300ms ease,
-    opacity 600ms var(--ease);
+  transition: border-color 200ms ease;
 }
 
 /* The inner rule of the mount. */
@@ -191,27 +177,7 @@ figure {
 }
 
 a.card:hover {
-  transform: translateY(-3px);
-  border-color: var(--muted);
-  box-shadow: var(--lift);
-}
-
-/* Cards below the fold rise in as they arrive (deck.tsx adds the classes). */
-.card.pre {
-  opacity: 0;
-  transform: translateY(22px);
-}
-
-.card.in-view {
-  opacity: 1;
-  transform: none;
-}
-
-.card-lab {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.875rem;
+  border-color: var(--foreground);
 }
 
 @media (max-width: 37.5rem) {
@@ -224,11 +190,6 @@ a.card:hover {
 
 .page-work {
   width: min(100% - (var(--margin) * 2), 60rem);
-}
-
-.clock {
-  display: inline-block;
-  min-width: 4.5em;
 }
 
 .projects {
@@ -266,8 +227,8 @@ a.card:hover {
 }
 
 .project-year {
-  color: var(--faint);
-  font-size: 0.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
 }
 
 .project-metric {
@@ -292,23 +253,8 @@ a.card:hover {
 }
 
 .project-stack {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
   color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
-}
-
-.project-go {
-  flex: none;
-  color: var(--faint);
-  transition: color 200ms ease, transform 300ms var(--ease);
-}
-
-.project:hover .project-go {
-  color: var(--foreground);
-  transform: translateX(3px);
+  font-size: 0.8125rem;
 }
 
 /* ---------- the frame: a demo on a plate of ink ---------- */
@@ -470,8 +416,8 @@ a.card:hover {
 }
 
 .exhibit-year {
-  color: var(--faint);
-  font-size: 0.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
 }
 
 .exhibit-lede {
@@ -792,62 +738,6 @@ a.card:hover {
   font-size: 0.875rem;
 }
 
-/* ---------- the ticker ---------- */
-
-.ticker {
-  position: relative;
-  display: inline-block;
-  white-space: pre;
-}
-
-.ticker-char {
-  display: inline-block;
-  transform-origin: center;
-}
-
-.ticker-char.is-in {
-  animation: tick-in 320ms cubic-bezier(0.22, 1.25, 0.36, 1) both;
-}
-
-.ticker-out {
-  position: absolute;
-  top: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.ticker-out .ticker-char {
-  animation: tick-out 320ms cubic-bezier(0.4, 0, 0.6, 1) both;
-}
-
-@keyframes tick-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.35em) scale(0.6) rotate(2deg);
-    filter: blur(0.1em);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-    filter: blur(0);
-  }
-}
-
-@keyframes tick-out {
-  from {
-    opacity: 1;
-    transform: none;
-    filter: blur(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(-0.35em) scale(0.6) rotate(2deg);
-    filter: blur(0.1em);
-  }
-}
-
 /* ---------- motion ---------- */
 
 @keyframes degree-fill {
@@ -870,8 +760,4 @@ a.card:hover {
     transition-duration: 1ms !important;
   }
 
-  .card.pre {
-    opacity: 1;
-    transform: none;
-  }
 }

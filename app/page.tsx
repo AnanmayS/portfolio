@@ -1,30 +1,21 @@
 import Link from "next/link";
-import { Clock } from "./clock";
 import { ComposeTrigger } from "./compose";
-import { Count } from "./count";
-import { Deck } from "./deck";
-import { home, languages, person, projects, roles } from "./content";
-import { OutIcon } from "./icons";
+import { Countdown } from "./countdown";
+import { home, person, projects, roles } from "./content";
 import { asset } from "./paths";
 import { Plate } from "./plate";
 
 /*
-  The front page. The engraved plate opens it with the name set in its sky;
-  then the deck of mounted plates: About and Now, the five projects (each
-  numbered like a plate in a book, with the number that says it works),
-  Experience, and Elsewhere.
+  The front page. The engraved plate opens it with the name, one line, two
+  sentences and three links in its sky, and a flip clock counting down to
+  graduation at the right. Then the five projects as mounted plates, each
+  with its one number, and the work history as plain rows.
 */
-const numerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
-const words = ["one", "two", "three", "four", "five", "six", "seven", "eight"];
 
 /* The three narrow plates, then the two wide ones. */
 const span = (i: number) => (i < 3 ? "c4" : "c6");
 
-const [first, ...last] = person.name.split(" ");
-
 export default function Home() {
-  const current = roles[0];
-
   return (
     <main className="home">
       <header className="plate" id="top">
@@ -49,160 +40,69 @@ export default function Home() {
               <a className="u" href={asset("/resume.pdf")} target="_blank" rel="noreferrer">
                 Résumé
               </a>
-              <span className="mast-where mono">
-                {person.whereLong} · <Clock />
-              </span>
             </nav>
           </div>
 
           <div className="hero">
-            <p className="label hero-eyebrow rise">{home.subline}</p>
-            <h1 className="hero-name rise">
-              {first} <em>{last.join(" ")}</em>
-            </h1>
-            <p className="hero-lede rise">{home.tagline}</p>
-            <div className="hero-links rise">
-              <a className="u" href={person.github} target="_blank" rel="noreferrer">
-                GitHub <span className="k">↗</span>
-              </a>
-              <a className="u" href={person.linkedin} target="_blank" rel="noreferrer">
-                LinkedIn <span className="k">↗</span>
-              </a>
-              <ComposeTrigger className="u" title={`Email ${person.email}`}>
-                {person.email} <span className="k">write</span>
-              </ComposeTrigger>
+            <div className="hero-text">
+              <h1 className="hero-name rise">{person.name}</h1>
+              <p className="hero-lede rise">{home.tagline}</p>
+              <p className="hero-about rise">{home.about}</p>
+              <div className="hero-links rise">
+                <a className="u" href={person.github} target="_blank" rel="noreferrer">
+                  GitHub
+                </a>
+                <a className="u" href={person.linkedin} target="_blank" rel="noreferrer">
+                  LinkedIn
+                </a>
+                <ComposeTrigger className="u" title={`Email ${person.email}`}>
+                  {person.email} <span className="k">write</span>
+                </ComposeTrigger>
+              </div>
+            </div>
+            <div className="hero-clock rise">
+              <Countdown to={person.graduation} label={person.graduationLabel} />
             </div>
           </div>
         </div>
       </header>
 
-      <Deck className="deck wrap">
-        <div className="grid">
-          <section className="card c7" id="about" aria-labelledby="h-about">
-            <div className="card-lab label">
-              <span id="h-about">About</span>
-              <span>{person.whereLong}</span>
-            </div>
-            <p className="about-text">{home.about}</p>
-            <div className="langs mono">
-              {languages.map((lang) => (
-                <span key={lang}>{lang}</span>
-              ))}
-            </div>
-          </section>
-
-          <section className="card c5" id="now" aria-labelledby="h-now">
-            <div className="card-lab label">
-              <span id="h-now">Now</span>
-              <span>{person.timeZone}</span>
-            </div>
-            <div className="now-time mono">
-              <Clock />
-            </div>
-            <p className="now-place mono">local time in {person.whereLong}</p>
-            <ul className="now-list">
-              <li>
-                <span className="dot dot-pulse" aria-hidden="true" />
-                <span>
-                  {current.title} at {current.company}
-                </span>
-              </li>
-              <li>
-                <span className="dot dot-dim" aria-hidden="true" />
-                <span>
-                  {person.school} · class of {person.classOf}
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <div className="strip" id="projects">
-            <h2>Projects</h2>
-            <span className="strip-note mono">
-              {words[projects.length - 1] ?? projects.length} plates · each with the number that says it works
-            </span>
-          </div>
-
+      <div className="deck wrap">
+        <div className="grid" id="projects">
           {projects.map((project, i) => (
             <Link key={project.slug} className={`card ${span(i)}`} href={`/work/${project.slug}`}>
-              <div className="card-lab label">
-                <span>Plate {numerals[i]}</span>
-                <span>{project.year}</span>
+              <div className="proj-head">
+                <h2 className="proj-name">{project.name}</h2>
+                <span className="proj-year">{project.year}</span>
               </div>
-              <h3 className="proj-name">{project.name}</h3>
               <p className="proj-lede">{project.lede}</p>
               <div className="metric">
-                <Count className="metric-value" value={project.metric.value} />
-                <span className="metric-label mono">{project.metric.label}</span>
+                <b className="metric-value">{project.metric.value}</b>
+                <span className="metric-label">{project.metric.label}</span>
               </div>
-              <div className="proj-stack mono">
-                <span>{project.stack}</span>
-                <span className="proj-go" aria-hidden="true">
-                  open →
-                </span>
-              </div>
+              <p className="proj-stack">{project.stack}</p>
             </Link>
           ))}
-
-          <section className="card c7" id="experience" aria-labelledby="h-xp">
-            <div className="card-lab label">
-              <span id="h-xp">Experience</span>
-              <span>
-                {roles[roles.length - 1].start} – now
-              </span>
-            </div>
-            {roles.map((role) => (
-              <div key={role.company} className="xp-row">
-                <div>
-                  <div className="xp-co">{role.company}</div>
-                  <div className="xp-title">{role.title}</div>
-                  <div className="xp-when mono">{role.when}</div>
-                </div>
-                <div className="xp-result">{role.result}</div>
-              </div>
-            ))}
-          </section>
-
-          <section className="card c5" id="contact" aria-labelledby="h-find">
-            <div className="card-lab label">
-              <span id="h-find">Elsewhere</span>
-              <span>{person.handle}</span>
-            </div>
-            <ul className="find-list">
-              <li>
-                <a className="u" href={person.github} target="_blank" rel="noreferrer">
-                  GitHub
-                </a>
-                <span className="k mono">github.com/{person.handle.slice(1)}</span>
-              </li>
-              <li>
-                <a className="u" href={person.linkedin} target="_blank" rel="noreferrer">
-                  LinkedIn
-                </a>
-                <span className="k mono">{person.linkedinShort}</span>
-              </li>
-              <li>
-                <ComposeTrigger title={`Email ${person.email}`}>
-                  <span className="u">Email</span>
-                  <span className="k mono">{person.email}</span>
-                </ComposeTrigger>
-              </li>
-              <li>
-                <a className="u" href={asset("/resume.pdf")} target="_blank" rel="noreferrer">
-                  Résumé
-                </a>
-                <span className="k mono">
-                  pdf <OutIcon size={10} />
-                </span>
-              </li>
-            </ul>
-          </section>
         </div>
-      </Deck>
 
-      <footer className="foot wrap mono">
-        <span>© 2026 {person.fullName}</span>
-        <span>set in Newsreader and Geist · plate tinted in the browser</span>
+        <section className="xp" id="experience" aria-labelledby="h-xp">
+          <h2 id="h-xp">Where I&rsquo;ve worked</h2>
+          {roles.map((role) => (
+            <div key={role.company} className="xp-row">
+              <div>
+                <div className="xp-co">{role.company}</div>
+                <div className="xp-title">{role.title}</div>
+                <div className="xp-when">{role.when}</div>
+              </div>
+              <div className="xp-result">{role.result}</div>
+            </div>
+          ))}
+        </section>
+      </div>
+
+      <footer className="foot wrap">
+        <span>© 2026 {person.name}</span>
+        <span>{person.whereLong}</span>
       </footer>
     </main>
   );

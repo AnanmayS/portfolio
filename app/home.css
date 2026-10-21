@@ -1,8 +1,8 @@
 /*
-  The front page. A full-bleed engraved plate opens it, with the name set in
-  the plate's blank sky; then a deck of mounted plates (cards) pulls up over
-  the water and continues on the paper. Every colour is a token from
-  globals.css.
+  The front page. A full-bleed engraved plate opens it, with the name and a
+  few lines set in the plate's blank sky; then the cards pull up over the
+  water: the five projects and the work history. A flip clock in the sky
+  counts down to graduation. Every colour is a token from globals.css.
 */
 
 .home {
@@ -95,48 +95,89 @@
   font-size: 0.875rem;
 }
 
-.mast-where {
-  color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
-}
-
-@media (max-width: 35rem) {
-  .mast-where {
-    display: none;
-  }
-}
-
 .hero {
-  max-width: 40rem;
-  padding-top: clamp(2.5rem, 9vh, 5.75rem);
+  display: grid;
+  grid-template-columns: minmax(0, 42rem) auto;
+  align-items: start;
+  justify-content: space-between;
+  gap: 2rem 3rem;
+  padding-top: clamp(2.5rem, 8vh, 5rem);
 }
 
-.hero-eyebrow {
-  margin-bottom: 1rem;
+.hero-text {
+  max-width: 42rem;
+}
+
+/* The clock sits in the blank sky at the right, level with the line over
+   the name, small enough that its four groups share one line and end above
+   the pine. */
+.hero-clock {
+  justify-self: end;
+  padding-top: 0.125rem;
+}
+
+.hero-clock .flipclock {
+  align-items: flex-end;
+}
+
+.hero-clock .flip-groups {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.hero-clock .flap {
+  --flap-w: 2rem;
+  --flap-h: 2.75rem;
+  font-size: 2rem;
+}
+
+@media (max-width: 64rem) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .hero-clock {
+    justify-self: start;
+    padding-top: 0;
+  }
+
+  .hero-clock .flipclock {
+    align-items: flex-start;
+  }
+
+  .hero-clock .flip-groups {
+    justify-content: flex-start;
+  }
 }
 
 .hero-name {
   margin-bottom: 1.125rem;
   font-family: var(--font-serif);
-  font-size: clamp(3.375rem, 9vw, 6rem);
+  font-size: clamp(3.375rem, 7.5vw, 5.5rem);
   font-weight: 400;
   letter-spacing: -0.024em;
   line-height: 0.96;
   text-wrap: balance;
 }
 
-.hero-name em {
-  font-style: italic;
-}
-
 .hero-lede {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.125rem;
   color: var(--soft);
   font-family: var(--font-serif);
   font-size: clamp(1.375rem, 3vw, 1.75rem);
   font-style: italic;
   line-height: 1.28;
+}
+
+.hero-about {
+  max-width: 34rem;
+  margin-bottom: 1.5rem;
+  color: var(--soft);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .hero-links {
@@ -176,6 +217,7 @@
 .rise:nth-child(2) { animation-delay: 70ms; }
 .rise:nth-child(3) { animation-delay: 140ms; }
 .rise:nth-child(4) { animation-delay: 210ms; }
+.hero-clock.rise { animation-delay: 220ms; }
 
 @keyframes rise {
   from {
@@ -211,53 +253,21 @@
 .grid > .c6 { grid-column: span 6; }
 .grid > .c7 { grid-column: span 7; }
 
-.strip {
-  grid-column: span 12;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.375rem 1rem;
-  padding: 1.625rem 0.125rem 0.375rem;
-}
-
-.strip h2 {
-  font-family: var(--font-serif);
-  font-size: 1.875rem;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1;
-}
-
-.strip-note {
-  color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
-}
-
 @media (max-width: 55rem) {
   .grid > .c4,
-  .grid > .c5,
-  .grid > .c6,
-  .grid > .c7 {
+  .grid > .c6 {
     grid-column: span 6;
   }
-}
 
-@media (max-width: 37.5rem) {
-  .grid > .c4,
   .grid > .c5,
-  .grid > .c6,
   .grid > .c7 {
     grid-column: span 12;
   }
+}
 
-  .deck {
-    margin-top: -4.375rem;
-  }
-
-  /* On a phone the plate sits under the name instead of behind it, cropped
-     to the water and the shore. */
+/* Below desktop width the hero stacks, so the plate moves under it instead
+   of behind it: a full-width band the cards pull up over. */
+@media (max-width: 64rem) {
   .plate {
     display: flex;
     flex-direction: column;
@@ -268,15 +278,13 @@
   .plate-art {
     position: relative;
     order: 2;
-    height: 20.625rem;
-    margin-top: -1rem;
+    margin-top: 1.25rem;
   }
 
   .plate-img {
+    position: relative;
     left: auto;
-    right: 0;
-    width: auto;
-    height: 150%;
+    bottom: auto;
     -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
   }
@@ -288,118 +296,65 @@
   .hero {
     padding-top: 2.75rem;
   }
+
+  /* The cards still pull up over the band, but only over its last strip of water. */
+  .deck {
+    margin-top: -3.5rem;
+  }
+}
+
+/* Phones: the band is cropped to the shore, and the cards stack. */
+@media (max-width: 37.5rem) {
+  .grid > .c4,
+  .grid > .c5,
+  .grid > .c6,
+  .grid > .c7 {
+    grid-column: span 12;
+  }
+
+  .plate-art {
+    height: 20.625rem;
+  }
+
+  .plate-img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: 150%;
+  }
 }
 
 /* About */
 
 .about-text {
-  max-width: 56ch;
+  max-width: 60ch;
   color: var(--soft);
   font-size: 1rem;
   line-height: 1.6;
 }
 
-.langs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1.125rem;
-}
+/* A project card */
 
-.langs span {
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  padding: 0.1875rem 0.625rem;
-  color: var(--soft);
-  font-size: 0.71875rem;
-}
-
-/* Now */
-
-.now-time {
-  margin: 0.125rem 0 0.25rem;
-  font-size: 2.25rem;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.now-time .clock {
-  min-width: 0;
-}
-
-.now-place {
-  margin-bottom: 1.125rem;
-  color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
-}
-
-.now-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5625rem;
-  margin: 0;
-  padding: 0;
-  color: var(--soft);
-  font-size: 0.875rem;
-  list-style: none;
-}
-
-.now-list li {
+.proj-head {
   display: flex;
   align-items: baseline;
-  gap: 0.625rem;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.625rem;
 }
-
-.dot {
-  position: relative;
-  top: -1px;
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--foreground);
-}
-
-.dot-dim {
-  background: var(--faint);
-}
-
-.dot-pulse::before {
-  content: "";
-  position: absolute;
-  inset: -5px;
-  border: 1px solid var(--foreground);
-  border-radius: 50%;
-  opacity: 0;
-  animation: ping 2.6s ease-out infinite;
-}
-
-@keyframes ping {
-  0% {
-    transform: scale(0.4);
-    opacity: 0.7;
-  }
-
-  70% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-/* A project plate */
 
 .proj-name {
-  margin-bottom: 0.625rem;
   font-family: var(--font-serif);
   font-size: 1.625rem;
   font-weight: 400;
   letter-spacing: -0.015em;
   line-height: 1.05;
+}
+
+.proj-year {
+  color: var(--muted);
+  font-size: 0.8125rem;
 }
 
 .proj-lede {
@@ -428,45 +383,37 @@
 
 .metric-label {
   color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
+  font-size: 0.8125rem;
   line-height: 1.4;
 }
 
 .proj-stack {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.625rem;
   color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
+  font-size: 0.8125rem;
 }
 
-.proj-go {
-  flex: none;
-  color: var(--faint);
-  white-space: nowrap;
-  transition: color 200ms ease, transform 300ms var(--ease);
+/* Where I've worked: plain rows on the paper. */
+
+.xp {
+  max-width: 52rem;
+  padding-top: 2.5rem;
 }
 
-a.card:hover .proj-go {
-  color: var(--foreground);
-  transform: translateX(3px);
+.xp h2 {
+  margin-bottom: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.875rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
-
-/* Experience */
 
 .xp-row {
   display: grid;
-  grid-template-columns: 10.5rem 1fr;
-  gap: 0.25rem 1.125rem;
-  padding: 0.875rem 0;
+  grid-template-columns: 11rem 1fr;
+  gap: 0.25rem 1.5rem;
+  padding: 1rem 0;
   border-top: 1px solid var(--border);
-}
-
-.xp-row:first-of-type {
-  padding-top: 0;
-  border-top: 0;
 }
 
 .xp-co {
@@ -481,10 +428,9 @@ a.card:hover .proj-go {
 }
 
 .xp-when {
-  margin-top: 0.375rem;
+  margin-top: 0.25rem;
   color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
+  font-size: 0.78125rem;
 }
 
 .xp-result {
@@ -499,49 +445,156 @@ a.card:hover .proj-go {
   }
 }
 
-/* Elsewhere */
+/* ---------- the countdown ---------- */
 
-.find-list {
+/* A split-flap clock: one ink card per digit with a paper digit on it, a
+   hinge across the middle, the days, hours, minutes and seconds until
+   commencement. */
+.flipclock {
   display: flex;
   flex-direction: column;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.find-list li {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   gap: 0.75rem;
-  padding: 0.6875rem 0;
-  border-top: 1px solid var(--border);
-  font-size: 0.90625rem;
 }
 
-.find-list li:first-child {
-  padding-top: 0;
-  border-top: 0;
+.flip-head {
+  color: var(--muted);
+  font-size: 0.8125rem;
 }
 
-.find-list .k {
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
-  text-align: right;
-}
-
-.find-list button {
+.flip-groups {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.flip-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flip-digits {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.flip-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.flap {
+  --flap-w: 2.5rem;
+  --flap-h: 3.5rem;
+  position: relative;
+  display: inline-block;
+  width: var(--flap-w);
+  height: var(--flap-h);
+  perspective: 320px;
+  color: var(--foreground);
+  font-family: var(--font-serif);
+  font-size: 2.625rem;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--flap-h);
+  text-align: center;
+}
+
+.flap-half,
+.flap-leaf {
+  position: absolute;
+  left: 0;
   width: 100%;
-  gap: 0.75rem;
-  border: 0;
-  padding: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  text-align: left;
+  height: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: var(--raised);
+}
+
+.flap-top,
+.flap-leaf-top {
+  top: 0;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+}
+
+.flap-bottom,
+.flap-leaf-bottom {
+  bottom: 0;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  background: var(--paper-deep);
+}
+
+/* Each half holds the whole glyph and shows its own half of it. */
+.flap-half > span,
+.flap-leaf > span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--flap-h);
+}
+
+.flap-top > span,
+.flap-leaf-top > span {
+  top: 0;
+}
+
+.flap-bottom > span,
+.flap-leaf-bottom > span {
+  bottom: 0;
+}
+
+/* The hinge. */
+.flap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 3;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+.flap-leaf {
+  z-index: 2;
+  backface-visibility: hidden;
+}
+
+.flap-leaf-top {
+  transform-origin: 50% 100%;
+  animation: flap-down 280ms ease-in both;
+}
+
+.flap-leaf-bottom {
+  transform-origin: 50% 0;
+  transform: rotateX(90deg);
+  animation: flap-up 280ms 280ms ease-out both;
+}
+
+@keyframes flap-down {
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes flap-up {
+  to {
+    transform: rotateX(0);
+  }
+}
+
+@media (max-width: 37.5rem) {
+  .hero-clock .flap {
+    --flap-w: 1.875rem;
+  }
+
+  .hero-clock .flip-groups {
+    gap: 0.625rem 0.875rem;
+  }
 }
 
 /* ---------- the colophon ---------- */
@@ -554,6 +607,5 @@ a.card:hover .proj-go {
   padding: 1.125rem 0 1.625rem;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.71875rem;
-  letter-spacing: 0.02em;
+  font-size: 0.8125rem;
 }

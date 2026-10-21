@@ -1,7 +1,7 @@
 ---
 version: 5
 name: Plates
-description: Cream laid paper, one blue ink, a fine grain. An engraved plate of the Chesapeake opens the front page with the name in its sky; the content follows as mounted plates, cards with a double rule. The demos play on plates of solid ink.
+description: Cream laid paper, one blue ink, a fine grain. An engraved plate of the Chesapeake opens the front page with the name and a few lines in its sky; the projects and the work history follow as cards with a double rule, with a split-flap clock counting down to graduation beside them. The demos play on plates of solid ink.
 colors:
   light:
     paper: "#f1ece0"
@@ -20,7 +20,7 @@ typography:
   serif:
     fontFamily: "Newsreader"
     weight: 400
-    usage: "The name, the italic tagline, section and project titles, every metric"
+    usage: "The name, the italic tagline, section and project titles, every number"
   sans:
     fontFamily: "Geist"
     weights: [400, 500]
@@ -28,18 +28,17 @@ typography:
   mono:
     fontFamily: "Geist Mono"
     weight: 400
-    usage: "Labels in small caps, dates, stacks, the clock, the colophon"
+    usage: "Inside the demos only"
 layout:
   wrap: 66rem
   grid: 12 columns, 0.875rem gap
   plate: "max(min(86vh, 48.75rem), the image's own height at this width)"
   base-size: 15px
 motion:
-  load: the name and its lines rise 14px, staggered 70ms, transform only
-  reveal: cards below the fold rise 22px as they arrive, 70ms apart in a batch
+  load: the name and its lines rise 14px, staggered 70ms, transform only, while every clock card turns over to its number
   parallax: the plate drifts at 0.22 of scroll
-  metric: counts up to itself when its card arrives, 1.1s ease-out
-  hover: a linked card lifts 3px and its arrow slides right
+  hover: a linked card's border darkens; nothing moves
+  countdown: each digit card turns over when it changes, 280ms down then 280ms up
   art: one 6–12 s loop per project demo, only while on screen
 ---
 
@@ -53,11 +52,22 @@ plate's blank sky and a soft breath of paper behind it. The print is sepia on
 disk; an SVG duotone filter tints it to the page's ink and paper in the
 browser, so the plate can never drift from the type.
 
-The content follows as a deck of mounted plates: cards on 90% paper with a
-blur, a hairline border and an inner rule like a mount, that pull up over the
-water and continue on the paper. About and Now first; then the five projects,
-numbered Plate I to V like the plates in a book, each with the number that
-says it works set large in the serif; then Experience and Elsewhere.
+Under the name: one line on what he builds, two sentences on what he likes,
+and three links. That is the whole introduction; there is no About card.
+
+The cards follow, on 90% paper with a blur, a hairline border and an inner
+rule like a mount, pulling up over the water and continuing on the paper:
+the five projects, each a name, one quick sentence, its one number set large
+in the serif, and a short stack. The work history follows as plain rows on
+the paper, one sentence per role; only the projects get the mount. Nothing
+on the page is said twice, so there is no card of links (the hero has them).
+
+In the blank sky at the right of the name, a split-flap clock counts down
+to commencement: paper cards with ink digits in the serif, a hairline hinge
+across each, days, hours, minutes and seconds, one plain line above it. The server renders the cards blank,
+so the first thing a visitor sees is every card turning over to the right
+number, and then the seconds keep turning. On a phone it sits under the
+links. The date lives in content.ts.
 
 On /work each project is a plate too, its demo on a panel of solid ink inside
 the card. Inside that panel the tokens flip to light-on-dark, so the demos
@@ -72,17 +82,18 @@ the demos, for what went right and wrong, and they never appear on the paper.
 ## Type
 
 Newsreader for anything that is a title or a number: the name at up to 96px,
-the italic tagline, the plate names, the metrics. Geist for sentences and
-rows at 14–16px. Geist Mono at 10.5–11.5px for labels (small caps,
-letter-spaced), dates, stacks and the clock.
+set roman, the italic tagline, the plate names, the metrics. Geist for
+everything else, down to 13px for dates, stacks and the clock's labels, in
+sentence case, never tracked out. No caps labels, no arrows on links, no
+middle dots: lists are written with commas.
 
 ## Motion
 
-Nothing waits invisible. The hero rises on load with transform only, so a
-paused frame still reads. Cards already on screen at hydration are left as
-the server rendered them; only the ones below the fold get the rise, and
-the classes come off again once they have arrived. The plate's parallax, the
-count-up and the pulse on the Now dot all stop under reduced motion.
+One moment on load: the name and its lines settle while the clock turns
+over to the right numbers, with transform only, so a paused frame still
+reads. Nothing else moves on its own; a card answers hover by darkening its
+border. The plate's parallax and the flaps' turning stop under reduced
+motion; the clock still counts.
 
 ## Do's and Don'ts
 
@@ -91,4 +102,7 @@ count-up and the pulse on the Now dot all stop under reduced motion.
 - Do generate any new plate in greyscale and let the filter tint it.
 - Don't put text over the busy part of the plate; the fog marks the sky that is safe.
 - Don't add a status badge to a project. Its card links to the page; that is the status.
+- Don't name things the way a museum would. No "Plate I", no eyebrow labels anywhere; a name, a sentence, a number.
+- Don't add motion that answers nothing: no scroll reveals, no hover lifts, no counting numbers.
+- Do write every sentence so it can be read in one breath.
 - Don't put phone numbers or anything not already public on the page.

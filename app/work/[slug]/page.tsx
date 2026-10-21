@@ -44,7 +44,7 @@ export default async function ProjectPage({ params }: Params) {
 
       <div className="exhibit">
         <div className="exhibit-main">
-          <span className="exhibit-year mono">{project.year}</span>
+          <span className="exhibit-year">{project.year}</span>
           <h1 className="page-title">{project.name}</h1>
           <p className="exhibit-lede">{project.lede}</p>
         </div>
