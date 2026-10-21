@@ -15,11 +15,14 @@ import type { Book } from "./content";
 */
 const tones = ["ink", "plate", "soft", "paper", "muted"] as const;
 
+/* Two books can share a title; title and author together name one. */
+const id = (b: Book) => `${b.title}|${b.author}`;
+
 export function Shelf({ books }: { books: Book[] }) {
   const [out, setOut] = useState<string | null>(null);
   const reading = books.filter((b) => b.status === "reading");
   const ordered = [...books.filter((b) => b.status === "read"), ...reading];
-  const picked = ordered.find((b) => b.title === out) ?? null;
+  const picked = ordered.find((b) => id(b) === out) ?? null;
 
   useEffect(() => {
     if (!out) return;
@@ -36,10 +39,10 @@ export function Shelf({ books }: { books: Book[] }) {
           const width = Math.round(Math.min(44, Math.max(22, book.pages / 14)));
           const height = book.format === "l" ? 200 : book.format === "s" ? 156 : 176;
           const tone = book.tone ?? tones[i % tones.length];
-          const isOut = out === book.title;
+          const isOut = out === id(book);
           return (
             <li
-              key={book.title}
+              key={id(book)}
               className={`book book-${tone}${book.status === "reading" ? " book-reading" : ""}${isOut ? " is-out" : ""}`}
               style={{ width, height }}
             >
@@ -48,7 +51,7 @@ export function Shelf({ books }: { books: Book[] }) {
                 className="book-btn"
                 aria-pressed={isOut}
                 aria-label={`${book.title} by ${book.author}`}
-                onClick={() => setOut(isOut ? null : book.title)}
+                onClick={() => setOut(isOut ? null : id(book))}
               >
                 <span className="book-spine" aria-hidden="true">
                   {book.spine ?? book.title}

@@ -63,7 +63,7 @@ export default function Home() {
               </div>
             </div>
             <div className="hero-clock rise">
-              <Countdown to={person.graduation} label={person.graduationLabel} />
+              <Countdown to={person.graduation} label={person.graduationLabel} after={person.graduatedLabel} />
             </div>
           </div>
         </div>

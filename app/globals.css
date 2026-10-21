@@ -133,17 +133,11 @@ figure {
   background-size: 100% 1px;
 }
 
-/* Staggered entrance on the inner pages: later blocks start lower and a little later. */
-.in {
-  --i: 0;
-  animation: enter 640ms var(--ease) both;
-  animation-delay: calc(60ms + var(--i) * 60ms);
-}
-
+/* The email card's entrance. */
 @keyframes enter {
   from {
     opacity: 0;
-    transform: translateY(calc(8px + var(--i) * 4px));
+    transform: translateY(8px);
   }
 
   to {
@@ -161,8 +155,6 @@ figure {
   padding: 1.25rem 1.375rem 1.375rem;
   background: var(--card);
   box-shadow: var(--float);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   transition: border-color 200ms ease;
 }
 

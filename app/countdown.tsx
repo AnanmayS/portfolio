@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
   the new bottom half folds up behind it, the way a flap display turns.
   The server renders blank cards; the client fills them on mount and every
   second after, so the first thing a visitor sees is every card turning
-  over to the right number.
+  over to the right number. Once the day has passed the cards go and the
+  line says so.
 */
 type Parts = { days: number; hours: number; minutes: number; seconds: number };
 
@@ -29,16 +30,25 @@ const groups: { key: keyof Parts; width: number; label: string }[] = [
   { key: "seconds", width: 2, label: "sec" },
 ];
 
-export function Countdown({ to, label }: { to: string; label: string }) {
+export function Countdown({ to, label, after }: { to: string; label: string; after: string }) {
   const [parts, setParts] = useState<Parts | null>(null);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     const target = new Date(to).getTime();
-    const tick = () => setParts(until(target));
+    const tick = () => {
+      if (Date.now() >= target) {
+        setDone(true);
+        return;
+      }
+      setParts(until(target));
+    };
     tick();
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, [to]);
+
+  if (done) return <p className="flip-head">{after}</p>;
 
   const spoken = parts
     ? `${parts.days} days, ${parts.hours} hours, ${parts.minutes} minutes and ${parts.seconds} seconds until ${label}`

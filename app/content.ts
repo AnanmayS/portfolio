@@ -5,28 +5,21 @@
 
 export const person = {
   name: "Ananmay Singh",
-  fullName: "Ananmay Som Singh",
+  /** The email card greets with it. */
   first: "Ananmay",
-  /** The handwritten phrase in the intro; follows "who likes". */
-  role: "building software",
-  school: "UMD",
-  /** The class year, as it reads on the nav pill. */
-  classOf: "'28",
-  /** Commencement, for the countdown at the foot of the front page. The day is a placeholder until UMD publishes it. */
+  /** Commencement, for the countdown in the plate's sky. The day is a placeholder until UMD publishes it. */
   graduation: "2028-05-22T10:00:00-04:00",
+  /** Over the clock while it counts, and in its place once the day has passed. */
   graduationLabel: "Graduation from Maryland, May 2028",
+  graduatedLabel: "Graduated from Maryland, May 2028",
   email: "ananmaysom@gmail.com",
-  /** Shown beside the clock above the work; the intro does not say where. */
-  where: "College Park",
+  /** In the footer. */
   whereLong: "College Park, MD",
-  timeZone: "America/New_York",
   github: "https://github.com/AnanmayS",
-  handle: "@AnanmayS",
   linkedin: "https://www.linkedin.com/in/ananmaysingh",
-  linkedinShort: "in/ananmaysingh",
 } as const;
 
-/** The front page, top to bottom: the plate and the About card. */
+/** The front page's opening: what the sky says, and the plate behind it. */
 export const home = {
   tagline: "I build the plumbing behind apps: pipelines, exchanges, and the odd AI.",
   /** Two sentences under the tagline. */

@@ -244,8 +244,11 @@
   gap: 0.875rem;
 }
 
+/* Only these cards sit over the plate, so only they blur what is behind them. */
 .grid > .card {
   grid-column: span 12;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .grid > .c4 { grid-column: span 4; }
@@ -414,7 +417,9 @@
   max-width: 52rem;
 }
 
-.xp h2 {
+/* The two section titles under the projects. */
+.xp h2,
+.shelf h2 {
   margin-bottom: 1rem;
   font-family: var(--font-serif);
   font-size: 1.875rem;
@@ -463,15 +468,6 @@
 /* ---------- the shelf ---------- */
 
 /* Books as spines in the page's inks, standing on a hairline shelf. */
-.shelf h2 {
-  margin-bottom: 1rem;
-  font-family: var(--font-serif);
-  font-size: 1.875rem;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1;
-}
-
 .shelf-row {
   display: flex;
   align-items: flex-end;
@@ -727,7 +723,9 @@
     --flap-w: 1.875rem;
   }
 
+  /* Small phones: the four groups may fall onto two lines. */
   .hero-clock .flip-groups {
+    flex-wrap: wrap;
     gap: 0.625rem 0.875rem;
   }
 }
