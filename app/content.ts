@@ -21,12 +21,12 @@ export const person = {
 
 /** The front page's opening: what the sky says, and the plate behind it. */
 export const home = {
-  /** The front page's list: who I am, not where I've worked (that's the work tab). A `link` turns the named words into a link. */
+  /** The front page's list, in lowercase: who I am, not where I've worked (that's the work tab). A `link` turns the named words into a link. */
   facts: [
-    { text: "Studying computer engineering at Maryland, class of 2028" },
-    { text: "Grew up in the Bay Area, now in College Park" },
-    { text: "Big F1 fan, enough to build a way to replay a race and change the strategy calls" },
-    { text: "Play badminton when I’m away from the keyboard" },
+    { text: "studying computer engineering at maryland, class of 2028" },
+    { text: "grew up in the bay area, now in college park" },
+    { text: "big f1 fan, enough to build a way to replay a race and change the strategy calls" },
+    { text: "play badminton when i’m away from the keyboard" },
   ] as { text: string; link?: { words: string; href: string } }[],
   /**
    * The line above the name: one of these a day, the same for everyone that
