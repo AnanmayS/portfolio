@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { ComposeTrigger } from "./compose";
 import { books, home, person, roles } from "./content";
 import { Gallery } from "./gallery";
+import { Shelf } from "./shelf";
 import { asset } from "./paths";
 import { TABS, type Tab } from "./tabs";
 
 /*
-  The front page's tabs: pond (who I am), projects, work and reading, in a
-  small row of lowercase mono at the top.
+  The front page's tabs: pond (who I am, and the shelf of what I'm reading),
+  projects and work, in a small lowercase row at the top.
   They switch in place, so the koi keep swimming; the hash keeps the tab, so
   a link to #projects opens on projects.
 */
@@ -77,6 +78,7 @@ export function Front() {
               <Fact key={fact.text} {...fact} />
             ))}
           </ul>
+          <Shelf books={books} />
         </>
       )}
 
@@ -98,16 +100,6 @@ export function Front() {
         </ul>
       )}
 
-      {tab === "reading" && (
-        <ul>
-          {books.map((b) => (
-            <li key={b.title}>
-              <i>{b.title}</i>, {b.author}
-              {b.status === "reading" && <span className="meta"> reading now</span>}
-            </li>
-          ))}
-        </ul>
-      )}
     </main>
   );
 }

@@ -8,7 +8,7 @@ import type { Book } from "./content";
   one of the page's inks with its title set down it in the serif, standing on
   a hairline shelf. Width comes from the page count, height from the format.
   The book being read leans at the end of the row with a ribbon hanging out
-  of it. Tap a book and it stands proud of the row while the line under the
+  of it. It fills the reading tab; a heading is optional. Tap a book and it stands proud of the row while the line under the
   shelf names it, with its note if it has one; tap it again, another book,
   or Escape, and it goes back. With nothing pulled out the line names what
   is being read.
@@ -18,7 +18,7 @@ const tones = ["ink", "plate", "soft", "paper", "muted"] as const;
 /* Two books can share a title; title and author together name one. */
 const id = (b: Book) => `${b.title}|${b.author}`;
 
-export function Shelf({ books }: { books: Book[] }) {
+export function Shelf({ books, heading }: { books: Book[]; heading?: string }) {
   const [out, setOut] = useState<string | null>(null);
   const reading = books.filter((b) => b.status === "reading");
   const ordered = [...books.filter((b) => b.status === "read"), ...reading];
@@ -32,12 +32,12 @@ export function Shelf({ books }: { books: Book[] }) {
   }, [out]);
 
   return (
-    <section className="shelf" aria-labelledby="h-shelf">
-      <h2 id="h-shelf">On the shelf</h2>
+    <section className="shelf" aria-label={heading ?? "Bookshelf"}>
+      {heading && <h2>{heading}</h2>}
       <ul className="shelf-row" aria-label="Books">
         {ordered.map((book, i) => {
-          const width = Math.round(Math.min(44, Math.max(22, book.pages / 14)));
-          const height = book.format === "l" ? 200 : book.format === "s" ? 156 : 176;
+          const width = Math.round(Math.min(34, Math.max(18, book.pages / 18)));
+          const height = book.format === "l" ? 148 : book.format === "s" ? 116 : 132;
           const tone = book.tone ?? tones[i % tones.length];
           const isOut = out === id(book);
           return (

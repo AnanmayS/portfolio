@@ -341,3 +341,78 @@ html:has(.plain) {
 ::view-transition-new(root) {
   animation-duration: 0.25s;
 }
+
+/* ---------- the shelf, under the facts on the pond tab (shelf.tsx) ---------- */
+
+/* A small shelf drawn the way the page is: spines as hairline outlines with
+   their titles in the body grey, all the tone differences left to the koi.
+   Only the book being read stands apart, a little brighter, with its ribbon
+   in the koi's terracotta. The base shapes are in home.css. */
+.plain .shelf {
+  margin-top: 0.5rem;
+}
+/* A row of spines, not one of the page's bulleted lists. */
+.plain .shelf-row {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 3px;
+  padding: 0.75rem 0.25rem 0;
+}
+.plain .shelf-row > li {
+  padding-left: 0;
+  font-size: inherit;
+}
+.plain .shelf-row > li::before {
+  content: none;
+}
+.plain .book,
+.plain .book-ink,
+.plain .book-plate,
+.plain .book-soft,
+.plain .book-muted,
+.plain .book-paper {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--p-dim);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+.plain .book:hover .book-spine,
+.plain .book.is-out .book-spine {
+  color: var(--p-fg);
+}
+.plain .book-reading {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--p-body);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+}
+.plain .book-spine {
+  padding-top: 0.5rem;
+  font-size: 0.6875rem;
+  transition: color 0.15s;
+}
+.plain .book-btn:focus-visible {
+  outline: 1px solid var(--p-fg);
+  outline-offset: 3px;
+}
+.plain .book-reading::after {
+  top: -0.5rem;
+  right: 4px;
+  width: 2px;
+  height: 1rem;
+  background: rgba(205, 123, 79, 0.8);
+}
+.plain .shelf-plank {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+.plain .shelf-now {
+  min-height: 0;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--p-dim);
+}
+.plain .shelf-now b {
+  color: var(--p-body);
+  font-weight: 400;
+  font-style: italic;
+}
