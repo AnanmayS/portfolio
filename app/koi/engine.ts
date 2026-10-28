@@ -8,6 +8,9 @@
   internal edge, and one of a few colours. Faint broken wake rings go down
   first, fish on top.
 
+  Clicking the water drops a pinch of food with a splash; the koi turn for
+  the nearest pellet, hurry if it's far, and eat it with a small ring.
+
   Motion: the head is rigid, and the body behind the shoulders follows the
   path the shoulders actually swam, so the bend travels to the tail. Steering
   is car-like (curvature, never pivoting). A small beam search picks the
@@ -41,7 +44,18 @@ const FIN = 4;
 const FIN_DIM = 5;
 const WAKE = 6;
 const WAKE_FAINT = 7;
-const PALETTE = ["#f4eee4", "#d9cbb1", "#e2772f", "#c4432c", "#8a8681", "#56534f", "#3b3b3b", "#282828"];
+/* Muted and see-through, so the fish sit in the water under the page rather than on it:
+   pale body, terracotta and peach markings, warm grey fins, faint wakes. */
+const PALETTE = [
+  "rgba(237, 237, 237, 0.36)",
+  "rgba(237, 237, 237, 0.3)",
+  "rgba(226, 133, 74, 0.52)",
+  "rgba(205, 123, 79, 0.46)",
+  "rgba(232, 177, 144, 0.38)",
+  "rgba(184, 168, 159, 0.3)",
+  "rgba(184, 184, 184, 0.16)",
+  "rgba(184, 184, 184, 0.09)",
+];
 const BODY_RGB = [
   [244, 238, 228],
   [217, 203, 177],
@@ -69,7 +83,11 @@ type Layout = {
   clip: Rect;
 };
 
-type Ring = { x: number; y: number; age: number; life: number; r0: number; r1: number; p: number[] };
+/* A ring on the water; `splash` ones (a click, a bite) start brighter than a wake. */
+type Ring = { x: number; y: number; age: number; life: number; r0: number; r1: number; p: number[]; splash?: boolean };
+
+/* A food pellet floating where the reader clicked. */
+type Pellet = { x: number; y: number; age: number; life: number; phase: number };
 
 type Fish = {
   rng: () => number;
@@ -92,6 +110,8 @@ type Fish = {
   gx: number;
   gy: number;
   goalLeft: number;
+  /** Heading for food rather than wandering. */
+  hungry: boolean;
   planLeft: number;
   ringLeft: number;
   rings: Ring[];
@@ -156,7 +176,8 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
     const h = host.clientHeight;
     if (!w || !h) return null;
     const phone = w < PHONE_BELOW;
-    const font = `${phone ? 7 : 9}px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace`;
+    // Small glyphs, so a fish reads as fine texture rather than as letters.
+    const font = `${phone ? 6 : 7.5}px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace`;
     ctx!.font = font;
     const cw = ctx!.measureText("M").width;
     const ch = cw * Y_SCALE;
@@ -292,6 +313,7 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
       gx: x,
       gy: y,
       goalLeft: 0,
+      hungry: false,
       planLeft: rng() * PLAN_EVERY,
       ringLeft: rng() * 2,
       rings: [],
@@ -376,7 +398,7 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
     let best = beam[0];
     let bestCost = Infinity;
     for (const c of beam) {
-      const total = c.cost + (0.7 * Math.hypot(c.x - f.gx, c.y - f.gy)) / L + room(c.x, c.y, c.th);
+      const total = c.cost + ((f.hungry ? 3 : 0.7) * Math.hypot(c.x - f.gx, c.y - f.gy)) / L + room(c.x, c.y, c.th);
       if (total < bestCost) {
         bestCost = total;
         best = c;
@@ -472,8 +494,37 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
       }
     }
 
+    // Food in the water: go for the nearest pellet, hurrying when it's far, and eat what the mouth reaches.
+    const mouthX = f.x + Math.cos(f.th) * f.sprite.shoulder * L;
+    const mouthY = f.y + Math.sin(f.th) * f.sprite.shoulder * L;
+    let nearest: Pellet | null = null;
+    let nearestD = Infinity;
+    for (const p of food) {
+      const d = Math.hypot(p.x - mouthX, p.y - mouthY);
+      if (d < nearestD) {
+        nearestD = d;
+        nearest = p;
+      }
+    }
+    if (nearest && nearestD < 0.1 * L + 8) {
+      food.splice(food.indexOf(nearest), 1);
+      splash(nearest.x, nearest.y, L * 0.16, 1.6);
+    } else if (nearest) {
+      f.hungry = true;
+      f.gx = nearest.x;
+      f.gy = nearest.y;
+      f.goalLeft = 2;
+      if (!f.bursting && nearestD > 1.2 * L && room(f.x, f.y, f.th) < 6) {
+        f.bursting = true;
+        f.modeLeft = 0.6 + 0.5 * f.rng();
+      }
+    } else if (f.hungry) {
+      f.hungry = false;
+      pickGoal(f);
+    }
+
     f.goalLeft -= dt;
-    if (f.goalLeft <= 0 || Math.hypot(f.gx - f.x, f.gy - f.y) < 0.6 * L) pickGoal(f);
+    if (!f.hungry && (f.goalLeft <= 0 || Math.hypot(f.gx - f.x, f.gy - f.y) < 0.6 * L)) pickGoal(f);
 
     for (const r of f.rings) r.age += dt;
     f.rings = f.rings.filter((r) => r.age < r.life);
@@ -535,6 +586,10 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
   }
 
   function world(dt: number) {
+    for (const p of food) p.age += dt;
+    for (let i = food.length - 1; i >= 0; i--) if (food[i].age >= food[i].life) food.splice(i, 1);
+    for (const r of splashes) r.age += dt;
+    for (let i = splashes.length - 1; i >= 0; i--) if (splashes[i].age >= splashes[i].life) splashes.splice(i, 1);
     refreshBodies();
     for (const f of fish) stepFish(f, dt);
   }
@@ -558,7 +613,7 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
     const [p1, p2, p3, p4, p5] = ring.p;
     const broken = -0.35 + 0.95 * u;
     const steps = Math.ceil((Math.PI * (rxx + ry)) / (cw * 0.7));
-    const color = u < 0.5 ? WAKE : WAKE_FAINT;
+    const color = ring.splash ? (u < 0.35 ? FIN : u < 0.7 ? WAKE : WAKE_FAINT) : u < 0.5 ? WAKE : WAKE_FAINT;
     for (let i = 0; i < steps; i++) {
       const a = (i / steps) * Math.PI * 2;
       const gap = Math.sin(3 * a + p4) * 0.6 + Math.sin(7 * a + p5) * 0.4;
@@ -894,6 +949,14 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
     const { cols, rows, cw, ch, dpr, font } = lay;
     gch.fill(0);
     for (const f of fish) for (const r of f.rings) paintRing(r);
+    for (const r of splashes) paintRing(r);
+    for (const p of food) {
+      // A pellet bobs a little and shrinks as it softens.
+      const x = p.x + Math.sin(p.age * 1.3 + p.phase) * 2;
+      const y = p.y + Math.cos(p.age * 0.9 + p.phase) * 1.5;
+      const glyph = p.age < p.life * 0.75 ? "o" : ".";
+      put(Math.floor(x / lay.cw), Math.floor(y / lay.ch), glyph.charCodeAt(0), p.age < p.life * 0.85 ? CREAM : FIN);
+    }
     for (const f of fish) paintFish(f);
 
     for (const b of buckets) b.length = 0;
@@ -960,6 +1023,45 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
     }
   }
 
+  /* ---------- feeding ---------- */
+
+  const food: Pellet[] = [];
+  const splashes: Ring[] = [];
+
+  function splash(x: number, y: number, r1: number, life: number) {
+    splashes.push({
+      x,
+      y,
+      age: 0,
+      life,
+      r0: 4,
+      r1,
+      p: [0, 1, 2, 3, 4].map(() => Math.random() * Math.PI * 2),
+      splash: true,
+    });
+  }
+
+  /* A click on the water (not on the text, a link or a button) drops a pinch of food there. */
+  function onClick(e: MouseEvent) {
+    if (!lay || reduced.matches) return;
+    const target = e.target as Element | null;
+    if (target?.closest("a, button, input, textarea, select, label") || avoidEl.contains(target)) return;
+    const hr = host.getBoundingClientRect();
+    const x = e.clientX - hr.left, y = e.clientY - hr.top;
+    if (x < 0 || y < 0 || x > lay.w || y > lay.h) return;
+    splash(x, y, lay.L * 0.35, 3);
+    // Food only where the koi can swim; near the text it would just float there uneaten.
+    if (zone(x, y) > 0) return;
+    const n = 3 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < n && food.length < 24; i++) {
+      const a = Math.random() * Math.PI * 2, r = 4 + Math.random() * 14;
+      food.push({ x: x + Math.cos(a) * r, y: y + Math.sin(a) * r * 0.6, age: 0, life: 14 + Math.random() * 4, phase: Math.random() * 6 });
+    }
+    host.dataset.fed = "true";
+  }
+  const water = host.parentElement ?? host;
+  water.addEventListener("click", onClick);
+
   const ro = new ResizeObserver(() => relayout());
   ro.observe(host);
   ro.observe(avoidEl);
@@ -972,6 +1074,7 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
     cancelAnimationFrame(raf);
     raf = 0;
     ro.disconnect();
+    water.removeEventListener("click", onClick);
     document.removeEventListener("visibilitychange", sync);
     reduced.removeEventListener("change", sync);
   };
