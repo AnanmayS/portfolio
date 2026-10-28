@@ -432,3 +432,96 @@ html:has(.plain) {
   font-weight: 400;
   font-style: italic;
 }
+
+/* ---------- send me a rec (shelf.tsx) ---------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.plain .rec-open {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--p-body);
+}
+
+/* A small box: one hairline field and a send link, nothing more. */
+.plain .rec {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  max-width: 22rem;
+  margin-top: 0.75rem;
+}
+.plain .rec input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.25rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: none;
+  color: var(--p-fg);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-style: italic;
+  outline: none;
+  transition: border-color 0.15s, color 0.2s;
+}
+.plain .rec input::placeholder {
+  color: var(--p-dim);
+}
+.plain .rec input:focus {
+  border-bottom-color: var(--p-fg);
+}
+.plain .rec button {
+  font-size: 0.875rem;
+}
+.plain .rec button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+/* The words leave the box as they take off. */
+.plain .rec.is-sending input {
+  color: transparent;
+}
+
+/* The words in flight: laid exactly over the field's text, then whooshed away. */
+.plain .rec-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+.plain .rec-flyer {
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+  font-size: 0.9375rem;
+  font-style: italic;
+  color: var(--p-fg);
+  white-space: nowrap;
+  pointer-events: none;
+  transform-origin: left center;
+}
+.plain .rec-sent {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--p-body);
+  animation: rec-sent 0.35s var(--ease) both;
+}
+@keyframes rec-sent {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plain .rec-sent { animation: none; }
+}
