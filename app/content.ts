@@ -25,8 +25,9 @@ export const home = {
   facts: [
     { text: "studying computer engineering at maryland, class of 2028" },
     { text: "grew up in the bay area, now in college park" },
-    { text: "big f1 fan, enough to build a way to replay a race and change the strategy calls" },
-    { text: "play badminton when i’m away from the keyboard" },
+    { text: "into finance and markets, and the systems that keep them running" },
+    { text: "pats fan, f1 fan, sundays are busy" },
+    { text: "reading or playing badminton when i’m away from the keyboard" },
   ] as { text: string; link?: { words: string; href: string } }[],
   /**
    * The line above the name: one of these a day, the same for everyone that
