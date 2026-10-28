@@ -21,6 +21,14 @@ export const person = {
 
 /** The front page's opening: what the sky says, and the plate behind it. */
 export const home = {
+  /** The front page's list, one plain fact a line. A `link` turns the named words into a link. */
+  facts: [
+    { text: "Studying computer engineering at Maryland, class of 2028" },
+    { text: "Live in College Park" },
+    { text: "Interning at GSAlpha Labs, teaching an AI to read real estate contracts so agents don’t have to" },
+    { text: "Before that, built a research feed for retail traders at theconviction.ai", link: { words: "theconviction.ai", href: "https://theconviction.ai" } },
+    { text: "Wrote the GPS test suite for a CubeSat with SEDS at UMD" },
+  ] as { text: string; link?: { words: string; href: string } }[],
   tagline: "I build the plumbing behind apps: pipelines, exchanges, and the odd AI.",
   /** Two sentences under the tagline. */
   about:

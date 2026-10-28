@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BackLink } from "../../back-link";
 import { projects } from "../../content";
 import { Framed } from "../../framed";
-import { LockIcon, OutIcon } from "../../icons";
+import { SiteTabs } from "../../tabs";
+import "../../plain.css";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -22,10 +22,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 /*
-  A project on its own: the demo hung large in its painting, what it is in
-  one sentence, the number that says it works, the stack, where to play it
-  when it runs in the browser, and the code (or that the code is private).
-  Previous and next walk the collection.
+  A project on its own: the demo, the name and year, what it is in one
+  sentence, then plain bullets for the number, the stack, where to play it
+  and the code. Previous and next walk the five.
 */
 export default async function ProjectPage({ params }: Params) {
   const { slug } = await params;
@@ -37,56 +36,52 @@ export default async function ProjectPage({ params }: Params) {
   const next = projects[(index + 1) % projects.length];
 
   return (
-    <main className="page">
-      <BackLink href="/work" label="Work" />
+    <div className="plain">
+      <main className="wide">
+        <SiteTabs current="projects" />
 
-      <Framed project={project} large />
+        <Link className="crumb" href="/work">
+          ← all projects
+        </Link>
 
-      <div className="exhibit">
-        <div className="exhibit-main">
-          <span className="exhibit-year">{project.year}</span>
-          <h1 className="page-title">{project.name}</h1>
-          <p className="exhibit-lede">{project.lede}</p>
+        <Framed project={project} large />
+
+        <div className="lede">
+          <div className="row-head">
+            <h1>{project.name}</h1>
+            <span className="meta">{project.year}</span>
+          </div>
+          <p>{project.lede}</p>
         </div>
-        <aside className="exhibit-facts">
-          <div className="exhibit-fact">
-            <span className="exhibit-num">{project.metric.value}</span>
-            <span className="exhibit-label">{project.metric.label}</span>
-          </div>
-          <div className="exhibit-fact">
-            <span className="exhibit-key">Stack</span>
-            <span>{project.stack}</span>
-          </div>
-          {project.live && (
-            <a className="exhibit-link" href={project.live} target="_blank" rel="noreferrer">
-              Play it in your browser
-              <OutIcon size={11} />
-            </a>
-          )}
-          {project.href ? (
-            <a className="exhibit-link" href={project.href} target="_blank" rel="noreferrer">
-              View on GitHub
-              <OutIcon size={11} />
-            </a>
-          ) : (
-            <span className="exhibit-link exhibit-private">
-              <LockIcon size={11} />
-              Private repository
-            </span>
-          )}
-        </aside>
-      </div>
 
-      <nav className="walk" aria-label="More projects">
-        <Link className="walk-item" href={`/work/${prev.slug}`}>
-          <span className="walk-key">← Previous</span>
-          <span className="walk-name">{prev.name}</span>
-        </Link>
-        <Link className="walk-item walk-next" href={`/work/${next.slug}`}>
-          <span className="walk-key">Next →</span>
-          <span className="walk-name">{next.name}</span>
-        </Link>
-      </nav>
-    </main>
+        <ul>
+          <li>
+            <span className="figure">{project.metric.value}</span> {project.metric.label}
+          </li>
+          <li>Built with {project.stack}</li>
+          {project.live && (
+            <li>
+              <a href={project.live} target="_blank" rel="noreferrer">
+                Play it in your browser
+              </a>
+            </li>
+          )}
+          <li>
+            {project.href ? (
+              <a href={project.href} target="_blank" rel="noreferrer">
+                The code, on GitHub
+              </a>
+            ) : (
+              "The code is private"
+            )}
+          </li>
+        </ul>
+
+        <nav className="walk" aria-label="More projects">
+          <Link href={`/work/${prev.slug}`}>← {prev.name}</Link>
+          <Link href={`/work/${next.slug}`}>{next.name} →</Link>
+        </nav>
+      </main>
+    </div>
   );
 }

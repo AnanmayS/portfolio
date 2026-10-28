@@ -7,38 +7,36 @@
 @import "./home.css";
 
 /*
-  "Plates". Cream laid paper, one blue ink, a fine grain over everything.
-  The front page opens on an engraved plate of the Chesapeake with the name
-  set in its sky; the content follows as mounted plates, cards with a double
-  rule. The demos play on a plate of solid ink inside their cards, so they
-  keep their light-on-dark drawing.
+  Night, after jwahn.com: near-black, light grey type, one serif. The pages
+  themselves are styled in plain.css; this holds the tokens, the demos'
+  panel and the email card.
 
   Every colour is a token here and nowhere else.
 */
 :root {
-  color-scheme: light;
-  --background: #f1ece0;
-  --paper-deep: #e8e2d1;
-  --card: rgba(243, 239, 229, 0.9);
-  --foreground: #1e3570;
-  --soft: #3a4a86;
-  --muted: #586388;
-  --faint: #5d6890;
-  --dim: #aab1c7;
-  --border: rgba(30, 53, 112, 0.16);
-  --border-strong: rgba(30, 53, 112, 0.34);
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --paper-deep: #111111;
+  --card: #141414;
+  --foreground: #ededed;
+  --soft: #cfcfcf;
+  --muted: #a3a3a3;
+  --faint: #8c8c8c;
+  --dim: #5c5c5c;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
   --panel: var(--card);
-  --plate: #16274f;
-  --chip: #e8e2d1;
-  --raised: #f5f1e8;
-  --track: rgba(30, 53, 112, 0.1);
-  --surface: rgba(30, 53, 112, 0.05);
-  --ok: #2f7d5b;
-  --bad: #b5533c;
-  --danger: #b5533c;
-  --shadow: rgba(30, 53, 112, 0.35);
-  --float: 0 1px 0 rgba(30, 53, 112, 0.04), 0 26px 40px -30px rgba(30, 53, 112, 0.4);
-  --backdrop: rgba(30, 53, 112, 0.3);
+  --plate: #121212;
+  --chip: #1a1a1a;
+  --raised: #161616;
+  --track: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255, 255, 255, 0.04);
+  --ok: #8fd8b0;
+  --bad: #e7a08a;
+  --danger: #e7a08a;
+  --shadow: rgba(0, 0, 0, 0.6);
+  --float: 0 26px 40px -30px rgba(0, 0, 0, 0.8);
+  --backdrop: rgba(0, 0, 0, 0.6);
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --page: 84rem;
@@ -78,18 +76,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
-}
-
-/* The grain: a small tile of noise, plain opacity, over every page. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  opacity: 0.1;
-  background-size: 320px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 ::selection {
@@ -146,128 +132,18 @@ figure {
   }
 }
 
-/* ---------- a mounted plate: the card ---------- */
-
-.card {
-  position: relative;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  padding: 1.25rem 1.375rem 1.375rem;
-  background: var(--card);
-  box-shadow: var(--float);
-  transition: border-color 200ms ease;
-}
-
-/* The inner rule of the mount. */
-.card::after {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  pointer-events: none;
-}
-
-a.card:hover {
-  border-color: var(--foreground);
-}
-
-@media (max-width: 37.5rem) {
-  .card {
-    padding: 1.125rem 1.125rem 1.25rem;
-  }
-}
-
-/* ---------- work, on its own page ---------- */
-
-.page-work {
-  width: min(100% - (var(--margin) * 2), 60rem);
-}
-
-.projects {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Each project is a plate: the demo on ink at the top, the card beside it
-   below. The whole thing opens the project's page. */
-.project {
-  display: flex;
-  flex-direction: column;
-  gap: 1.125rem;
-}
-
-.project-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.project-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.25rem 0.75rem;
-}
-
-.project-name {
-  font-family: var(--font-serif);
-  font-size: 1.75rem;
-  letter-spacing: -0.015em;
-  line-height: 1.1;
-}
-
-.project-year {
-  color: var(--muted);
-  font-size: 0.8125rem;
-}
-
-.project-metric {
-  margin-left: auto;
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
-.project-metric b {
-  color: var(--foreground);
-  font-family: var(--font-serif);
-  font-size: 1.375rem;
-  font-weight: 400;
-  font-variant-numeric: tabular-nums;
-}
-
-.project-lede {
-  color: var(--soft);
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
-.project-stack {
-  color: var(--muted);
-  font-size: 0.8125rem;
-}
-
 /* ---------- the frame: a demo on a plate of ink ---------- */
 
 .frame {
   position: relative;
+  border: 1px solid var(--border);
   border-radius: 3px;
   overflow: hidden;
 }
 
-/* The demos were drawn light-on-dark; inside the plate the tokens say so. */
+/* The demos are drawn light-on-dark on a panel a shade above the page. */
 .frame-plate {
-  --foreground: #f1ece0;
-  --soft: #d9dfee;
-  --muted: #a7b4d6;
-  --faint: #7f8fb8;
-  --dim: #62719c;
-  --border: rgba(241, 236, 224, 0.14);
-  --border-strong: rgba(241, 236, 224, 0.26);
-  --ok: #8fd8b0;
-  --bad: #e7a08a;
+  --dim: #6b6b6b;
   padding: 1rem 1.125rem 0.75rem;
   border-radius: 3px;
   background: var(--plate);
@@ -278,17 +154,11 @@ a.card:hover {
   padding: 1.5rem 1.75rem 1.125rem;
 }
 
-/* On a phone the demo needs every pixel: a tighter plate, and the metric
-   on its own line. */
+/* On a phone the demo needs every pixel: a tighter plate. */
 @media (max-width: 40rem) {
   .frame-plate,
   .frame-large .frame-plate {
     padding: 0.5rem 0.5rem 0.375rem;
-  }
-
-  .project-metric {
-    flex-basis: 100%;
-    margin-left: 0;
   }
 
   /* The demos are drawn 720 wide; shrunk to a phone their labels drop
@@ -343,178 +213,6 @@ a.card:hover {
 .art-bar-before { fill: var(--dim); }
 .art-bar-after { fill: var(--ok); }
 .art-bar-ink { fill: var(--foreground); }
-
-/* ---------- inner pages: work and a project ---------- */
-
-.page {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-  width: min(100% - (var(--margin) * 2), 68.75rem);
-  margin: 0 auto;
-  padding: clamp(1.5rem, 4vh, 2.5rem) 0 4rem;
-}
-
-.back {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  color: var(--muted);
-  font-size: 0.9375rem;
-  transition: color 120ms ease;
-}
-
-.back:hover {
-  color: var(--foreground);
-}
-
-.back-icon {
-  transform: scaleX(-1);
-}
-
-.page-head {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.page-title {
-  font-family: var(--font-serif);
-  font-size: clamp(2.75rem, 6vw, 4.25rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.page-sub {
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
-.exhibit {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 2rem 4.5rem;
-}
-
-.exhibit-main {
-  display: flex;
-  flex: 1 1 30rem;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.exhibit-year {
-  color: var(--muted);
-  font-size: 0.8125rem;
-}
-
-.exhibit-lede {
-  color: var(--soft);
-  font-size: 1.3125rem;
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
-.exhibit-facts {
-  display: flex;
-  flex: 0 1 18.75rem;
-  flex-direction: column;
-}
-
-.exhibit-fact {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--border-strong);
-}
-
-.exhibit-num {
-  font-family: var(--font-serif);
-  font-size: 2.75rem;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
-
-.exhibit-label {
-  color: var(--muted);
-}
-
-.exhibit-key {
-  color: var(--faint);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.exhibit-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  min-height: 3rem;
-  border-top: 1px solid var(--border-strong);
-  border-bottom: 1px solid var(--border-strong);
-  font-size: 1rem;
-  transition: color 120ms ease;
-}
-
-.exhibit-link:hover {
-  color: var(--soft);
-}
-
-/* Two links in a row (play it, then the code) share one hairline. */
-.exhibit-link + .exhibit-link {
-  border-top: 0;
-}
-
-/* The code is private: the same row, in the muted grey, with nothing to hover. */
-.exhibit-private,
-.exhibit-private:hover {
-  color: var(--muted);
-}
-
-.walk {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border);
-}
-
-.walk-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  padding: 0.5rem 0;
-}
-
-.walk-next {
-  align-items: flex-end;
-  text-align: right;
-}
-
-.walk-key {
-  color: var(--faint);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.walk-name {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  transition: color 200ms ease;
-}
-
-.walk-item:hover .walk-name {
-  color: var(--soft);
-}
 
 /* ---------- the email card ---------- */
 
