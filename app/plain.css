@@ -17,7 +17,7 @@
   color: var(--p-fg);
   font-family: var(--font-serif);
   font-size: 1rem;
-  line-height: 1.42;
+  line-height: 1.5;
 }
 
 /* The page under the column, so overscroll matches. */
@@ -45,8 +45,8 @@ html:has(.plain) {
   bottom: 1.25rem;
   margin: 0;
   transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
+  font-style: italic;
   color: var(--p-dim);
   transition: opacity 0.6s var(--ease);
 }
@@ -93,7 +93,7 @@ html:has(.plain) {
   font-size: 0.875rem;
 }
 
-/* The tabs: small lowercase mono, the open one bright, the rest dim. */
+/* The tabs: lowercase in the page's own serif, the open one bright, the rest dim. */
 .plain .tabs {
   display: flex;
   justify-content: center;
@@ -101,8 +101,7 @@ html:has(.plain) {
   flex-wrap: wrap;
   gap: 0.25rem 1.5rem;
   margin-top: -2rem;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
 }
 .plain .tabs a {
   color: var(--p-dim);
@@ -134,9 +133,10 @@ html:has(.plain) {
 .plain .name {
   color: var(--p-fg);
 }
+/* Dates and small facts: the same serif, smaller, with old-style figures that sit in the line. */
 .plain .meta {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  font-variant-numeric: oldstyle-nums;
   color: var(--p-dim);
   white-space: nowrap;
 }
@@ -219,8 +219,7 @@ html:has(.plain) {
 
 .plain .crumb,
 .plain .walk a {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   color: var(--p-dim);
   text-decoration: none;
   transition: color 0.15s;
@@ -283,11 +282,10 @@ html:has(.plain) {
 }
 .plain .card .frame {
   margin-bottom: 0.375rem;
-  transition: border-color 0.2s var(--ease);
 }
-.plain .card:hover .frame,
-.plain .card:focus-visible .frame {
-  border-color: rgba(255, 255, 255, 0.22);
+.plain .card:focus-visible {
+  outline: 1px solid var(--p-fg);
+  outline-offset: 6px;
 }
 .plain .card:hover .name,
 .plain .card:focus-visible .name {

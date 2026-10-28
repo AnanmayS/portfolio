@@ -32,8 +32,9 @@ export default function WorkPage() {
               </div>
               <p>{p.lede}</p>
               <p className="meta">
-                {p.metric.value} {p.metric.label} · {p.stack}
+                {p.metric.value} {p.metric.label}
               </p>
+              <p className="meta">Built with {p.stack}</p>
             </li>
           ))}
         </ul>

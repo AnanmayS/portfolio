@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }: Params) {
         <SiteTabs current="projects" />
 
         <Link className="crumb" href="/#projects">
-          ← all projects
+          All projects
         </Link>
 
         <Framed project={project} large />
@@ -80,8 +80,8 @@ export default async function ProjectPage({ params }: Params) {
         </ul>
 
         <nav className="walk" aria-label="More projects">
-          <Link href={`/work/${prev.slug}`}>← {prev.name}</Link>
-          <Link href={`/work/${next.slug}`}>{next.name} →</Link>
+          <Link href={`/work/${prev.slug}`}>Previous: {prev.name}</Link>
+          <Link href={`/work/${next.slug}`}>Next: {next.name}</Link>
         </nav>
       </main>
     </div>
