@@ -1,0 +1,527 @@
+/*
+  Every page, after jwahn.com: near-black, one serif at one size, a narrow
+  column, bullets. The front page has the koi pond swimming behind it; the
+  project pages widen the column to 720px for the demos.
+*/
+.plain {
+  --p-bg: #0a0a0a;
+  --p-fg: #ededed;
+  --p-body: #b8b8b8;
+  --p-rule: #6b6b6b;
+  --p-dim: #8c8c8c;
+
+  position: relative;
+  min-height: 100vh;
+  padding: 4rem 1.5rem;
+  background: var(--p-bg);
+  color: var(--p-fg);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* The page under the column, so overscroll matches. */
+html:has(.plain) {
+  background: #0a0a0a;
+  color-scheme: dark;
+}
+
+/* The koi pond (koi.tsx), behind the column. On phones the page grows a
+   stretch of open water below the bio for them. */
+#koi {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+#koi canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.koi-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 1.25rem;
+  margin: 0;
+  transform: translateX(-50%);
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--p-dim);
+  transition: opacity 0.6s var(--ease);
+}
+#koi[data-fed] .koi-hint {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .koi-hint {
+    display: none;
+  }
+}
+@media (max-width: 54.99rem) {
+  .plain:has(#koi) {
+    padding-bottom: calc(4rem + 75vh);
+  }
+}
+
+.plain main {
+  position: relative;
+  max-width: 528px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.plain header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+}
+
+/* Today's quote, above the name: quiet italic, its source under it. */
+.plain .quote {
+  min-height: 3rem;
+  margin: 0 0 -1rem;
+  color: var(--p-dim);
+}
+.plain .quote blockquote {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.98rem;
+}
+.plain .quote figcaption {
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+}
+
+.plain h1 {
+  margin: 0;
+  font: inherit;
+}
+
+.plain .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* The tabs: lowercase in the page's own serif, the open one bright, the rest dim. */
+.plain .tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin-top: -2rem;
+  font-size: 0.9375rem;
+}
+.plain .tabs a {
+  color: var(--p-dim);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.plain .tabs a:hover,
+.plain .tabs a[aria-current="page"] {
+  color: var(--p-fg);
+}
+.plain .tabs a[aria-current="page"] {
+  font-weight: 500;
+}
+
+.plain .tabs a:focus-visible {
+  outline: 1px solid var(--p-fg);
+  outline-offset: 2px;
+}
+
+/* Projects and work: a name with its date, then one line under it. */
+.plain .rows {
+  gap: 1rem;
+}
+.plain .row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+}
+.plain .name {
+  color: var(--p-fg);
+}
+/* Dates and small facts: the same serif, smaller, with old-style figures that sit in the line. */
+.plain .meta {
+  font-size: 0.875rem;
+  font-variant-numeric: oldstyle-nums;
+  color: var(--p-dim);
+  white-space: nowrap;
+}
+.plain .rows p {
+  margin: 0.125rem 0 0;
+}
+
+.plain a,
+.plain .link {
+  color: var(--p-body);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--p-rule);
+  transition: text-decoration-color 0.15s;
+}
+.plain a:hover,
+.plain .link:hover {
+  text-decoration-color: var(--p-fg);
+}
+.plain a:focus-visible,
+.plain .link:focus-visible {
+  outline: 1px solid var(--p-fg);
+  outline-offset: 2px;
+}
+
+.plain .link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.plain ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  color: var(--p-body);
+}
+
+.plain li {
+  position: relative;
+  padding-left: 0.875rem;
+  font-size: 0.98rem;
+}
+.plain li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--p-rule);
+}
+
+
+/* ---------- the project pages ---------- */
+
+.plain main.wide {
+  max-width: 720px;
+}
+
+/* Every project, its demo above it. */
+.plain .exhibits {
+  gap: 3.5rem;
+}
+.plain .exhibits > li {
+  padding-left: 0;
+}
+.plain .exhibits > li::before {
+  content: none;
+}
+.plain .exhibits .frame {
+  margin-bottom: 1rem;
+}
+.plain .exhibits p {
+  margin: 0.25rem 0 0;
+}
+
+.plain .crumb,
+.plain .walk a {
+  font-size: 0.9375rem;
+  color: var(--p-dim);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.plain .crumb {
+  align-self: flex-start;
+  margin-bottom: -1.25rem;
+}
+.plain .crumb:hover,
+.plain .walk a:hover {
+  color: var(--p-fg);
+}
+
+.plain .lede p {
+  margin: 0.375rem 0 0;
+  color: var(--p-body);
+}
+.plain .figure {
+  color: var(--p-fg);
+}
+
+.plain .walk {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #1f1f1f;
+}
+
+/* ---------- the projects gallery (gallery.tsx) ---------- */
+
+/* A row of big cards, lined up with a centred 56rem measure and running out
+   past the screen's right edge; it scrolls sideways (and with an up-and-down
+   scroll, see gallery.tsx), smoothly, with no snapping and no scrollbar. */
+.plain .gallery {
+  --gutter: max(1.5rem, calc((100vw - 56rem) / 2));
+  display: flex;
+  gap: 0.75rem;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 0.25rem var(--gutter) 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.plain .gallery::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each card is as wide as its preview, and its words wrap to that width. */
+.plain .card {
+  flex: 0 0 auto;
+  width: min-content;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--p-bg);
+  color: var(--p-body);
+  text-decoration: none;
+}
+.plain .card .frame {
+  margin-bottom: 0.375rem;
+}
+.plain .card:focus-visible {
+  outline: 1px solid var(--p-fg);
+  outline-offset: 6px;
+}
+.plain .card:hover .name,
+.plain .card:focus-visible .name {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--p-rule);
+}
+
+/* A big 3:2 preview: most of the screen's height, or most of a phone's width. */
+.plain .gallery .frame-plate {
+  box-sizing: border-box;
+  height: min(62vh, 42rem, calc(85vw / 1.5));
+  aspect-ratio: 3 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+.plain .gallery .art {
+  width: 100%;
+  max-height: 100%;
+  min-width: 0;
+}
+
+.plain .card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+}
+.plain .card-lede {
+  font-size: 0.98rem;
+}
+
+/* ---------- opening a project (transition.tsx) ---------- */
+
+/* The project page's demo and title share names with the card they came from,
+   so the browser grows one into the other; the rest crossfades quickly. */
+.plain .frame-large {
+  view-transition-name: project-frame;
+}
+.plain .lede h1 {
+  view-transition-name: project-title;
+  width: fit-content;
+}
+::view-transition-group(project-frame),
+::view-transition-group(project-title) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
+/* ---------- the shelf, under the facts on the pond tab (shelf.tsx) ---------- */
+
+/* A small shelf drawn the way the page is: spines as hairline outlines with
+   their titles in the body grey, all the tone differences left to the koi.
+   Only the book being read stands apart, a little brighter, with its ribbon
+   in the koi's terracotta. The base shapes are in home.css. */
+.plain .shelf {
+  margin-top: 0.5rem;
+}
+/* A row of spines, not one of the page's bulleted lists. */
+.plain .shelf-row {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 3px;
+  padding: 0.75rem 0.25rem 0;
+}
+.plain .shelf-row > li {
+  padding-left: 0;
+  font-size: inherit;
+}
+.plain .shelf-row > li::before {
+  content: none;
+}
+.plain .book,
+.plain .book-ink,
+.plain .book-plate,
+.plain .book-soft,
+.plain .book-muted,
+.plain .book-paper {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--p-dim);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+.plain .book:hover .book-spine,
+.plain .book.is-out .book-spine {
+  color: var(--p-fg);
+}
+.plain .book-reading {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--p-body);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+}
+.plain .book-spine {
+  padding-top: 0.5rem;
+  font-size: 0.6875rem;
+  transition: color 0.15s;
+}
+.plain .book-btn:focus-visible {
+  outline: 1px solid var(--p-fg);
+  outline-offset: 3px;
+}
+.plain .book-reading::after {
+  top: -0.5rem;
+  right: 4px;
+  width: 2px;
+  height: 1rem;
+  background: rgba(205, 123, 79, 0.8);
+}
+.plain .shelf-plank {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+.plain .shelf-now {
+  min-height: 0;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--p-dim);
+}
+.plain .shelf-now b {
+  color: var(--p-body);
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* ---------- send me a rec (shelf.tsx) ---------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.plain .rec-open {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--p-body);
+}
+
+/* A small box: one hairline field and a send link, nothing more. */
+.plain .rec {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  max-width: 22rem;
+  margin-top: 0.75rem;
+}
+.plain .rec input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.25rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: none;
+  color: var(--p-fg);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-style: italic;
+  outline: none;
+  transition: border-color 0.15s, color 0.2s;
+}
+.plain .rec input::placeholder {
+  color: var(--p-dim);
+}
+.plain .rec input:focus {
+  border-bottom-color: var(--p-fg);
+}
+.plain .rec button {
+  font-size: 0.875rem;
+}
+.plain .rec button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+/* The words leave the box as they take off. */
+.plain .rec.is-sending input {
+  color: transparent;
+}
+
+/* The words in flight: laid exactly over the field's text, then whooshed away. */
+.plain .rec-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+.plain .rec-flyer {
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+  font-size: 0.9375rem;
+  font-style: italic;
+  color: var(--p-fg);
+  white-space: nowrap;
+  pointer-events: none;
+  transform-origin: left center;
+}
+.plain .rec-sent {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--p-body);
+  animation: rec-sent 0.35s var(--ease) both;
+}
+@keyframes rec-sent {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plain .rec-sent { animation: none; }
+}

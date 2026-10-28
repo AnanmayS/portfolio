@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BackLink } from "../back-link";
 import { projects } from "../content";
 import { Framed } from "../framed";
+import { SiteTabs } from "../tabs";
+import "../plain.css";
 
 export const metadata: Metadata = {
   title: "Work — Ananmay Som Singh",
@@ -11,39 +12,33 @@ export const metadata: Metadata = {
 };
 
 /*
-  The work: each project's demo on its plate of ink, one sentence, and its
-  number. Each opens the project's page.
+  Every project with its demo playing above it: the name and year, one
+  sentence, the number that says it works and the stack. Each name opens the
+  project's page.
 */
 export default function WorkPage() {
   return (
-    <main className="page page-work">
-      <BackLink />
+    <div className="plain">
+      <main className="wide">
+        <SiteTabs current="projects" />
 
-      <header className="page-head">
-        <h1 className="page-title">Work</h1>
-        <p className="page-sub">
-          Five things I built, and how each one works.
-        </p>
-      </header>
-
-      <div className="projects">
-        {projects.map((item) => (
-          <Link key={item.slug} className="card project" id={item.slug} href={`/work/${item.slug}`}>
-            <Framed project={item} />
-            <div className="project-body">
-              <div className="project-line">
-                <span className="project-name">{item.name}</span>
-                <span className="project-year">{item.year}</span>
-                <span className="project-metric">
-                  <b>{item.metric.value}</b> {item.metric.label}
-                </span>
+        <ul className="exhibits">
+          {projects.map((p) => (
+            <li key={p.slug} id={p.slug}>
+              <Framed project={p} />
+              <div className="row-head">
+                <Link href={`/work/${p.slug}`}>{p.name}</Link>
+                <span className="meta">{p.year}</span>
               </div>
-              <p className="project-lede">{item.lede}</p>
-              <p className="project-stack">{item.stack}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </main>
+              <p>{p.lede}</p>
+              <p className="meta">
+                {p.metric.value} {p.metric.label}
+              </p>
+              <p className="meta">Built with {p.stack}</p>
+            </li>
+          ))}
+        </ul>
+      </main>
+    </div>
   );
 }

@@ -21,7 +21,38 @@ export const person = {
 
 /** The front page's opening: what the sky says, and the plate behind it. */
 export const home = {
-  tagline: "I build the plumbing behind apps: pipelines, exchanges, and the odd AI.",
+  /** The front page's list, in lowercase: who I am, not where I've worked (that's the work tab). A `link` turns the named words into a link. */
+  facts: [
+    { text: "studying computer engineering at maryland, class of 2028" },
+    { text: "grew up in the bay area, now in college park" },
+    { text: "into finance and markets, and the systems that keep them running" },
+    { text: "pats fan, f1 fan, sundays are busy" },
+    { text: "reading or playing badminton when i’m away from the keyboard" },
+  ] as { text: string; link?: { words: string; href: string } }[],
+  /**
+   * The line above the name: one of these a day, the same for everyone that
+   * day, cycling in order. Short, and only ones whose source is solid.
+   */
+  quotes: [
+    { text: "Simplicity is prerequisite for reliability.", by: "Edsger W. Dijkstra" },
+    { text: "Simplify, then add lightness.", by: "Colin Chapman" },
+    { text: "What I cannot create, I do not understand.", by: "Richard Feynman" },
+    { text: "Make it work, make it right, make it fast.", by: "Kent Beck" },
+    { text: "If you no longer go for a gap that exists, you are no longer a racing driver.", by: "Ayrton Senna" },
+    { text: "Real artists ship.", by: "Steve Jobs" },
+    { text: "Fall seven times, stand up eight.", by: "Japanese proverb" },
+    { text: "Premature optimization is the root of all evil.", by: "Donald Knuth" },
+    { text: "Leave me alone, I know what I’m doing.", by: "Kimi Räikkönen" },
+    { text: "The best way to predict the future is to invent it.", by: "Alan Kay" },
+    { text: "Talk is cheap. Show me the code.", by: "Linus Torvalds" },
+    { text: "Risk comes from not knowing what you’re doing.", by: "Warren Buffett" },
+    { text: "The first principle is that you must not fool yourself, and you are the easiest person to fool.", by: "Richard Feynman" },
+    { text: "The cheapest, fastest, and most reliable components are those that aren’t there.", by: "Gordon Bell" },
+    { text: "Simple things should be simple, complex things should be possible.", by: "Alan Kay" },
+    { text: "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.", by: "Antoine de Saint-Exupéry" },
+    { text: "Programs must be written for people to read, and only incidentally for machines to execute.", by: "Abelson and Sussman" },
+    { text: "Stay hungry. Stay foolish.", by: "The Whole Earth Catalog" },
+  ] as { text: string; by: string }[],
   /** Two sentences under the tagline. */
   about:
     "Into finance, AI and distributed systems, and especially where the three meet. I like it when something I built keeps running after I stop watching.",
