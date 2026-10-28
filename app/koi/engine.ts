@@ -849,8 +849,11 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
             if (rr >= 0 && cc >= 0 && rr < CH && cc < CW && t[rr * CW + cc]) near++;
           }
         }
-        const hairline = (r === 0 || !t[k - CW]) && (r === CH - 1 || !t[k + CW]);
-        if (near <= 1 || hairline) m[k] = 0;
+        // A one-row hairline end: nothing above or below, and it doesn't bridge two parts
+        // (a fish's tail stalk is one row tall and must stay, or the tail comes loose).
+        const flat = (r === 0 || !t[k - CW]) && (r === CH - 1 || !t[k + CW]);
+        const bridges = c > 0 && c < CW - 1 && t[k - 1] && t[k + 1];
+        if (near <= 1 || (flat && !bridges)) m[k] = 0;
       }
     }
 
@@ -869,10 +872,18 @@ export function startKoi(host: HTMLElement, avoidEl: HTMLElement): () => void {
         members.push(k);
         size++;
         const r = (k / CW) | 0, c = k - r * CW;
-        if (c > 0 && m[k - 1] && !lab[k - 1]) { lab[k - 1] = id; st[top++] = k - 1; }
-        if (c < CW - 1 && m[k + 1] && !lab[k + 1]) { lab[k + 1] = id; st[top++] = k + 1; }
-        if (r > 0 && m[k - CW] && !lab[k - CW]) { lab[k - CW] = id; st[top++] = k - CW; }
-        if (r < CH - 1 && m[k + CW] && !lab[k + CW]) { lab[k + CW] = id; st[top++] = k + CW; }
+        // Diagonal neighbours count: a thin, slanted tail is still attached.
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            const rr = r + dr, cc = c + dc;
+            if ((!dr && !dc) || rr < 0 || cc < 0 || rr >= CH || cc >= CW) continue;
+            const kk = rr * CW + cc;
+            if (m[kk] && !lab[kk]) {
+              lab[kk] = id;
+              st[top++] = kk;
+            }
+          }
+        }
       }
       if (size < MIN_ISLAND) for (const k of members) m[k] = 0;
     }
