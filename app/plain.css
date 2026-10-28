@@ -81,6 +81,22 @@ html:has(.plain) {
   gap: 0.5rem 1rem;
 }
 
+/* Today's quote, above the name: quiet italic, its source under it. */
+.plain .quote {
+  min-height: 3rem;
+  margin: 0 0 -1rem;
+  color: var(--p-dim);
+}
+.plain .quote blockquote {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.98rem;
+}
+.plain .quote figcaption {
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+}
+
 .plain h1 {
   margin: 0;
   font: inherit;

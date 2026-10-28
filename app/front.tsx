@@ -20,6 +20,28 @@ const fromHash = (): Tab => {
   return (TABS as readonly string[]).includes(h) ? (h as Tab) : "pond";
 };
 
+/* Today's quote: the same for everyone on a given day, the next one tomorrow.
+   Chosen in the browser, since the page itself is built once; until then the
+   line keeps its space so nothing jumps. */
+function Quote() {
+  const [quote, setQuote] = useState<(typeof home.quotes)[number] | null>(null);
+  useEffect(() => {
+    const now = new Date();
+    const day = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86_400_000);
+    setQuote(home.quotes[day % home.quotes.length]);
+  }, []);
+  return (
+    <figure className="quote">
+      {quote && (
+        <>
+          <blockquote>{quote.text}</blockquote>
+          <figcaption>{quote.by}</figcaption>
+        </>
+      )}
+    </figure>
+  );
+}
+
 function Fact({ text, link }: (typeof home.facts)[number]) {
   if (!link) return <li>{text}</li>;
   const [before, after] = text.split(link.words);
@@ -56,6 +78,7 @@ export function Front() {
 
       {tab === "pond" && (
         <>
+          <Quote />
           <header>
             <h1>{person.name}</h1>
             <div className="links">
