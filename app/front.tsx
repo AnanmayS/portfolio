@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ComposeTrigger } from "./compose";
-import { books, home, person, projects, roles } from "./content";
+import { books, home, person, roles } from "./content";
+import { Gallery } from "./gallery";
 import { asset } from "./paths";
 import { TABS, type Tab } from "./tabs";
 
@@ -80,19 +80,7 @@ export function Front() {
         </>
       )}
 
-      {tab === "projects" && (
-        <ul className="rows">
-          {projects.map((p) => (
-            <li key={p.slug}>
-              <div className="row-head">
-                <Link href={`/work/${p.slug}`}>{p.name}</Link>
-                <span className="meta">{p.year}</span>
-              </div>
-              <p>{p.lede}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      {tab === "projects" && <Gallery />}
 
       {tab === "work" && (
         <ul className="rows">

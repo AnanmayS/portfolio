@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { projects } from "../../content";
 import { Framed } from "../../framed";
 import { SiteTabs } from "../../tabs";
+import { Arrived } from "../../transition";
 import "../../plain.css";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -40,11 +41,12 @@ export default async function ProjectPage({ params }: Params) {
       <main className="wide">
         <SiteTabs current="projects" />
 
-        <Link className="crumb" href="/work">
+        <Link className="crumb" href="/#projects">
           ← all projects
         </Link>
 
         <Framed project={project} large />
+        <Arrived />
 
         <div className="lede">
           <div className="row-head">
