@@ -150,6 +150,7 @@ export const books: Book[] = [
   { title: "Scythe", author: "Neal Shusterman", status: "read", pages: 435, tone: "plate" },
   { title: "The Name of the Wind", author: "Patrick Rothfuss", status: "read", pages: 662, tone: "soft", format: "l" },
   { title: "Lord of the Mysteries", author: "Cuttlefish That Loves Diving", status: "reading", pages: 1400, tone: "paper", format: "l" },
+  { title: "The Will of the Many", author: "James Islington", status: "reading", pages: 640, tone: "muted", format: "l" },
 ];
 
 export type Role = {
