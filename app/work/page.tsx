@@ -8,7 +8,7 @@ import "../plain.css";
 export const metadata: Metadata = {
   title: "Work — Ananmay Som Singh",
   description:
-    "Beat the Bots, Pit Wall, Tape, Wildebeest and ShowdownRL: what each one does, as a short looping demo.",
+    "Beat the Bots, Ghostlap, Tape, Wildebeest and ShowdownRL: what each one does, as a short looping demo.",
 };
 
 /*

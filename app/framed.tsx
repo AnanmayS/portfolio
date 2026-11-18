@@ -3,7 +3,7 @@ import { basePath } from "./paths";
 import { Reveal } from "./reveal";
 
 import { ArenaArt } from "./art/arena";
-import { PitwallArt } from "./art/pitwall";
+import { GhostlapArt } from "./art/ghostlap";
 import { ShowdownArt } from "./art/showdown";
 import { TapeArt } from "./art/tape";
 import { WildebeestArt } from "./art/wildebeest";
@@ -11,7 +11,7 @@ import { WildebeestArt } from "./art/wildebeest";
 /* One looping demo per project, keyed so content.ts stays free of React. */
 const art: Record<Project["slug"], (props: { basePath: string }) => React.ReactElement> = {
   "beat-the-bots": ArenaArt,
-  pitwall: PitwallArt,
+  ghostlap: GhostlapArt,
   wildebeest: WildebeestArt,
   tape: TapeArt,
   showdownrl: ShowdownArt,

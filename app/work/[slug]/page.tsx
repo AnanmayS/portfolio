@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 /*
   A project on its own: the demo, the name and year, what it is in one
-  sentence, then plain bullets for the number, the stack, where to play it
+  sentence, then plain bullets for the number, the stack, where to try it
   and the code. Previous and next walk the five.
 */
 export default async function ProjectPage({ params }: Params) {
@@ -64,7 +64,7 @@ export default async function ProjectPage({ params }: Params) {
           {project.live && (
             <li>
               <a href={project.live} target="_blank" rel="noreferrer">
-                Play it in your browser
+                Try it in your browser
               </a>
             </li>
           )}

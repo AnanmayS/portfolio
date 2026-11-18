@@ -1,0 +1,40 @@
+/*
+  Ghostlap: one 10 s loop. The lap draws on (a mask along the circuit, a
+  wipe across the charts, in step), then the result. The rules outside
+  `.is-visible` draw the finished frame: the whole lap and the verdict.
+*/
+
+.art-gl .gl-ghost { stroke: rgba(255, 255, 255, 0.08); stroke-width: 5; stroke-linejoin: round; }
+.art-gl .gl-sec-rus { stroke: var(--ok); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.art-gl .gl-sec-law { stroke: var(--bad); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.art-gl .gl-reveal { stroke: #fff; stroke-width: 12; stroke-linejoin: round; stroke-dasharray: 1.02; stroke-dashoffset: 0; }
+.art-gl .gl-speed-rus { stroke: var(--ok); stroke-width: 1.3; stroke-linejoin: round; }
+.art-gl .gl-speed-law { stroke: var(--bad); stroke-width: 1.1; stroke-linejoin: round; opacity: 0.8; }
+.art-gl .gl-gap { stroke: var(--foreground); stroke-width: 1.5; stroke-linejoin: round; }
+.art-gl .gl-head-txt { letter-spacing: 1.5px; font-size: 11px; }
+.art-gl .gl-cover { fill: var(--plate); }
+.art-gl .gl-head { stroke: var(--faint); stroke-width: 1.5; }
+.art-gl .gl-wipe { display: none; }
+
+.is-visible .art-gl .gl-wipe { display: inline; }
+
+.is-visible .art-gl .gl-wipe,
+.is-visible .art-gl .gl-reveal,
+.is-visible .art-gl .gl-verdict {
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.is-visible .art-gl .gl-wipe { animation-name: gl-wipe; }
+.is-visible .art-gl .gl-reveal { animation-name: gl-reveal; }
+.is-visible .art-gl .gl-verdict { animation-name: gl-verdict; }
+
+/* The lap: start line to finish line (416 px of chart) over 6 s, both sides together. */
+@keyframes gl-wipe { 0%, 5% { transform: translateX(0); } 65% { transform: translateX(416px); } 65.01%, 100% { transform: translateX(440px); } }
+@keyframes gl-reveal { 0%, 5% { stroke-dashoffset: 1.02; } 65%, 100% { stroke-dashoffset: 0; } }
+@keyframes gl-verdict { 0%, 67% { opacity: 0; } 70%, 100% { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .is-visible .art-gl .gl-wipe { display: none; }
+}
